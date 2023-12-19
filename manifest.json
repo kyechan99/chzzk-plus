@@ -9,7 +9,7 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "content_scripts": [
     {
       "matches": ["*://chzzk.naver.com/*"],
