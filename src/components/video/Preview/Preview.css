@@ -1,0 +1,9 @@
+.preview {
+  position: fixed;
+  box-shadow: 0px 0px 10px #00ffa370;
+}
+.preview-thumbnail {
+  width: 440px;
+  height: 248px;
+  background-color: tomato;
+}
