@@ -1,0 +1,14 @@
+.url-btn {
+  color: #000;
+  background: #00ffa3e6;
+  border-radius: 0.25rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: auto;
+  cursor: pointer;
+}
+.url-btn:hover {
+  background: #00df8de6;
+}

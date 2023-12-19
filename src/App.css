@@ -1,0 +1,16 @@
+body {
+  margin: 0px;
+  background-color: #141517;
+}
+#root {
+  padding: 2rem;
+  min-width: 12rem;
+}
+.popup {
+  display: flex;
+  margin: 0 auto;
+  background-color: #141517;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
