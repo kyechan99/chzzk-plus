@@ -16,7 +16,7 @@
 
 ## Feature
 
-### PIP 모드 버튼
+### 1. PIP 모드 버튼
 
 ![PIP 모드 버튼](/README/feature_pip.png)
 
