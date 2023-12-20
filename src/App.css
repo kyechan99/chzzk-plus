@@ -17,6 +17,14 @@ hr {
   align-items: center;
   gap: 1rem;
 }
+.form-group {
+  display: flex;
+  width: 100%;
+  color: white;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .menu {
   width: 100%;
   display: flex;

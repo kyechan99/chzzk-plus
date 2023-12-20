@@ -103,8 +103,10 @@ export default function Preview() {
         ref.current.style.display = "block";
       }
 
-      const channelID = getChannelIDByUrl(eventTarget.href);
-      setChannelId(channelID);
+      if (eventTarget.href) {
+        const channelID = getChannelIDByUrl(eventTarget.href);
+        setChannelId(channelID);
+      }
     } catch (err) {
       logError(err);
     }
