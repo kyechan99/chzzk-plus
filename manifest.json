@@ -10,15 +10,10 @@
     "128": "icon128.png"
   },
   "permissions": ["storage"],
-  "background": {
-    "service_worker": "src/background.ts"
-  },
   "content_scripts": [
     {
       "matches": ["*://chzzk.naver.com/*"],
-      "js": ["src/content.tsx"],
-      "run_at": "document_end",
-      "all_frames": true
+      "js": ["src/content.tsx"]
     }
   ],
   "host_permissions": ["http://www.google.com/", "https://www.google.com/"],
@@ -26,8 +21,5 @@
     "default_icon": "icon128.png",
     "default_popup": "index.html",
     "default_title": "Open Extension App"
-  },
-  "externally_connectable": {
-    "matches": ["*://chzzk.naver.com/*"]
   }
 }
