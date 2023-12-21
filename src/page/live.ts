@@ -12,6 +12,7 @@ import {
   CHAT_NAME,
   CHEEZE_CHAT,
   INPUT_UI_LIST,
+  LIVE_INFORMATION_HEAD,
   PLAYER_LAYOUT_ID,
   PLAYER_UI,
   VIDEO_FULL_BTN,
@@ -27,6 +28,7 @@ import {
   CHEEZE_REMOVER,
   PLAYER_KEY_CONTROL,
 } from "../constants/storage";
+import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -84,6 +86,16 @@ export const editLivePage = () => {
         });
       }
     });
+
+    const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
+    if ($infoHeads.length > 0) {
+      const $liveTitle = $infoHeads[0] as HTMLElement;
+      $liveTitle.style.justifyContent = "space-between";
+      const $liveHelper = document.createElement("div");
+      $liveHelper.id = "chzzk-plus-live-helper";
+      $liveTitle.appendChild($liveHelper);
+      createReactElement($liveHelper, CaptureButton);
+    }
   }
 
   // Feat: Barricade (이벤트 방해 모드) =======================================================
