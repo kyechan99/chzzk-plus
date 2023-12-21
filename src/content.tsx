@@ -1,5 +1,6 @@
 import { editGlobalPage } from "./page/global";
 import { editLivePage } from "./page/live";
+import { editVideoPage } from "./page/video";
 
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
@@ -9,6 +10,7 @@ const waitingSPALoaded = setInterval(() => {
      */
     editGlobalPage();
     editLivePage();
+    editVideoPage();
 
     /**
      * [주의]
@@ -19,6 +21,7 @@ const waitingSPALoaded = setInterval(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const observer = new MutationObserver((_mutations) => {
       editLivePage();
+      editVideoPage();
     });
 
     const config = { subtree: true, childList: true };

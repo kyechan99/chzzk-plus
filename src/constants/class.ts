@@ -1,5 +1,6 @@
 // 플레이어 레이아웃, 동영상 플레이어의 기본적인 레이아웃
 export const PLAYER_LAYOUT_ID = "live_player_layout";
+export const VIDEO_LAYOUT_ID = "player_layout";
 
 // 플레이어를 덮어주는 UI의 부모 클래스명
 export const PLAYER_UI = "player_header";
