@@ -12,6 +12,7 @@ import {
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
   CHAT_TEXT_COLOR,
+  CHEEZE_REMOVER,
 } from "./constants/storage";
 
 function App() {
@@ -43,6 +44,13 @@ function App() {
       <div className="setting-group">
         <h2 className="setting-label">채팅</h2>
         <div className="menus">
+          <Checkbox id={CHEEZE_REMOVER}>
+            <div className="menu">
+              <p className="menu-title">치즈 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용됩니다</p>
+            </div>
+          </Checkbox>
+
           <Select
             id={CHAT_COLOR_THEME}
             options={CHAT_COLOR_OPTIONS.map((op) => {
