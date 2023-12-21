@@ -30,3 +30,6 @@ export const CHAT_SIZE_OPTIONS = [
   "20",
 ];
 export const CHEEZE_REMOVER = "czp-cheeze-remover"; // 치즈 제거 여부
+
+// 즐겨찾기한 스트리머
+export const FAVORITE_STREAMER = "czp-favorite-streamer";

@@ -21,6 +21,22 @@ export const editGlobalPage = () => {
   document.body.appendChild($preview);
   createReactElement($preview, Preview);
 
+  //
+  const moreChannelBtnList = document.getElementsByClassName('navigator_button_more__UE0v3');
+  if (moreChannelBtnList.length > 0) {
+    // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
+    const moreChannelBtn = moreChannelBtnList[0] as HTMLElement   ;
+    moreChannelBtn.click();
+
+    // chrome.storage.local.get(COLOR_PROPERTIES, (res) => {
+
+    // })
+    
+    
+
+  }
+
+
   // Feat: 색상 설정 ==========================================================================
   chrome.storage.local.get(COLOR_PROPERTIES, (res) => {
     // 채팅 이름 및 텍스트 색상 저장되어 있는 값으로 설정

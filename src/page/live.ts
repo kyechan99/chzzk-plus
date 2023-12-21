@@ -28,7 +28,7 @@ import {
   CHEEZE_REMOVER,
   PLAYER_KEY_CONTROL,
 } from "../constants/storage";
-import CaptureButton from "../components/button/CaptureButton/CaptureButton";
+import LiveHelper from "../components/liveHelper/LiveHelper";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -94,7 +94,7 @@ export const editLivePage = () => {
       const $liveHelper = document.createElement("div");
       $liveHelper.id = "chzzk-plus-live-helper";
       $liveTitle.appendChild($liveHelper);
-      createReactElement($liveHelper, CaptureButton);
+      createReactElement($liveHelper, LiveHelper);
     }
   }
 

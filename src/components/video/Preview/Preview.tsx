@@ -4,6 +4,7 @@ import { STREAMER_MENU, STREAMER_MENU_LIST } from "../../../constants/class";
 import { getChannelIDByUrl } from "../../../utils/channel";
 
 import "./Preview.css";
+import { FAVORITE_STREAMER } from "../../../constants/storage";
 
 export default function Preview() {
   const ref = useRef<HTMLInputElement>(null);
@@ -41,17 +42,53 @@ export default function Preview() {
     };
     const observer = new MutationObserver(observerCallback);
 
-    // '팔로우 채널'과 '추천 채널'을 모두 돌면서
-    Array.from($menuList).forEach((menu) => {
-      // 처음 생성된 스트리머 메뉴에 event 추가
-      const prevMenu = menu.getElementsByClassName(STREAMER_MENU);
-      Array.from(prevMenu).forEach((item) => {
-        item.addEventListener("mouseenter", navHoverListener);
-        item.addEventListener("mouseleave", navLeaveListener);
-      });
+    const $navigation = document.getElementById("navigation");
+    /*
+      <div className="navigator_wrapper__ruh6f">
+        <h2 className="navigator_title__9RhVJ" style={{ paddingLeft: "0.5rem" }}>
+          즐겨찾기 채널
+        </h2>
+        <div className="navigator_list__cHnuV">
+      </div>
+    */
+    const $starNavigation = document.createElement("div");
+    $starNavigation.className = "navigator_wrapper__ruh6f";
+    $navigation?.prepend($starNavigation);
 
-      // '팔로우 채널'과 '추천 채널' 에 [더보기]를 눌러 새로운 스트리머를 가져온다면 해당 메뉴에 리스너 추가
-      observer.observe(menu, { childList: true });
+    const $starNavigationH2 = document.createElement("h2");
+    $starNavigationH2.className = "navigator_title__9RhVJ";
+    $starNavigationH2.style.paddingLeft = "0.5rem";
+    $starNavigationH2.style.paddingBottom = "7px";
+    $starNavigationH2.innerText = "즐겨찾기 채널";
+    $starNavigation.appendChild($starNavigationH2);
+
+    const $starNavigationList = document.createElement("div");
+    $starNavigationList.className = "navigator_list__cHnuV";
+    $starNavigation.appendChild($starNavigationList);
+
+    // '팔로우 채널'과 '추천 채널'을 모두 돌면서
+    chrome.storage.local.get(FAVORITE_STREAMER, (res) => {
+      Array.from($menuList).forEach((menu) => {
+        // 처음 생성된 스트리머 메뉴에 event 추가
+        const prevMenu = menu.getElementsByClassName(
+          STREAMER_MENU
+        ) as HTMLCollectionOf<HTMLAnchorElement>;
+        Array.from(prevMenu).forEach((item) => {
+          item.addEventListener("mouseenter", navHoverListener);
+          item.addEventListener("mouseleave", navLeaveListener);
+
+          // 즐겨찾기한 채널에 포함이 되는지 확인
+          if (item.href && res[FAVORITE_STREAMER]) {
+            const channelID = getChannelIDByUrl(item.href);
+            const streamers = JSON.parse(res[FAVORITE_STREAMER]);
+            if (streamers.includes(channelID)) {
+              $starNavigationList.appendChild(item);
+            }
+          }
+        });
+        // '팔로우 채널'과 '추천 채널' 에 [더보기]를 눌러 새로운 스트리머를 가져온다면 해당 메뉴에 리스너 추가
+        observer.observe(menu, { childList: true });
+      });
     });
 
     return () => {

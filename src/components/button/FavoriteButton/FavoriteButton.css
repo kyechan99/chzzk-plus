@@ -1,6 +1,6 @@
-.capture-btn {
-  background-color: #2e3033;
-  color: #dfe2ea;
+.favorite-btn {
+  background: #dfe2ea;
+  color: #2e3033;
   padding-left: 12px;
   padding-right: 16px;
   border-radius: 17px;
@@ -22,6 +22,13 @@
 
   cursor: pointer;
 }
-.capture-btn:hover {
+.favorite-btn.favorited {
+  background-color: #2e3033;
+  color: #dfe2ea;
+}
+.favorite-btn:hover {
+  background-color: #c8cbd2;
+}
+.favorite-btn:hover.favorited {
   background-color: #434447;
 }

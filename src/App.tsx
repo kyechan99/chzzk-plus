@@ -7,7 +7,6 @@ import URLButton from "./components/button/URLButton/URLButton";
 import ColorPicker from "./components/input/ColorPicker/ColorPicker";
 
 import {
-  BARRICADE,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
@@ -33,12 +32,12 @@ function App() {
       <div className="setting-group">
         <h2 className="setting-label">플레이어</h2>
         <div className="menus">
-          <Checkbox id={BARRICADE}>
+          {/* <Checkbox id={BARRICADE}>
             <div className="menu">
               <p className="menu-title">화면 클릭시 일시정지 방지 *</p>
               <p className="menu-desc">새로고침 후 적용됩니다</p>
             </div>
-          </Checkbox>
+          </Checkbox> */}
 
           <Checkbox id={PLAYER_KEY_CONTROL}>
             <div className="menu">
@@ -77,13 +76,13 @@ function App() {
 
           <ColorPicker id={CHAT_NAME_COLOR}>
             <div className="menu">
-              <p className="menu-title">채팅 이름 색상</p>
-              <p className="menu-desc">'테마' 모드에서 작동합니다</p>
+              <p className="menu-title">이름 색</p>
+              <p className="menu-desc">'커스텀' 모드에서 작동합니다</p>
             </div>
           </ColorPicker>
           <ColorPicker id={CHAT_TEXT_COLOR}>
             <div className="menu">
-              <p className="menu-title">채팅 내용 색상</p>
+              <p className="menu-title">내용 색</p>
               <p className="menu-desc">'테마', '커스텀' 모드에서 작동합니다</p>
             </div>
           </ColorPicker>
@@ -105,6 +104,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
+      <p className="version">v1.0.3</p>
     </div>
   );
 }
