@@ -8,3 +8,8 @@ export const PLAYER_UI = "player_header";
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
 export const STREAMER_MENU_LIST = "navigator_list__cHnuV";
 export const STREAMER_MENU = "navigator_item__qXlq9";
+
+// 채팅 부모
+export const CHAT_CONTAINER = "live_chatting_list_wrapper__a5XTV";
+export const CHAT_NAME = "name_text__yQG50";
+export const CHAT_CONTENT = "live_chatting_message_text__DyleH";

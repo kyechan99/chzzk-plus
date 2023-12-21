@@ -29,9 +29,7 @@ export const editGlobalPage = () => {
       `--${CHAT_TEXT_COLOR}`,
       res[CHAT_TEXT_COLOR] || CHAT_TEXT_COLOR_DEFAULT
     );
-    // for (const [key, value] of Object.entries(res)) {
-    //   document.documentElement.style.setProperty(`--${key}`, value);
-    // }
+
     if (!res[CHAT_NAME_COLOR])
       chrome.storage.local.set({ [CHAT_NAME_COLOR]: CHAT_NAME_COLOR_DEFAULT });
     if (!res[CHAT_TEXT_COLOR])
