@@ -11,8 +11,11 @@ import {
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
+  CHAT_SIZE,
+  CHAT_SIZE_OPTIONS,
   CHAT_TEXT_COLOR,
   CHEEZE_REMOVER,
+  PLAYER_KEY_CONTROL,
 } from "./constants/storage";
 
 function App() {
@@ -34,6 +37,15 @@ function App() {
             <div className="menu">
               <p className="menu-title">화면 클릭시 일시정지 방지 *</p>
               <p className="menu-desc">새로고침 후 적용됩니다</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={PLAYER_KEY_CONTROL}>
+            <div className="menu">
+              <p className="menu-title">키 이벤트 활성화 *</p>
+              <p className="menu-desc">T: 넓은 화면</p>
+              <p className="menu-desc">F: 전체 화면</p>
+              <p className="menu-desc">M: 음소거</p>
             </div>
           </Checkbox>
         </div>
@@ -75,6 +87,18 @@ function App() {
               <p className="menu-desc">'테마', '커스텀' 모드에서 작동합니다</p>
             </div>
           </ColorPicker>
+
+          <Select
+            id={CHAT_SIZE}
+            options={CHAT_SIZE_OPTIONS.map((op) => {
+              return { name: op, value: op };
+            })}
+          >
+            <div className="menu">
+              <p className="menu-title">채팅 크기 *</p>
+              <p className="menu-desc">새로고침 후 적용됩니다</p>
+            </div>
+          </Select>
         </div>
       </div>
 

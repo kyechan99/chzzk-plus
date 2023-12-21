@@ -14,7 +14,6 @@ import {
   INPUT_UI_LIST,
   PLAYER_LAYOUT_ID,
   PLAYER_UI,
-  VIDEO_CHAT_CLOSE_BTN,
   VIDEO_FULL_BTN,
   VIDEO_VIEW_BTN,
   VIDEO_VOLUME_BTN,
@@ -23,8 +22,10 @@ import {
   BARRICADE,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
+  CHAT_SIZE,
   CHAT_TEXT_COLOR,
   CHEEZE_REMOVER,
+  PLAYER_KEY_CONTROL,
 } from "../constants/storage";
 
 export const editLivePage = () => {
@@ -49,43 +50,39 @@ export const editLivePage = () => {
       $pipButtonRoot.style.display = "none";
     });
 
-    // Feat: 채팅 색상 (중복 등록 안되려고 버튼 체크랑 같이 둠) ===================================
-    document.addEventListener("keydown", (event) => {
-      const { target } = event;
-      if (target instanceof HTMLElement)
-        if (!INPUT_UI_LIST.includes(target.className)) {
-          if (event.key === "t" || event.key === "T") {
-            const viewModeBtn = document.querySelector(
-              VIDEO_VIEW_BTN
-            ) as HTMLElement;
-            if (viewModeBtn) viewModeBtn.click();
-          }
+    // Feat: 플레이커 키 단축키 활성화 =========================================================
+    chrome.storage.local.get(PLAYER_KEY_CONTROL, (res) => {
+      // 위에서 pip 버튼 추가 체크로 재생성 걱정은 안해도 괜찮다.
+      if (res[PLAYER_KEY_CONTROL]) {
+        document.addEventListener("keydown", (event) => {
+          const { target } = event;
+          if (target instanceof HTMLElement)
+            if (!INPUT_UI_LIST.includes(target.className)) {
+              // T : 넓은 화면
+              if (event.key === "t" || event.key === "T") {
+                const viewModeBtn = document.querySelector(
+                  VIDEO_VIEW_BTN
+                ) as HTMLElement;
+                if (viewModeBtn) viewModeBtn.click();
+              }
 
-          if (event.key === "f" || event.key === "F") {
-            const fullScreenBtn = document.querySelector(
-              VIDEO_FULL_BTN
-            ) as HTMLElement;
-            if (fullScreenBtn) fullScreenBtn.click();
-          }
-          if (event.key === "m" || event.key === "M") {
-            const muteBtn = document.querySelector(
-              VIDEO_VOLUME_BTN
-            ) as HTMLElement;
-            if (muteBtn) muteBtn.click();
-          }
-          if (event.altKey && event.key === "w") {
-            const chatCloseBtn = document.querySelector(
-              VIDEO_CHAT_CLOSE_BTN
-            ) as HTMLElement;
-            const viewModeBtn = document.querySelector(
-              VIDEO_VIEW_BTN
-            ) as HTMLElement;
-            if (chatCloseBtn && viewModeBtn) {
-              setTimeout(() => chatCloseBtn.click(), 100);
-              setTimeout(() => viewModeBtn.click(), 200);
+              // F : 전체 화면
+              if (event.key === "f" || event.key === "F") {
+                const fullScreenBtn = document.querySelector(
+                  VIDEO_FULL_BTN
+                ) as HTMLElement;
+                if (fullScreenBtn) fullScreenBtn.click();
+              }
+              // M : 음소거
+              if (event.key === "m" || event.key === "M") {
+                const muteBtn = document.querySelector(
+                  VIDEO_VOLUME_BTN
+                ) as HTMLElement;
+                if (muteBtn) muteBtn.click();
+              }
             }
-          }
-        }
+        });
+      }
     });
   }
 
@@ -104,58 +101,67 @@ export const editLivePage = () => {
   });
 
   // Feat: 채팅 색상, 치즈 제거 ===============================================================
-  chrome.storage.local.get([CHAT_COLOR_THEME, CHEEZE_REMOVER], (res) => {
-    const chatContainer = document.querySelector(
-      `div[class*="${CHAT_CONTAINER}"]`
-    );
+  chrome.storage.local.get(
+    [CHAT_COLOR_THEME, CHEEZE_REMOVER, CHAT_SIZE],
+    (res) => {
+      const chatContainer = document.querySelector(
+        `div[class*="${CHAT_CONTAINER}"]`
+      );
 
-    if (chatContainer && res[CHAT_COLOR_THEME] !== "기본") {
-      if (res[CHAT_COLOR_THEME] && chatContainer.id !== CHAT_COLOR_THEME) {
-        chatContainer.id = CHAT_COLOR_THEME;
+      if (chatContainer && res[CHAT_COLOR_THEME] !== "기본") {
+        if (res[CHAT_COLOR_THEME] && chatContainer.id !== CHAT_COLOR_THEME) {
+          chatContainer.id = CHAT_COLOR_THEME;
 
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const observer = new MutationObserver((mutationList, _observer) => {
-            for (const mutation of mutationList) {
-              for (const addedNode of mutation.addedNodes as NodeListOf<HTMLElement>) {
-                if (res[CHEEZE_REMOVER]) {
-                  if (addedNode.className === CHEEZE_CHAT) {
-                    addedNode.style.display = "none";
-                    continue;
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const observer = new MutationObserver((mutationList, _observer) => {
+              for (const mutation of mutationList) {
+                for (const addedNode of mutation.addedNodes as NodeListOf<HTMLElement>) {
+                  if (res[CHEEZE_REMOVER]) {
+                    if (addedNode.className === CHEEZE_CHAT) {
+                      addedNode.style.display = "none";
+                      continue;
+                    }
                   }
-                }
 
-                const nickname = addedNode.getElementsByClassName(
-                  CHAT_NAME
-                )[0] as HTMLElement;
-                const text = addedNode.getElementsByClassName(
-                  CHAT_CONTENT
-                )[0] as HTMLElement;
+                  const nickname = addedNode.querySelector(
+                    CHAT_NAME
+                  ) as HTMLElement;
+                  const text = addedNode.querySelector(
+                    CHAT_CONTENT
+                  ) as HTMLElement;
 
-                if (text) {
-                  text.style.color = `var(--${CHAT_TEXT_COLOR})`;
-                }
+                  if (text) {
+                    text.style.color = `var(--${CHAT_TEXT_COLOR})`;
+                    if (res[CHAT_SIZE]) {
+                      text.style.fontSize = `${res[CHAT_SIZE]}px`;
+                    }
+                  }
 
-                if (nickname) {
-                  if (res[CHAT_COLOR_THEME] === "테마") {
-                    nickname.style.color = getNameColor(
-                      nickname.textContent || ""
-                    );
-                  } else if (res[CHAT_COLOR_THEME] === "커스텀") {
-                    nickname.style.color = `var(--${CHAT_NAME_COLOR})`;
+                  if (nickname) {
+                    if (res[CHAT_COLOR_THEME] === "테마") {
+                      nickname.style.color = getNameColor(
+                        nickname.textContent || ""
+                      );
+                    } else if (res[CHAT_COLOR_THEME] === "커스텀") {
+                      nickname.style.color = `var(--${CHAT_NAME_COLOR})`;
+                    }
+                    if (res[CHAT_SIZE]) {
+                      nickname.style.fontSize = `${res[CHAT_SIZE]}px`;
+                    }
                   }
                 }
               }
-            }
-          });
+            });
 
-          observer.observe(chatContainer, { childList: true, subtree: true });
-        } catch (err) {
-          logError(err);
+            observer.observe(chatContainer, { childList: true, subtree: true });
+          } catch (err) {
+            logError(err);
+          }
         }
       }
     }
-  });
+  );
 
   log("LIVE PAGE 설정");
 };

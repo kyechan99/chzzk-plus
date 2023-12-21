@@ -22,7 +22,7 @@ hr {
   display: flex;
   width: 100%;
   color: white;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
