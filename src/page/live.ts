@@ -1,6 +1,11 @@
 import Barricade from "../components/video/Barricade/Barricade";
 import PipButton from "../components/button/PipButton/PipButton";
 
+import { isLivePage } from "../utils/page";
+import { log, logError } from "../utils/log";
+import { getNameColor } from "../utils/color";
+import { createReactElement } from "../utils/dom";
+
 import {
   CHAT_CONTAINER,
   CHAT_CONTENT,
@@ -8,13 +13,12 @@ import {
   PLAYER_LAYOUT_ID,
   PLAYER_UI,
 } from "../constants/class";
-import { BARRICADE, CHAT_COLOR_THEME } from "../constants/storage";
-
-import { createReactElement } from "../utils/dom";
-import { isLivePage } from "../utils/page";
-import { log, logError } from "../utils/log";
-import { getNameColor } from "../utils/color";
-import { CHAT_NAME_COLOR, CHAT_TEXT_COLOR } from "../constants/data";
+import {
+  BARRICADE,
+  CHAT_COLOR_THEME,
+  CHAT_NAME_COLOR,
+  CHAT_TEXT_COLOR,
+} from "../constants/storage";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -43,7 +47,7 @@ export const editLivePage = () => {
   chrome.storage.local.get(BARRICADE, (res) => {
     if (res[BARRICADE] && !document.getElementById("chzzk-plus-barricade")) {
       // Pause 이벤트 막는 바리게이트 생성
-      const $playerUI = $playerLayout?.getElementsByClassName(PLAYER_UI)[0];
+      const $playerUI = $playerLayout.getElementsByClassName(PLAYER_UI)[0];
       if ($playerUI && $playerUI.parentNode) {
         const $barricade = document.createElement("div");
         $barricade.id = "chzzk-plus-barricade";
@@ -92,7 +96,7 @@ export const editLivePage = () => {
             }
           });
 
-          observer.observe(document.body, { childList: true, subtree: true });
+          observer.observe(chatContainer, { childList: true, subtree: true });
         } catch (err) {
           logError(err);
         }

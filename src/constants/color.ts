@@ -1,4 +1,6 @@
 // 채팅 색상
+export const CHAT_NAME_COLOR_DEFAULT = "#697183";
+export const CHAT_TEXT_COLOR_DEFAULT = "#dfe2ea";
 export const themeColors = [
   "#D2691E",
   "#bfa86d",

@@ -1,15 +1,18 @@
+import Global from "../components/Global";
 import Preview from "../components/video/Preview/Preview";
 
 import { log } from "../utils/log";
 import { createReactElement } from "../utils/dom";
+
 import {
   CHAT_NAME_COLOR,
-  COLOR_PROPERTIES,
   CHAT_TEXT_COLOR,
+  COLOR_PROPERTIES,
+} from "../constants/storage";
+import {
   CHAT_NAME_COLOR_DEFAULT,
   CHAT_TEXT_COLOR_DEFAULT,
-} from "../constants/data";
-import Global from "../components/Global";
+} from "../constants/color";
 
 export const editGlobalPage = () => {
   // Feat: Preview 썸네일 =====================================================================

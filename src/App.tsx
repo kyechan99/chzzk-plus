@@ -1,17 +1,18 @@
 import "./App.css";
 
 import Logo from "../public/icon128.png";
-import URLButton from "./components/button/URLButton/URLButton";
+import { Select } from "./components/input/Select/Select";
 import Checkbox from "./components/input/Checkbox/Checkbox";
+import URLButton from "./components/button/URLButton/URLButton";
 import ColorPicker from "./components/input/ColorPicker/ColorPicker";
 
 import {
   BARRICADE,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
+  CHAT_NAME_COLOR,
+  CHAT_TEXT_COLOR,
 } from "./constants/storage";
-import { CHAT_NAME_COLOR, CHAT_TEXT_COLOR } from "./constants/data";
-import { Select } from "./components/input/Select/Select";
 
 function App() {
   return (
