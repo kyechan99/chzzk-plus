@@ -9,10 +9,12 @@
 <p align="center">
     <img src="https://img.shields.io/github/package-json/v/kyechan99/chzzk-plus?style=for-the-badge"/>
     <img src="https://img.shields.io/github/license/kyechan99/chzzk-plus?style=for-the-badge"/>
-    <a href="https://github.com/kyechan99/chzzk-plus/releases">
+    <a href="https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia?hl=ko&utm_source=ext_sidebar">
  	    <img src="https://img.shields.io/badge/DOWNLOAD-ME-%2320c997?style=for-the-badge"/>
     </a>
 </p>
+
+[크롬 확장프로그램 설치](https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia?hl=ko&utm_source=ext_sidebar)
 
 ## Feature
 
