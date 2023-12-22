@@ -30,6 +30,10 @@ import {
 } from "../constants/storage";
 import LiveHelper from "../components/liveHelper/LiveHelper";
 
+interface Video extends HTMLMediaElement {
+  captureStream: () => MediaStream;
+}
+
 export const editLivePage = () => {
   if (!isLivePage()) return;
 
@@ -96,6 +100,78 @@ export const editLivePage = () => {
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
     }
+
+    let mediaRecorder: MediaRecorder | null = null;
+    let recordedChunks: Blob[] = [];
+
+    const startRecording = () => {
+      const videoElement = document.getElementById("asdf") as Video | null;
+
+      if (!videoElement) {
+        console.error("Video element with 'asdf' id not found");
+        return;
+      }
+
+      const stream = videoElement.captureStream();
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: "video/mp4" });
+        const recordedVideo = document.getElementById(
+          "recordedVideo"
+        ) as HTMLVideoElement | null;
+
+        if (recordedVideo) {
+          recordedVideo.src = URL.createObjectURL(blob);
+        }
+
+        recordedChunks = [];
+      };
+
+      mediaRecorder.start();
+    };
+
+    const stopRecording = () => {
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+      }
+    };
+
+    const saveRecording = () => {
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style.display = "none";
+
+      const blob = new Blob(recordedChunks, { type: "video/mp4" });
+      const url = URL.createObjectURL(blob);
+
+      a.href = url;
+      a.download = "recorded-video.mp4";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    };
+
+    // Button event listeners
+    document
+      .getElementById("startStopButton")
+      ?.addEventListener("click", () => {
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+          stopRecording();
+        } else {
+          startRecording();
+        }
+      });
+
+    document
+      .getElementById("saveButton")
+      ?.addEventListener("click", saveRecording);
   }
 
   // Feat: Barricade (이벤트 방해 모드) =======================================================
