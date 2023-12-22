@@ -1,38 +1,25 @@
-import Barricade from "../components/video/Barricade/Barricade";
+// import Barricade from "../components/video/Barricade/Barricade";
 import PipButton from "../components/button/PipButton/PipButton";
 
 import { isLivePage } from "../utils/page";
-import { log, logError } from "../utils/log";
-import { getNameColor } from "../utils/color";
+import { log } from "../utils/log";
 import { createReactElement } from "../utils/dom";
 
 import {
-  CHAT_CONTAINER,
-  CHAT_CONTENT,
-  CHAT_NAME,
-  CHEEZE_CHAT,
   INPUT_UI_LIST,
   LIVE_INFORMATION_HEAD,
   PLAYER_LAYOUT_ID,
-  PLAYER_UI,
+  // PLAYER_UI,
   VIDEO_FULL_BTN,
   VIDEO_VIEW_BTN,
   VIDEO_VOLUME_BTN,
 } from "../constants/class";
 import {
-  BARRICADE,
-  CHAT_COLOR_THEME,
-  CHAT_NAME_COLOR,
-  CHAT_SIZE,
-  CHAT_TEXT_COLOR,
-  CHEEZE_REMOVER,
+  // BARRICADE,
   PLAYER_KEY_CONTROL,
 } from "../constants/storage";
 import LiveHelper from "../components/liveHelper/LiveHelper";
-
-interface Video extends HTMLMediaElement {
-  captureStream: () => MediaStream;
-}
+import { chatSetting } from "../feature/chat";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -100,156 +87,23 @@ export const editLivePage = () => {
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
     }
-
-    let mediaRecorder: MediaRecorder | null = null;
-    let recordedChunks: Blob[] = [];
-
-    const startRecording = () => {
-      const videoElement = document.getElementById("asdf") as Video | null;
-
-      if (!videoElement) {
-        console.error("Video element with 'asdf' id not found");
-        return;
-      }
-
-      const stream = videoElement.captureStream();
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          recordedChunks.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: "video/mp4" });
-        const recordedVideo = document.getElementById(
-          "recordedVideo"
-        ) as HTMLVideoElement | null;
-
-        if (recordedVideo) {
-          recordedVideo.src = URL.createObjectURL(blob);
-        }
-
-        recordedChunks = [];
-      };
-
-      mediaRecorder.start();
-    };
-
-    const stopRecording = () => {
-      if (mediaRecorder) {
-        mediaRecorder.stop();
-      }
-    };
-
-    const saveRecording = () => {
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style.display = "none";
-
-      const blob = new Blob(recordedChunks, { type: "video/mp4" });
-      const url = URL.createObjectURL(blob);
-
-      a.href = url;
-      a.download = "recorded-video.mp4";
-      a.click();
-
-      window.URL.revokeObjectURL(url);
-    };
-
-    // Button event listeners
-    document
-      .getElementById("startStopButton")
-      ?.addEventListener("click", () => {
-        if (mediaRecorder && mediaRecorder.state === "recording") {
-          stopRecording();
-        } else {
-          startRecording();
-        }
-      });
-
-    document
-      .getElementById("saveButton")
-      ?.addEventListener("click", saveRecording);
   }
 
   // Feat: Barricade (이벤트 방해 모드) =======================================================
-  chrome.storage.local.get(BARRICADE, (res) => {
-    if (res[BARRICADE] && !document.getElementById("chzzk-plus-barricade")) {
-      // Pause 이벤트 막는 바리게이트 생성
-      const $playerUI = $playerLayout.getElementsByClassName(PLAYER_UI)[0];
-      if ($playerUI && $playerUI.parentNode) {
-        const $barricade = document.createElement("div");
-        $barricade.id = "chzzk-plus-barricade";
-        $playerUI.parentNode.insertBefore($barricade, $playerUI);
-        createReactElement($barricade, Barricade);
-      }
-    }
-  });
+  // chrome.storage.local.get(BARRICADE, (res) => {
+  //   if (res[BARRICADE] && !document.getElementById("chzzk-plus-barricade")) {
+  //     // Pause 이벤트 막는 바리게이트 생성
+  //     const $playerUI = $playerLayout.getElementsByClassName(PLAYER_UI)[0];
+  //     if ($playerUI && $playerUI.parentNode) {
+  //       const $barricade = document.createElement("div");
+  //       $barricade.id = "chzzk-plus-barricade";
+  //       $playerUI.parentNode.insertBefore($barricade, $playerUI);
+  //       createReactElement($barricade, Barricade);
+  //     }
+  //   }
+  // });
 
-  // Feat: 채팅 색상, 치즈 제거 ===============================================================
-  chrome.storage.local.get(
-    [CHAT_COLOR_THEME, CHEEZE_REMOVER, CHAT_SIZE],
-    (res) => {
-      const chatContainer = document.querySelector(
-        `div[class*="${CHAT_CONTAINER}"]`
-      );
-
-      if (chatContainer && res[CHAT_COLOR_THEME] !== "기본") {
-        if (res[CHAT_COLOR_THEME] && chatContainer.id !== CHAT_COLOR_THEME) {
-          chatContainer.id = CHAT_COLOR_THEME;
-
-          try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const observer = new MutationObserver((mutationList, _observer) => {
-              for (const mutation of mutationList) {
-                for (const addedNode of mutation.addedNodes as NodeListOf<HTMLElement>) {
-                  if (res[CHEEZE_REMOVER]) {
-                    if (addedNode.className === CHEEZE_CHAT) {
-                      addedNode.style.display = "none";
-                      continue;
-                    }
-                  }
-
-                  const nickname = addedNode.querySelector(
-                    CHAT_NAME
-                  ) as HTMLElement;
-                  const text = addedNode.querySelector(
-                    CHAT_CONTENT
-                  ) as HTMLElement;
-
-                  if (text) {
-                    text.style.color = `var(--${CHAT_TEXT_COLOR})`;
-                    if (res[CHAT_SIZE]) {
-                      text.style.fontSize = `${res[CHAT_SIZE]}px`;
-                    }
-                  }
-
-                  if (nickname) {
-                    if (res[CHAT_COLOR_THEME] === "테마") {
-                      nickname.style.color = getNameColor(
-                        nickname.textContent || ""
-                      );
-                    } else if (res[CHAT_COLOR_THEME] === "커스텀") {
-                      nickname.style.color = `var(--${CHAT_NAME_COLOR})`;
-                    }
-                    if (res[CHAT_SIZE]) {
-                      nickname.style.fontSize = `${res[CHAT_SIZE]}px`;
-                    }
-                  }
-                }
-              }
-            });
-
-            observer.observe(chatContainer, { childList: true, subtree: true });
-          } catch (err) {
-            logError(err);
-          }
-        }
-      }
-    }
-  );
+  chatSetting();
 
   log("LIVE PAGE 설정");
 };

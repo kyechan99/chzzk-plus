@@ -11,7 +11,6 @@ export default function FavoriteButton() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const observer = new MutationObserver((_mutations) => {
-      console.log("OB SER ");
       checkFavorite();
     });
     observer.observe(document.head, { subtree: true, childList: true });

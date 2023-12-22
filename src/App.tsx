@@ -83,7 +83,7 @@ function App() {
           <ColorPicker id={CHAT_TEXT_COLOR}>
             <div className="menu">
               <p className="menu-title">내용 색</p>
-              <p className="menu-desc">'테마', '커스텀' 모드에서 작동합니다</p>
+              <p className="menu-desc">'커스텀' 모드에서 작동합니다</p>
             </div>
           </ColorPicker>
 

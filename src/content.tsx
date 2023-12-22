@@ -4,7 +4,10 @@ import { editVideoPage } from "./page/video";
 
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
-  if (isBodyLoaded) {
+
+  const $layout = document.querySelector(".layout_glive__oajiQ");
+
+  if (isBodyLoaded && $layout !== null) {
     /**
      * 페이지 content 수정
      */
