@@ -14,7 +14,7 @@ export default function RecordButton() {
 
   const clickedHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(recording);
+
     if (!recording) {
       startRecording();
     } else {
@@ -29,7 +29,7 @@ export default function RecordButton() {
 
     if (!$video || recording !== 0) return;
 
-    $video.muted = true;
+    $video.muted = false;
     // $video.volume = 0.5;
 
     const stream = $video.captureStream();

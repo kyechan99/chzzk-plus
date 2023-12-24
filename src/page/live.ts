@@ -15,11 +15,13 @@ import {
   VIDEO_VOLUME_BTN,
 } from "../constants/class";
 import {
+  FAST_BUTTON,
   // BARRICADE,
   PLAYER_KEY_CONTROL,
 } from "../constants/storage";
 import LiveHelper from "../components/liveHelper/LiveHelper";
 import { chatSetting } from "../feature/chat";
+import FastButton from "../components/button/FastButton/FastButton";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -75,6 +77,18 @@ export const editLivePage = () => {
               }
             }
         });
+      }
+    });
+
+    chrome.storage.local.get(FAST_BUTTON, (res) => {
+      console.log(res[FAST_BUTTON]);
+      if (res[FAST_BUTTON]) {
+        const $videoHelper = document.createElement("div");
+        const $btn_list = document.querySelector(
+          ".pzp-pc__bottom-buttons-right"
+        );
+        $btn_list?.prepend($videoHelper);
+        createReactElement($videoHelper, FastButton);
       }
     });
 

@@ -14,6 +14,7 @@ import {
   CHAT_SIZE_OPTIONS,
   CHAT_TEXT_COLOR,
   CHEEZE_REMOVER,
+  FAST_BUTTON,
   PLAYER_KEY_CONTROL,
 } from "./constants/storage";
 
@@ -47,6 +48,13 @@ function App() {
               <p className="menu-desc">M: 음소거</p>
             </div>
           </Checkbox>
+
+          <Checkbox id={FAST_BUTTON}>
+            <div className="menu">
+              <p className="menu-title">빨리 감기 활성화 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 
@@ -58,7 +66,7 @@ function App() {
           <Checkbox id={CHEEZE_REMOVER}>
             <div className="menu">
               <p className="menu-title">치즈 제거 *</p>
-              <p className="menu-desc">새로고침 후 적용됩니다</p>
+              <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>
 
@@ -70,20 +78,20 @@ function App() {
           >
             <div className="menu">
               <p className="menu-title">채팅 이름에 색상넣기 *</p>
-              <p className="menu-desc">새로고침 후 적용됩니다</p>
+              <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Select>
 
           <ColorPicker id={CHAT_NAME_COLOR}>
             <div className="menu">
               <p className="menu-title">이름 색</p>
-              <p className="menu-desc">'커스텀' 모드에서 작동합니다</p>
+              <p className="menu-desc">'커스텀' 모드에서 작동</p>
             </div>
           </ColorPicker>
           <ColorPicker id={CHAT_TEXT_COLOR}>
             <div className="menu">
               <p className="menu-title">내용 색</p>
-              <p className="menu-desc">'커스텀' 모드에서 작동합니다</p>
+              <p className="menu-desc">'커스텀' 모드에서 작동</p>
             </div>
           </ColorPicker>
 
@@ -95,7 +103,7 @@ function App() {
           >
             <div className="menu">
               <p className="menu-title">채팅 크기 *</p>
-              <p className="menu-desc">새로고침 후 적용됩니다</p>
+              <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Select>
         </div>
@@ -104,7 +112,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.0.3</p>
+      <p className="version">v1.0.4</p>
     </div>
   );
 }

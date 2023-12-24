@@ -9,9 +9,9 @@ export default function CaptureButton() {
       const video = document.querySelector(
         ".webplayer-internal-video"
       ) as HTMLVideoElement;
-      const canvas = document.querySelector(
-        ".pzp-space-creator.pzp-pc__space-creator"
-      ) as HTMLCanvasElement;
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
       const context = canvas.getContext("2d");
 
       if (!context) return;
