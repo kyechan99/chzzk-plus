@@ -1,0 +1,16 @@
+.audio-compressor-button {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    border: 1px solid #00000040;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    background-color: #141517e0;
+    /* display: none; */
+    color: rgba(0, 255, 163, 0.9);
+  }
+  .audio-compressor-button:hover {
+    background-color: #2e2f31e0;
+  }
+  

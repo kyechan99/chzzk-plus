@@ -1,5 +1,6 @@
 import Barricade from "../components/video/Barricade/Barricade";
 import PipButton from "../components/button/PipButton/PipButton";
+import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
 
 import { PLAYER_LAYOUT_ID, PLAYER_UI } from "../constants/class";
 
@@ -27,6 +28,20 @@ export const editLivePage = () => {
     });
     $playerLayout.addEventListener("mouseleave", () => {
       $pipButtonRoot.style.display = "none";
+    });
+  }
+
+  // Feat: Audio Compressor 버튼 추가 ==================================================================
+  if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
+    const $audioCompressorRoot = document.createElement("div");
+    $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
+    $playerLayout.appendChild($audioCompressorRoot);
+    createReactElement($audioCompressorRoot, AudioCompressorButton);
+    $playerLayout.addEventListener("mouseenter", () => {
+      $audioCompressorRoot.style.display = "block";
+    });
+    $playerLayout.addEventListener("mouseleave", () => {
+      $audioCompressorRoot.style.display = "none";
     });
   }
 
