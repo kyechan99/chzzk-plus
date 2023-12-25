@@ -1,4 +1,5 @@
 // 플레이어 레이아웃, 동영상 플레이어의 기본적인 레이아웃
+export const LAYOUT_WRAP = ".layout_wrap__Qtjcn";
 export const PLAYER_LAYOUT_ID = "live_player_layout";
 export const VIDEO_LAYOUT_ID = "player_layout";
 
@@ -26,3 +27,4 @@ export const CHEEZE_CHAT =
 
 // UI 정보
 export const LIVE_INFORMATION_HEAD = "video_information_row__HrQ0z";
+export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";

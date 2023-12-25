@@ -1,29 +1,21 @@
+import { chatSetting } from "../feature/chat";
+
 // import Barricade from "../components/video/Barricade/Barricade";
 import PipButton from "../components/button/PipButton/PipButton";
+import LiveHelper from "../components/liveHelper/LiveHelper";
+import FastButton from "../components/button/FastButton/FastButton";
+import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
 
-import { isLivePage } from "../utils/page";
 import { log } from "../utils/log";
+import { isLivePage } from "../utils/page";
 import { createReactElement } from "../utils/dom";
 
 import {
-  INPUT_UI_LIST,
-  LIVE_INFORMATION_HEAD,
+  VIDEO_BUTTONS,
   PLAYER_LAYOUT_ID,
-  // PLAYER_UI,
-  VIDEO_FULL_BTN,
-  VIDEO_VIEW_BTN,
-  VIDEO_VOLUME_BTN,
+  LIVE_INFORMATION_HEAD,
 } from "../constants/class";
-import {
-  AUDIO_COMPRESSOR,
-  FAST_BUTTON,
-  // BARRICADE,
-  PLAYER_KEY_CONTROL,
-} from "../constants/storage";
-import LiveHelper from "../components/liveHelper/LiveHelper";
-import { chatSetting } from "../feature/chat";
-import FastButton from "../components/button/FastButton/FastButton";
-import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
+import { FAST_BUTTON, AUDIO_COMPRESSOR } from "../constants/storage";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -44,46 +36,49 @@ export const editLivePage = () => {
       $liveHelper.id = "chzzk-plus-live-helper";
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
+
+      // // Feat: 플레이커 키 단축키 활성화 =========================================================
+      // chrome.storage.local.get(PLAYER_KEY_CONTROL, (res) => {
+      //   // 위에서 pip 버튼 추가 체크로 재생성 걱정은 안해도 괜찮다.
+      //   if (res[PLAYER_KEY_CONTROL]) {
+      //     document.addEventListener("keydown", (event) => {
+      //       const { target } = event;
+      //       if (target instanceof HTMLElement)
+      //         if (!INPUT_UI_LIST.includes(target.className)) {
+      //           // T : 넓은 화면
+      //           if (event.key === "t" || event.key === "T") {
+      //             const viewModeBtn = document.querySelector(
+      //               VIDEO_VIEW_BTN
+      //             ) as HTMLElement;
+      //             if (viewModeBtn) viewModeBtn.click();
+      //           }
+
+      //           // F : 전체 화면
+      //           if (event.key === "f" || event.key === "F") {
+      //             const fullScreenBtn = document.querySelector(
+      //               VIDEO_FULL_BTN
+      //             ) as HTMLElement;
+      //             if (fullScreenBtn) fullScreenBtn.click();
+      //           }
+      //           // M : 음소거
+      //           if (event.key === "m" || event.key === "M") {
+      //             const muteBtn = document.querySelector(
+      //               VIDEO_VOLUME_BTN
+      //             ) as HTMLElement;
+      //             if (muteBtn) muteBtn.click();
+      //           }
+      //         }
+      //     });
+      //   }
+      // });
     }
+  }
 
-    // Feat: 플레이커 키 단축키 활성화 =========================================================
-    chrome.storage.local.get(PLAYER_KEY_CONTROL, (res) => {
-      // 위에서 pip 버튼 추가 체크로 재생성 걱정은 안해도 괜찮다.
-      if (res[PLAYER_KEY_CONTROL]) {
-        document.addEventListener("keydown", (event) => {
-          const { target } = event;
-          if (target instanceof HTMLElement)
-            if (!INPUT_UI_LIST.includes(target.className)) {
-              // T : 넓은 화면
-              if (event.key === "t" || event.key === "T") {
-                const viewModeBtn = document.querySelector(
-                  VIDEO_VIEW_BTN
-                ) as HTMLElement;
-                if (viewModeBtn) viewModeBtn.click();
-              }
-
-              // F : 전체 화면
-              if (event.key === "f" || event.key === "F") {
-                const fullScreenBtn = document.querySelector(
-                  VIDEO_FULL_BTN
-                ) as HTMLElement;
-                if (fullScreenBtn) fullScreenBtn.click();
-              }
-              // M : 음소거
-              if (event.key === "m" || event.key === "M") {
-                const muteBtn = document.querySelector(
-                  VIDEO_VOLUME_BTN
-                ) as HTMLElement;
-                if (muteBtn) muteBtn.click();
-              }
-            }
-        });
-      }
-    });
-
-    const $btn_list = document.querySelector(".pzp-pc__bottom-buttons-right");
+  if (!document.getElementById("chzzk-plus-live-btns")) {
+    const $btn_list = document.querySelector(VIDEO_BUTTONS);
     // Feat: PIP 버튼 활성화 =========================================================
     const $pipButtonRoot = document.createElement("div");
+    $pipButtonRoot.id = "chzzk-plus-live-btns";
     $btn_list?.prepend($pipButtonRoot);
     createReactElement($pipButtonRoot, PipButton);
 
@@ -102,41 +97,6 @@ export const editLivePage = () => {
       }
     });
   }
-
-  // Feat: Audio Compressor 버튼 추가 ==================================================================
-  // if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
-  //   const $bottomButtonsRight = $playerLayout.querySelector(
-  //     ".pzp-pc__bottom-buttons-right"
-  //   );
-
-  //   if (!$bottomButtonsRight) return;
-
-  //   const $audioCompressorRoot = document.createElement("div");
-  //   $audioCompressorRoot.classList.add("pzp-button", "pzp-pc-ui-button");
-  //   $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
-  //   $bottomButtonsRight.prepend($audioCompressorRoot);
-  //   createReactElement($audioCompressorRoot, AudioCompressorButton);
-  //   $playerLayout.addEventListener("mouseenter", () => {
-  //     $audioCompressorRoot.style.display = "block";
-  //   });
-  //   $playerLayout.addEventListener("mouseleave", () => {
-  //     $audioCompressorRoot.style.display = "none";
-  //   });
-  // }
-
-  // Feat: Barricade (이벤트 방해 모드) =======================================================
-  // chrome.storage.local.get(BARRICADE, (res) => {
-  //   if (res[BARRICADE] && !document.getElementById("chzzk-plus-barricade")) {
-  //     // Pause 이벤트 막는 바리게이트 생성
-  //     const $playerUI = $playerLayout.getElementsByClassName(PLAYER_UI)[0];
-  //     if ($playerUI && $playerUI.parentNode) {
-  //       const $barricade = document.createElement("div");
-  //       $barricade.id = "chzzk-plus-barricade";
-  //       $playerUI.parentNode.insertBefore($barricade, $playerUI);
-  //       createReactElement($barricade, Barricade);
-  //     }
-  //   }
-  // });
 
   chatSetting();
 

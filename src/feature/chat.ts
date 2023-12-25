@@ -16,7 +16,7 @@ import {
 } from "../constants/storage";
 
 export async function chatSetting(): Promise<void> {
-  await waitingElement(".live_chatting_list_wrapper__a5XTV");
+  await waitingElement(`.${CHAT_CONTAINER}`);
 
   // Feat: 채팅 색상, 치즈 제거 ===============================================================
   chrome.storage.local.get(

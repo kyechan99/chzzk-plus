@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+
 import { logError } from "../../../utils/log";
-import { STREAMER_MENU, STREAMER_MENU_LIST } from "../../../constants/class";
 import { getChannelIDByUrl } from "../../../utils/channel";
 
-import "./Preview.css";
 import { FAVORITE_STREAMER } from "../../../constants/storage";
+import { STREAMER_MENU, STREAMER_MENU_LIST } from "../../../constants/class";
+
+import "./Preview.css";
 
 export default function Preview() {
   const ref = useRef<HTMLInputElement>(null);
@@ -19,6 +21,8 @@ export default function Preview() {
   useEffect(() => {
     // MenuList가 두개가 존재함. 팔로우 채널, 추천 채널
     const $menuList = document.getElementsByClassName(STREAMER_MENU_LIST);
+
+    if (!$menuList || $menuList.length <= 0) return;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const observerCallback: MutationCallback = (mutationsList, _observer) => {

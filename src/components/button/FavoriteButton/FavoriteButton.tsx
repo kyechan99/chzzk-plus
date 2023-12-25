@@ -30,7 +30,6 @@ export default function FavoriteButton() {
           setFavStreamerList(streamers);
 
           const currentUrl = window.location.href;
-          console.log("Cur", currentUrl);
 
           // 즐겨찾기한 스트리머임.
           setFavorited(streamers.includes(getChannelIDByUrl(currentUrl)));

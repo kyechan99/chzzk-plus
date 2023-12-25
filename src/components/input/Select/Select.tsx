@@ -15,7 +15,6 @@ export const Select = ({ id, options, children }: SelectProps) => {
 
   useEffect(() => {
     chrome.storage.local.get([id], (res) => {
-      console.log(id, res[id]);
       setSelectValue(res[id]);
     });
   }, []);
