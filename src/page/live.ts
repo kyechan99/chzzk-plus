@@ -22,6 +22,7 @@ import {
 import LiveHelper from "../components/liveHelper/LiveHelper";
 import { chatSetting } from "../feature/chat";
 import FastButton from "../components/button/FastButton/FastButton";
+import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -101,6 +102,27 @@ export const editLivePage = () => {
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
     }
+  }
+
+  // Feat: Audio Compressor 버튼 추가 ==================================================================
+  if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
+    const $bottomButtonsRight = $playerLayout.querySelector(
+      ".pzp-pc__bottom-buttons-right"
+    );
+
+    if (!$bottomButtonsRight) return;
+
+    const $audioCompressorRoot = document.createElement("div");
+    $audioCompressorRoot.classList.add("pzp-button", "pzp-pc-ui-button");
+    $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
+    $bottomButtonsRight.prepend($audioCompressorRoot);
+    createReactElement($audioCompressorRoot, AudioCompressorButton);
+    $playerLayout.addEventListener("mouseenter", () => {
+      $audioCompressorRoot.style.display = "block";
+    });
+    $playerLayout.addEventListener("mouseleave", () => {
+      $audioCompressorRoot.style.display = "none";
+    });
   }
 
   // Feat: Barricade (이벤트 방해 모드) =======================================================
