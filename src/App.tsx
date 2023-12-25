@@ -7,6 +7,7 @@ import URLButton from "./components/button/URLButton/URLButton";
 import ColorPicker from "./components/input/ColorPicker/ColorPicker";
 
 import {
+  AUDIO_COMPRESSOR,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
@@ -53,6 +54,14 @@ function App() {
             <div className="menu">
               <p className="menu-title">빨리 감기 활성화 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={AUDIO_COMPRESSOR}>
+            <div className="menu">
+              <p className="menu-title">사운드 압축 *</p>
+              <p className="menu-desc">높고 낮은 음압 간의 차이를 줄임</p>
+              <p className="menu-desc">일정한 음량 수준을 유지</p>
             </div>
           </Checkbox>
         </div>
@@ -112,7 +121,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.0.4</p>
+      <p className="version">v1.0.5</p>
     </div>
   );
 }

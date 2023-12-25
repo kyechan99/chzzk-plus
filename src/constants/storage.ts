@@ -9,6 +9,7 @@ export const BARRICADE = "barricade";
 export const PLAYER_KEY_CONTROL = "czp-player-key";
 
 export const FAST_BUTTON = "czp-fast-btn";
+export const AUDIO_COMPRESSOR = "czp-compressor-btn";
 
 // 채팅 색상 옵션
 export const CHAT_COLOR_THEME = "chat-color-theme";

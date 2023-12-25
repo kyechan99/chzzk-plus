@@ -15,6 +15,7 @@ import {
   VIDEO_VOLUME_BTN,
 } from "../constants/class";
 import {
+  AUDIO_COMPRESSOR,
   FAST_BUTTON,
   // BARRICADE,
   PLAYER_KEY_CONTROL,
@@ -33,18 +34,17 @@ export const editLivePage = () => {
     return;
   }
 
-  // Feat: PIP 실행 버튼 추가 ==================================================================
-  if (!document.getElementById("chzzk-plus-pip-btn")) {
-    const $pipButtonRoot = document.createElement("div");
-    $pipButtonRoot.id = "chzzk-plus-pip-btn";
-    $playerLayout.appendChild($pipButtonRoot);
-    createReactElement($pipButtonRoot, PipButton);
-    $playerLayout.addEventListener("mouseenter", () => {
-      $pipButtonRoot.style.display = "block";
-    });
-    $playerLayout.addEventListener("mouseleave", () => {
-      $pipButtonRoot.style.display = "none";
-    });
+  if (!document.getElementById("chzzk-plus-live-helper")) {
+    // Feat: Helper 추가 (즐겨찾기, 녹화, 캡처) =========================================================
+    const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
+    if ($infoHeads.length > 0) {
+      const $liveTitle = $infoHeads[0] as HTMLElement;
+      $liveTitle.style.justifyContent = "space-between";
+      const $liveHelper = document.createElement("div");
+      $liveHelper.id = "chzzk-plus-live-helper";
+      $liveTitle.appendChild($liveHelper);
+      createReactElement($liveHelper, LiveHelper);
+    }
 
     // Feat: 플레이커 키 단축키 활성화 =========================================================
     chrome.storage.local.get(PLAYER_KEY_CONTROL, (res) => {
@@ -81,49 +81,48 @@ export const editLivePage = () => {
       }
     });
 
-    chrome.storage.local.get(FAST_BUTTON, (res) => {
-      console.log(res[FAST_BUTTON]);
-      if (res[FAST_BUTTON]) {
+    const $btn_list = document.querySelector(".pzp-pc__bottom-buttons-right");
+    // Feat: PIP 버튼 활성화 =========================================================
+    const $pipButtonRoot = document.createElement("div");
+    $btn_list?.prepend($pipButtonRoot);
+    createReactElement($pipButtonRoot, PipButton);
+
+    chrome.storage.local.get([FAST_BUTTON, AUDIO_COMPRESSOR], (res) => {
+      // Feat: 빨리감기 버튼 활성화 =========================================================
+      if (res[FAST_BUTTON] && $btn_list) {
         const $videoHelper = document.createElement("div");
-        const $btn_list = document.querySelector(
-          ".pzp-pc__bottom-buttons-right"
-        );
         $btn_list?.prepend($videoHelper);
         createReactElement($videoHelper, FastButton);
       }
+      // Feat: 오디오 압축 버튼 활성화 =========================================================
+      if (res[AUDIO_COMPRESSOR] && $btn_list) {
+        const $videoHelper = document.createElement("div");
+        $btn_list?.prepend($videoHelper);
+        createReactElement($videoHelper, AudioCompressorButton);
+      }
     });
-
-    const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
-    if ($infoHeads.length > 0) {
-      const $liveTitle = $infoHeads[0] as HTMLElement;
-      $liveTitle.style.justifyContent = "space-between";
-      const $liveHelper = document.createElement("div");
-      $liveHelper.id = "chzzk-plus-live-helper";
-      $liveTitle.appendChild($liveHelper);
-      createReactElement($liveHelper, LiveHelper);
-    }
   }
 
   // Feat: Audio Compressor 버튼 추가 ==================================================================
-  if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
-    const $bottomButtonsRight = $playerLayout.querySelector(
-      ".pzp-pc__bottom-buttons-right"
-    );
+  // if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
+  //   const $bottomButtonsRight = $playerLayout.querySelector(
+  //     ".pzp-pc__bottom-buttons-right"
+  //   );
 
-    if (!$bottomButtonsRight) return;
+  //   if (!$bottomButtonsRight) return;
 
-    const $audioCompressorRoot = document.createElement("div");
-    $audioCompressorRoot.classList.add("pzp-button", "pzp-pc-ui-button");
-    $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
-    $bottomButtonsRight.prepend($audioCompressorRoot);
-    createReactElement($audioCompressorRoot, AudioCompressorButton);
-    $playerLayout.addEventListener("mouseenter", () => {
-      $audioCompressorRoot.style.display = "block";
-    });
-    $playerLayout.addEventListener("mouseleave", () => {
-      $audioCompressorRoot.style.display = "none";
-    });
-  }
+  //   const $audioCompressorRoot = document.createElement("div");
+  //   $audioCompressorRoot.classList.add("pzp-button", "pzp-pc-ui-button");
+  //   $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
+  //   $bottomButtonsRight.prepend($audioCompressorRoot);
+  //   createReactElement($audioCompressorRoot, AudioCompressorButton);
+  //   $playerLayout.addEventListener("mouseenter", () => {
+  //     $audioCompressorRoot.style.display = "block";
+  //   });
+  //   $playerLayout.addEventListener("mouseleave", () => {
+  //     $audioCompressorRoot.style.display = "none";
+  //   });
+  // }
 
   // Feat: Barricade (이벤트 방해 모드) =======================================================
   // chrome.storage.local.get(BARRICADE, (res) => {
