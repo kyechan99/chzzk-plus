@@ -33,9 +33,14 @@ export const editLivePage = () => {
 
   // Feat: Audio Compressor 버튼 추가 ==================================================================
   if (!document.getElementById("chzzk-plus-audio-compressor-btn")) {
+    const $bottomButtonsRight = $playerLayout.querySelector(".pzp-pc__bottom-buttons-right");
+
+    if (!$bottomButtonsRight) return;
+
     const $audioCompressorRoot = document.createElement("div");
+    $audioCompressorRoot.classList.add('pzp-button', 'pzp-pc-ui-button');
     $audioCompressorRoot.id = "chzzk-plus-audio-compressor-btn";
-    $playerLayout.appendChild($audioCompressorRoot);
+    $bottomButtonsRight.prepend($audioCompressorRoot);
     createReactElement($audioCompressorRoot, AudioCompressorButton);
     $playerLayout.addEventListener("mouseenter", () => {
       $audioCompressorRoot.style.display = "block";
