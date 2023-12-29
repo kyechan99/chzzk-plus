@@ -1,6 +1,6 @@
 .preview {
   position: fixed;
-  box-shadow: 0px 0px 10px #00ffa34d;
+  box-shadow: 0px 0px 10px #2c2d2f;
   z-index: 9999;
 }
 .preview-title {
@@ -17,5 +17,6 @@
 .preview-thumbnail {
   width: 440px;
   height: 248px;
-  background-color: #0a8a5d;
+  background-color: #2c2d2f;
+  border-radius: 0.5rem;
 }

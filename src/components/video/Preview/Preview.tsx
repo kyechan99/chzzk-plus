@@ -11,7 +11,6 @@ import "./Preview.css";
 export default function Preview() {
   const ref = useRef<HTMLInputElement>(null);
   const [channelId, setChannelId] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
   const [thumbnail, setThumbnail] = useState<string>("");
 
   useEffect(() => {
@@ -122,10 +121,8 @@ export default function Preview() {
       if (data.content && data.content.liveImageUrl) {
         const liveImageUrl = data.content.liveImageUrl.replace("{type}", 480);
         setThumbnail(liveImageUrl);
-        setTitle(data.content.liveTitle);
       } else {
         setThumbnail("");
-        setTitle("");
       }
     } catch (err) {
       logError(err);
@@ -142,8 +139,8 @@ export default function Preview() {
 
       const rect = eventTarget.getBoundingClientRect();
       if (ref.current) {
-        ref.current.style.left = 32 + rect.right + "px";
-        ref.current.style.top = rect.top + "px";
+        ref.current.style.left = 8 + rect.right + "px";
+        ref.current.style.top = rect.top + 60 + "px";
         ref.current.style.display = "block";
       }
 
@@ -167,7 +164,6 @@ export default function Preview() {
 
   return (
     <div className="preview" ref={ref}>
-      {title && <p className="preview-title">{title}</p>}
       {thumbnail && (
         <img
           src={thumbnail}
