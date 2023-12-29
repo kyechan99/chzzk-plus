@@ -58,7 +58,7 @@ export default function RecordButton() {
 
               const a = document.createElement("a");
               a.href = URL.createObjectURL(blob);
-              a.download = `chzzk_plus_v${new Date().getTime()}.webm`;
+              a.download = `chzzk_plus_v${new Date().getTime()}.mp4`;
               a.click();
 
               setRecording(0);
