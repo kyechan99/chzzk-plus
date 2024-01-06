@@ -7,6 +7,9 @@ import { LAYOUT_WRAP } from "./constants/class";
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
   const $layout = document.querySelector(LAYOUT_WRAP);
+  console.log("!!!");
+
+  console.log(isBodyLoaded, $layout);
 
   if (isBodyLoaded && $layout !== null) {
     /**

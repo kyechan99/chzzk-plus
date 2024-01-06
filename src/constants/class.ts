@@ -1,5 +1,5 @@
 // 플레이어 레이아웃, 동영상 플레이어의 기본적인 레이아웃
-export const LAYOUT_WRAP = ".layout_wrap__Qtjcn";
+export const LAYOUT_WRAP = ".layout_glive__oajiQ";
 export const PLAYER_LAYOUT_ID = "live_player_layout";
 export const VIDEO_LAYOUT_ID = "player_layout";
 
