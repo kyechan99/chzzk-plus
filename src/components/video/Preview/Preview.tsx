@@ -112,7 +112,7 @@ export default function Preview() {
   const fetchData = async () => {
     try {
       const res = await fetch(
-        `https://api.chzzk.naver.com/service/v1/channels/${channelId}/live-detail`
+        `https://api.chzzk.naver.com/service/v2/channels/${channelId}/live-detail`
       );
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
@@ -125,7 +125,7 @@ export default function Preview() {
         setThumbnail("");
       }
     } catch (err) {
-      logError(err);
+      // logError(err);
     }
   };
 
