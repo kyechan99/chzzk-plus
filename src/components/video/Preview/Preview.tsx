@@ -125,7 +125,7 @@ export default function Preview() {
         setThumbnail("");
       }
     } catch (err) {
-      // logError(err);
+      logError(err);
     }
   };
 
