@@ -1,7 +1,7 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: "[Feature]"
+name: 기능 제안
+about: 제안해주실 내용에 대해 위 형식에 맞추어 작성해주세요.
+title: "[기능 제안]"
 labels: 아이디어
 assignees: ''
 

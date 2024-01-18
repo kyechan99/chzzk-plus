@@ -1,7 +1,7 @@
 ---
-name: Bug report
-about: Report a bug
-title: "[BUG]"
+name: 버그 제보
+about: 위 형식에 맞추어 버그를 제보해주세요.
+title: "[버그]"
 labels: 버그
 assignees: ''
 
