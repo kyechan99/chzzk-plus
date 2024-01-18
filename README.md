@@ -9,41 +9,31 @@
 <p align="center">
     <img src="https://img.shields.io/github/package-json/v/kyechan99/chzzk-plus?style=for-the-badge"/>
     <img src="https://img.shields.io/github/license/kyechan99/chzzk-plus?style=for-the-badge"/>
-    <a href="https://github.com/kyechan99/chzzk-plus/releases">
+    <a href="https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia">
  	    <img src="https://img.shields.io/badge/DOWNLOAD-ME-%2320c997?style=for-the-badge"/>
     </a>
 </p>
 
+[크롬 확장프로그램 설치](https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia)
+
 ## Feature
 
-### 1. PIP 모드 버튼
+1.  PIP 모드 버튼
+2.  방송 미리보기
+3.  방송 화면 캡처저장
+4.  생방송 녹화
+5.  치즈 제거 모드
+6.  채팅 색상 모드
+7.  채팅 크기 조절
+8.  방송 단축키
+9.  즐겨찾기 (팔로우 채널 중 우선순위 올리기)
+10. 생방송 빨리감기
+11. 오디오 압축
 
-![PIP 모드 버튼](/README/feature_pip.png)
-
-### 2. 방송 미리보기
-
-![방송 미리보기](/README/preview.png)
-
-### 3. 방송화면 이벤트 방해 방지
-
-![방송화면 이벤트 방해 방지](/README/barrigade.png)
-
-> 설정 창에서 활성화 가능합니다.
->
-> default 로 비활성화 되어있습니다.
-
-### 4. 채팅 색상
-
-![채팅 색상 조절](/README/font_color.png)
-
-> 트위치의 경우 채팅 색상 조절에 BM에 포함되어 있습니다.
->
-> 치지직 역시 추가 될 경우 기능이 삭제 혹은 변경 될 수 있습니다.
-
-## 고려중
-
-1. 팔로우 채널 우선순위 순위
-2. 품질 조절 기타 등등
+![0](/README/0.png)
+![1](/README/1.png)
+![2](/README/2.png)
+![3](/README/3.png)
 
 ## 알림사항
 

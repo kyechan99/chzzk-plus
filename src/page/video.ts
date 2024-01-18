@@ -1,10 +1,10 @@
 import PipButton from "../components/button/PipButton/PipButton";
 
-import { VIDEO_LAYOUT_ID } from "../constants/class";
+import { VIDEO_BUTTONS, VIDEO_LAYOUT_ID } from "../constants/class";
 
-import { createReactElement } from "../utils/dom";
-import { isVideoPage } from "../utils/page";
 import { log } from "../utils/log";
+import { isVideoPage } from "../utils/page";
+import { createReactElement } from "../utils/dom";
 
 export const editVideoPage = () => {
   if (!isVideoPage()) return;
@@ -16,17 +16,13 @@ export const editVideoPage = () => {
   }
 
   // Feat: PIP 실행 버튼 추가 ==================================================================
-  if (!document.getElementById("chzzk-plus-pip-btn")) {
+  if (!document.getElementById("chzzk-plus-video-btn")) {
+    const $btn_list = document.querySelector(VIDEO_BUTTONS);
+    // Feat: PIP 버튼 활성화 =========================================================
     const $pipButtonRoot = document.createElement("div");
-    $pipButtonRoot.id = "chzzk-plus-pip-btn";
-    $playerLayout.appendChild($pipButtonRoot);
+    $pipButtonRoot.id = "chzzk-plus-video-btns";
+    $btn_list?.prepend($pipButtonRoot);
     createReactElement($pipButtonRoot, PipButton);
-    $playerLayout.addEventListener("mouseenter", () => {
-      $pipButtonRoot.style.display = "block";
-    });
-    $playerLayout.addEventListener("mouseleave", () => {
-      $pipButtonRoot.style.display = "none";
-    });
   }
 
   log("VIDEO PAGE 설정");
