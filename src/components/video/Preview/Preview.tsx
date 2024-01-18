@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { logError } from "../../../utils/log";
+import { logWarning } from "../../../utils/log";
 import { getChannelIDByUrl } from "../../../utils/channel";
 
 import { FAVORITE_STREAMER } from "../../../constants/storage";
@@ -126,7 +126,7 @@ export default function Preview() {
       }
     } catch (err) {
       setThumbnail("");
-      logError(err);
+      logWarning(err);
     }
   };
 
@@ -150,7 +150,7 @@ export default function Preview() {
         setChannelId(channelID);
       }
     } catch (err) {
-      logError(err);
+      logWarning(err);
     }
   };
   /**

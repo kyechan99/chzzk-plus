@@ -1,4 +1,4 @@
-import { logError } from "../../../utils/log";
+import { logWarning } from "../../../utils/log";
 import "./CaptureButton.css";
 
 export default function CaptureButton() {
@@ -24,7 +24,7 @@ export default function CaptureButton() {
       downloadLink.download = `chzzk_plus_${new Date().getTime()}.png`;
       downloadLink.click();
     } catch (err) {
-      logError(err);
+      logWarning(err);
     }
   };
 

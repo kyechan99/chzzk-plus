@@ -1,5 +1,5 @@
 // import { getNameColor } from "../utils/color";
-import { logError } from "../utils/log";
+import { logWarning } from "../utils/log";
 import { waitingElement } from "../utils/dom";
 import {
   CHAT_CONTAINER,
@@ -85,7 +85,7 @@ export async function chatSetting(): Promise<void> {
               subtree: true,
             });
           } catch (err) {
-            logError(err);
+            logWarning(err);
           }
         }
       }
