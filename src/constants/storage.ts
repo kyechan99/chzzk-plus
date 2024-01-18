@@ -4,6 +4,8 @@
  *
  *******************************************/
 
+export const GLOBAL_SETTING = "czp-global-setting";
+
 // 비디오 플레이어 보호 모드
 export const BARRICADE = "barricade";
 export const PLAYER_KEY_CONTROL = "czp-player-key";
@@ -36,3 +38,6 @@ export const CHEEZE_REMOVER = "czp-cheeze-remover"; // 치즈 제거 여부
 
 // 즐겨찾기한 스트리머
 export const FAVORITE_STREAMER = "czp-favorite-streamer";
+
+// 채팅 저장소
+export const CHAT_STORAGE = "czp-chat-storage";

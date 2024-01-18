@@ -12,6 +12,7 @@ export const VIDEO_CHAT_CLOSE_BTN = ".live_chatting_header_button__t2pa1";
 export const INPUT_UI_LIST = [
   "live_chatting_input_input__2F3Et",
   "search_input__tKVgq",
+  "czp-storage-form-input"
 ];
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
@@ -28,3 +29,6 @@ export const CHEEZE_CHAT =
 // UI 정보
 export const LIVE_INFORMATION_HEAD = "video_information_row__HrQ0z";
 export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";
+
+// 채팅
+export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";

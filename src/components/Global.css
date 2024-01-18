@@ -4,3 +4,104 @@
 .live_chatting_list_wrapper__a5XTV .live_chatting_message_text__DyleH {
   color: var(--czp-chat-text) !important;
 } */
+
+.czp-global {
+  position: fixed;
+  width: 30rem;
+  height: 30rem;
+  left: 50%;
+  top: 50%;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 10px #2e3033;
+  background: #141517;
+  z-index: 1000;
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.czp-global::-webkit-scrollbar {
+  display: none;
+}
+.czp-global-close-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+  font-family: "Sandoll Nemony2";
+}
+
+.czp-storage {
+  position: relative;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  height: 20rem;
+}
+.czp-storage::-webkit-scrollbar {
+  width: 5px;
+}
+.czp-storage::-webkit-scrollbar-thumb {
+  background-color: rgb(158, 158, 158);
+  border-radius: 10px;
+}
+.czp-storage::-webkit-scrollbar-track {
+  background-color: rgb(71, 71, 71);
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+.czp-storage-heading {
+  color: white;
+  font-family: "Sandoll Nemony2";
+  margin-bottom: 0.5rem;
+}
+.czp-storage-form {
+  display: flex;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+.czp-storage-form-input {
+  flex: 1 0 auto;
+  padding: 1rem;
+  color: white;
+  background: #262729;
+  border-radius: 0.5rem 0rem 0rem 0.5rem;
+}
+.czp-storage-form-btn {
+  background-color: white;
+  padding: 0.5rem;
+  background: #434445;
+  color: #828385;
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+  font-family: "Sandoll Nemony2";
+}
+.czp-storage-form-btn:hover {
+  background: #535353;
+}
+
+.czp-chat-st-btn {
+  width: 100%;
+  color: #e9e9e9;
+  text-align: left;
+  background-color: #2e3033;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+.czp-chat-st-btn:hover {
+  background-color: #3e4145;
+}
+.czp-chat-st-remove-btn {
+  float: right;
+  color: #e9e9e9;
+  background-color: #222222;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+.czp-chat-st-remove-btn:hover {
+  background-color: #353535;
+}
