@@ -1,7 +1,7 @@
 .preview {
   position: fixed;
   box-shadow: 0px 0px 10px #00ffa34d;
-  z-index: 9999;
+  z-index: -1; /* 기본 툴팁보다 뒤에 나오도록 처리 */
 }
 .preview-thumbnail {
   width: 440px;
