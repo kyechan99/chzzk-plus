@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Global.css";
 import {
-  INPUT_UI_LIST,
-  VIDEO_FULL_BTN,
-  VIDEO_VIEW_BTN,
-  VIDEO_VOLUME_BTN,
-} from "../constants/class";
-import {
   CHAT_STORAGE,
   GLOBAL_SETTING,
   PLAYER_KEY_CONTROL,
@@ -112,42 +106,44 @@ export default function Global() {
       }
     });
 
-    chrome.storage.local.get([GLOBAL_SETTING, PLAYER_KEY_CONTROL], (res) => {
+    // PLAYER_KEY_CONTROL 가 chzzk 이 기본으로 지원됨에 따라 기능 삭제함
+    // chrome.storage.local.get([GLOBAL_SETTING, PLAYER_KEY_CONTROL], (res) => {
+    chrome.storage.local.get([GLOBAL_SETTING], (res) => {
       if (res[GLOBAL_SETTING]) {
         setOpen(res[GLOBAL_SETTING]);
       }
       // Feat: 플레이커 키 단축키 활성화 =========================================================
-      if (res[PLAYER_KEY_CONTROL]) {
-        document.addEventListener("keydown", (event) => {
-          console.log("call");
-          const { target } = event;
-          if (target instanceof HTMLElement)
-            if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
-              // T : 넓은 화면
-              if (event.key === "t" || event.key === "T") {
-                const viewModeBtn = document.querySelector(
-                  VIDEO_VIEW_BTN
-                ) as HTMLElement;
-                if (viewModeBtn) viewModeBtn.click();
-              }
+      // if (res[PLAYER_KEY_CONTROL]) {
+      //   document.addEventListener("keydown", (event) => {
+      //     console.log("call");
+      //     const { target } = event;
+      //     if (target instanceof HTMLElement)
+      //       if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+      //         // T : 넓은 화면
+      //         if (event.key === "t" || event.key === "T") {
+      //           const viewModeBtn = document.querySelector(
+      //             VIDEO_VIEW_BTN
+      //           ) as HTMLElement;
+      //           if (viewModeBtn) viewModeBtn.click();
+      //         }
 
-              // F : 전체 화면
-              if (event.key === "f" || event.key === "F") {
-                const fullScreenBtn = document.querySelector(
-                  VIDEO_FULL_BTN
-                ) as HTMLElement;
-                if (fullScreenBtn) fullScreenBtn.click();
-              }
-              // M : 음소거
-              if (event.key === "m" || event.key === "M") {
-                const muteBtn = document.querySelector(
-                  VIDEO_VOLUME_BTN
-                ) as HTMLElement;
-                if (muteBtn) muteBtn.click();
-              }
-            }
-        });
-      }
+      //         // F : 전체 화면
+      //         if (event.key === "f" || event.key === "F") {
+      //           const fullScreenBtn = document.querySelector(
+      //             VIDEO_FULL_BTN
+      //           ) as HTMLElement;
+      //           if (fullScreenBtn) fullScreenBtn.click();
+      //         }
+      //         // M : 음소거
+      //         if (event.key === "m" || event.key === "M") {
+      //           const muteBtn = document.querySelector(
+      //             VIDEO_VOLUME_BTN
+      //           ) as HTMLElement;
+      //           if (muteBtn) muteBtn.click();
+      //         }
+      //       }
+      //   });
+      // }
     });
   }, []);
 

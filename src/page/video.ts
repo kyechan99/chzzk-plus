@@ -6,6 +6,8 @@ import { log } from "../utils/log";
 import { isVideoPage } from "../utils/page";
 import { createReactElement } from "../utils/dom";
 
+import VideoHelper from "../components/videoHelper/VideoHelper";
+
 export const editVideoPage = () => {
   if (!isVideoPage()) return;
 
@@ -13,6 +15,21 @@ export const editVideoPage = () => {
   const $playerLayout = document.getElementById(VIDEO_LAYOUT_ID);
   if (!$playerLayout) {
     return;
+  }
+  if (!document.getElementById("chzzk-plus-video-helper")) {
+    // Feat: Helper 추가 (즐겨찾기, 녹화, 캡처) =========================================================
+    const $videoTitle = document.querySelector(
+      ".video_information_vod_data__rK6z-"
+    );
+    if ($videoTitle) {
+      // const $liveTitle = $infoHeads[0] as HTMLElement;
+      // $liveTitle.style.justifyContent = "space-between";
+      const $videoHelper = document.createElement("div");
+      $videoHelper.id = "chzzk-plus-video-helper";
+      $videoHelper.style.marginLeft = "1rem";
+      $videoTitle.appendChild($videoHelper);
+      createReactElement($videoHelper, VideoHelper);
+    }
   }
 
   // Feat: PIP 실행 버튼 추가 ==================================================================

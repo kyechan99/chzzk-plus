@@ -64,15 +64,12 @@ export const editLivePage = () => {
       }
     });
 
-
-    
     // Feat: 채팅 저장소 =========================================================
     const $chatToolsList = document.querySelector(CHATTING_TOOLS);
     const $tools = document.createElement("div");
     $tools.id = "chzzk-plus-live-chattools";
     $chatToolsList?.prepend($tools);
     createReactElement($tools, MessageStorageButton);
-
   }
 
   chatSetting();
