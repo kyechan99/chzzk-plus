@@ -1,9 +1,8 @@
 import { useCallback, useRef, useState } from "react";
+import { WEBPLAYER_VIDEO } from "../../../constants/class";
 
 export default function AudioCompressorButton() {
-  const video: HTMLVideoElement = document.querySelector(
-    ".webplayer-internal-video"
-  )!;
+  const video: HTMLVideoElement = document.querySelector(WEBPLAYER_VIDEO)!;
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);

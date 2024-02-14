@@ -98,7 +98,6 @@ export default function Global() {
     chrome.storage.onChanged.addListener((changes) => {
       for (const key in changes) {
         const storageChange = changes[key];
-        console.log("!!!!!!!!!!!!", key);
         if (GLOBAL_SETTING === key) {
           console.log(storageChange);
           setOpen(storageChange.newValue);

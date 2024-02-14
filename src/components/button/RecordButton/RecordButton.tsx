@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 // import { logError } from "../../../utils/log";
 import "./RecordButton.css";
+import { WEBPLAYER_VIDEO } from "../../../constants/class";
 
 interface Video extends HTMLMediaElement {
   captureStream: () => MediaStream;
@@ -23,9 +24,7 @@ export default function RecordButton() {
   };
 
   const startRecording = async () => {
-    const $video = document.querySelector(
-      ".webplayer-internal-video"
-    ) as Video | null;
+    const $video = document.querySelector(WEBPLAYER_VIDEO) as Video | null;
 
     if (!$video || recording !== 0) return;
 

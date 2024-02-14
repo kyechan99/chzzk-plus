@@ -1,12 +1,51 @@
+import React from "react";
 import "./FastButton.css";
+import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from "../../../constants/class";
 
 export default function FastButton() {
-  const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  React.useEffect(() => {
+    const captureEvent = (event: KeyboardEvent) => {
+      const { target } = event;
+      if (target instanceof HTMLElement)
+        if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+          // ]: 빨리 감기
+          if (event.key === "]" || event.key === "}") {
+            faster();
+          } else if (event.key === "[" || event.key === "{") {
+            slower();
+          } else if (event.key === "=" || event.key === "+") {
+            normal();
+          }
+        }
+    };
 
-    const video = document.querySelector(
-      ".webplayer-internal-video"
-    ) as HTMLVideoElement;
+    // Feat: 플레이커 키 단축키 활성화 =========================================================
+    document.addEventListener("keydown", captureEvent);
+    return () => {
+      document.removeEventListener("keydown", captureEvent);
+    };
+  }, []);
+
+  const slower = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
+
+    const video = document.querySelector(WEBPLAYER_VIDEO) as HTMLVideoElement;
+
+    video.playbackRate = 0.5;
+  };
+
+  const normal = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
+
+    const video = document.querySelector(WEBPLAYER_VIDEO) as HTMLVideoElement;
+
+    video.playbackRate = 1;
+  };
+
+  const faster = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
+
+    const video = document.querySelector(WEBPLAYER_VIDEO) as HTMLVideoElement;
 
     video.playbackRate = 2.0;
   };
@@ -16,7 +55,7 @@ export default function FastButton() {
       className="pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button"
       aria-label="빨리감기"
       aria-haspopup="true"
-      onClick={onClickHandler}
+      onClick={faster}
       //   command="SettingCommands.Toggle"
     >
       <span className="pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top">

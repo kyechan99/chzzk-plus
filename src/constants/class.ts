@@ -2,6 +2,7 @@
 export const LAYOUT_WRAP = ".layout_glive__oajiQ";
 export const PLAYER_LAYOUT_ID = "live_player_layout";
 export const VIDEO_LAYOUT_ID = "player_layout";
+export const WEBPLAYER_VIDEO = ".webplayer-internal-video";
 
 // 플레이어를 덮어주는 UI의 부모 클래스명
 export const PLAYER_UI = "player_header";
@@ -12,7 +13,7 @@ export const VIDEO_CHAT_CLOSE_BTN = ".live_chatting_header_button__t2pa1";
 export const INPUT_UI_LIST = [
   "live_chatting_input_input__2F3Et",
   "search_input__tKVgq",
-  "czp-storage-form-input"
+  "czp-storage-form-input",
 ];
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명

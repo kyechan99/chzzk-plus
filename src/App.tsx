@@ -34,18 +34,17 @@ function App() {
       <div className="setting-group">
         <h2 className="setting-label">플레이어</h2>
         <div className="menus">
-          {/* <Checkbox id={BARRICADE}>
-            <div className="menu">
-              <p className="menu-title">화면 클릭시 일시정지 방지 *</p>
-              <p className="menu-desc">새로고침 후 적용됩니다</p>
-            </div>
-          </Checkbox> */}
+          <div className="menu">
+            <p className="menu-title">추가 설정</p>
+            <p className="menu-desc">S: 스크린샷</p>
+          </div>
 
           <Checkbox id={PLAYER_KEY_CONTROL}>
             <div className="menu">
               <p className="menu-title">키 이벤트 활성화 *</p>
               <p className="menu-desc">T: 넓은 화면</p>
               <p className="menu-desc">F: 전체 화면</p>
+              <p className="menu-desc">M: 음소거</p>
               <p className="menu-desc">M: 음소거</p>
             </div>
           </Checkbox>
@@ -54,6 +53,9 @@ function App() {
             <div className="menu">
               <p className="menu-title">빨리 감기 활성화 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
+              <p className="menu-desc">]: 빨리 감기</p>
+              <p className="menu-desc">[: 느리게 감기</p>
+              <p className="menu-desc">=: 기본</p>
             </div>
           </Checkbox>
 

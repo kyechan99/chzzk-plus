@@ -1,7 +1,7 @@
 import React from "react";
 import { logWarning } from "../../../utils/log";
 import "./CaptureButton.css";
-import { INPUT_UI_LIST } from "../../../constants/class";
+import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from "../../../constants/class";
 
 export default function CaptureButton() {
   React.useEffect(() => {
@@ -27,9 +27,7 @@ export default function CaptureButton() {
     e?.preventDefault();
 
     try {
-      const video = document.querySelector(
-        ".webplayer-internal-video"
-      ) as HTMLVideoElement;
+      const video = document.querySelector(WEBPLAYER_VIDEO) as HTMLVideoElement;
       const canvas = document.createElement("canvas");
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
