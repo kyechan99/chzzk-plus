@@ -1,9 +1,30 @@
+import React from "react";
 import { logWarning } from "../../../utils/log";
 import "./CaptureButton.css";
+import { INPUT_UI_LIST } from "../../../constants/class";
 
 export default function CaptureButton() {
-  const captureVideo = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  React.useEffect(() => {
+    const captureEvent = (event: KeyboardEvent) => {
+      const { target } = event;
+      if (target instanceof HTMLElement)
+        if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+          // S: 캡처
+          if (event.key === "s" || event.key === "S") {
+            captureVideo();
+          }
+        }
+    };
+
+    // Feat: 플레이커 키 단축키 활성화 =========================================================
+    document.addEventListener("keydown", captureEvent);
+    return () => {
+      document.removeEventListener("keydown", captureEvent);
+    };
+  }, []);
+
+  const captureVideo = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
 
     try {
       const video = document.querySelector(
