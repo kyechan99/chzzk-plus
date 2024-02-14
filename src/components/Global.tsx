@@ -9,6 +9,7 @@ import {
 const MessageStorage = () => {
   const [storage, setStorage] = useState<string[]>([]);
   const [text, setText] = useState<string>("");
+  const [showCopied, setShowCopied] = useState<boolean>(false);
 
   // 저장되어있는 storage 불러오기
   useEffect(() => {
@@ -21,6 +22,7 @@ const MessageStorage = () => {
 
   // 메세지 클립보드에 복사
   const copyMessage = (data: string) => {
+    setShowCopied(true);
     navigator.clipboard.writeText(data).then(() => {});
   };
 
@@ -43,6 +45,22 @@ const MessageStorage = () => {
       [CHAT_STORAGE]: temp,
     });
   };
+
+  useEffect(() => {
+    let timeoutId: number;
+
+    if (showCopied) {
+      timeoutId = setTimeout(() => {
+        setShowCopied(false);
+      }, 1000);
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [showCopied]);
 
   return (
     <>
@@ -89,6 +107,7 @@ const MessageStorage = () => {
           </div>
         ))}
       </div>
+      {showCopied && <div className="czp-storage-message">복사되었습니다.</div>}
     </>
   );
 };

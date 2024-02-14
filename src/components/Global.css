@@ -18,8 +18,8 @@
   background: #141517;
   z-index: 1000;
   overflow-y: auto;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 .czp-global::-webkit-scrollbar {
   display: none;
@@ -104,4 +104,16 @@
 }
 .czp-chat-st-remove-btn:hover {
   background-color: #353535;
+}
+
+.czp-storage-message {
+  position: absolute;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.25rem;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  font-family: "Sandoll Nemony2";
 }
