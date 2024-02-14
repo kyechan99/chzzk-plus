@@ -9,6 +9,7 @@ export const PLAYER_UI = "player_header";
 export const VIDEO_VIEW_BTN = ".pzp-pc-viewmode-button__icon";
 export const VIDEO_FULL_BTN = ".pzp-pc-fullscreen-button__icon";
 export const VIDEO_VOLUME_BTN = ".pzp-pc-volume-button__icon";
+export const VIDEO_CONTAINER = ".live_chatting_container__SvtrD";
 export const VIDEO_CHAT_CLOSE_BTN = ".live_chatting_header_button__t2pa1";
 export const INPUT_UI_LIST = [
   "live_chatting_input_input__2F3Et",

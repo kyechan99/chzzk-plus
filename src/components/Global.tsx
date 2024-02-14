@@ -101,7 +101,6 @@ export default function Global() {
       for (const key in changes) {
         const storageChange = changes[key];
         if (GLOBAL_SETTING === key) {
-          console.log(storageChange);
           setOpen(storageChange.newValue);
         }
       }

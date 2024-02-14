@@ -39,6 +39,29 @@ export const editLivePage = () => {
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
     }
+
+    chatSetting();
+  }
+
+  if (!document.getElementById("chzzk-plus-live-chattools")) {
+    // Feat: 채팅 저장소 =========================================================
+    const $chatToolsList = document.querySelector(CHATTING_TOOLS);
+
+    if (!$chatToolsList) {
+      /**
+       * [안전]
+       * 안전 호출용, SPA, 채팅 기능을 페이지 이동 후에 변경을 해서 페이지 이동시 null 이 됨
+       * 안전하게 1.5초 후에 재호출 시킴
+       */
+      setTimeout(() => {
+        editLivePage();
+      }, 1500);
+    } else {
+      const $tools = document.createElement("div");
+      $tools.id = "chzzk-plus-live-chattools";
+      $chatToolsList?.prepend($tools);
+      createReactElement($tools, MessageStorageButton);
+    }
   }
 
   if (!document.getElementById("chzzk-plus-live-btns")) {
@@ -63,16 +86,7 @@ export const editLivePage = () => {
         createReactElement($videoHelper, AudioCompressorButton);
       }
     });
-
-    // Feat: 채팅 저장소 =========================================================
-    const $chatToolsList = document.querySelector(CHATTING_TOOLS);
-    const $tools = document.createElement("div");
-    $tools.id = "chzzk-plus-live-chattools";
-    $chatToolsList?.prepend($tools);
-    createReactElement($tools, MessageStorageButton);
   }
-
-  chatSetting();
 
   log("LIVE PAGE 설정");
 };
