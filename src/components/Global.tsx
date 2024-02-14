@@ -26,6 +26,8 @@ const MessageStorage = () => {
 
   // 메세지 추가로 저장
   const addMessage = () => {
+    if (text.replaceAll(" ", "").length == 0) return;
+
     setStorage([...storage, text]);
     setText("");
     chrome.storage.local.set({
