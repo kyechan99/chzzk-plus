@@ -8,3 +8,18 @@ export const getChannelIDByUrl = (url: string) => {
   }
   return "";
 };
+
+export const getChannelOpenLive = async (channelId: string) => {
+  try {
+    const res = await fetch(
+      `https://api.chzzk.naver.com/service/v1/channels/${channelId}`
+    );
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+
+    const data = await res.json();
+    
+    return data.content.openLive;
+  } catch (err) {
+    return false;
+  }
+};

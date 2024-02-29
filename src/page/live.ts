@@ -15,12 +15,21 @@ import {
   PLAYER_LAYOUT_ID,
   LIVE_INFORMATION_HEAD,
   CHATTING_TOOLS,
+  WEBPLAYER_VIDEO,
 } from "../constants/class";
 import { FAST_BUTTON, AUDIO_COMPRESSOR } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
+import { traceOpenLive } from "../utils/trace";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
+
+  // Live 페이지 인데, 생방송 중이 아님.
+  if (!document.querySelector(WEBPLAYER_VIDEO)) {
+    traceOpenLive();
+
+    return;
+  }
 
   // 영상 Layout이 발견이 되었다면 content를 수정할 준비가 되었음.
   const $playerLayout = document.getElementById(PLAYER_LAYOUT_ID);
