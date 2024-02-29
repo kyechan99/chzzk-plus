@@ -45,7 +45,6 @@ function App() {
               <p className="menu-desc">T: 넓은 화면</p>
               <p className="menu-desc">F: 전체 화면</p>
               <p className="menu-desc">M: 음소거</p>
-              <p className="menu-desc">M: 음소거</p>
             </div>
           </Checkbox>
 
