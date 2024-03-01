@@ -41,3 +41,6 @@ export const FAVORITE_STREAMER = "czp-favorite-streamer";
 
 // 채팅 저장소
 export const CHAT_STORAGE = "czp-chat-storage";
+
+// 생방송 새로고침
+export const ONLIVE_REFRESH = "czp-live-refresh";

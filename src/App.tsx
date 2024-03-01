@@ -16,6 +16,7 @@ import {
   CHAT_TEXT_COLOR,
   CHEEZE_REMOVER,
   FAST_BUTTON,
+  ONLIVE_REFRESH,
   PLAYER_KEY_CONTROL,
 } from "./constants/storage";
 
@@ -26,7 +27,7 @@ function App() {
 
       <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">
-        버그 제보하기
+        버그 및 기능 제보
       </URLButton>
 
       <hr />
@@ -63,6 +64,20 @@ function App() {
               <p className="menu-title">사운드 압축 *</p>
               <p className="menu-desc">높고 낮은 음압 간의 차이를 줄임</p>
               <p className="menu-desc">일정한 음량 수준을 유지</p>
+            </div>
+          </Checkbox>
+        </div>
+      </div>
+
+      <hr />
+
+      <div className="setting-group">
+        <h2 className="setting-label">생방송</h2>
+        <div className="menus">
+          <Checkbox id={ONLIVE_REFRESH}>
+            <div className="menu">
+              <p className="menu-title">방송 새로고침</p>
+              <p className="menu-desc">방송 시작시 자동 새로고침</p>
             </div>
           </Checkbox>
         </div>

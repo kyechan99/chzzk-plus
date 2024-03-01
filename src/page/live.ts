@@ -17,7 +17,11 @@ import {
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
 } from "../constants/class";
-import { FAST_BUTTON, AUDIO_COMPRESSOR } from "../constants/storage";
+import {
+  FAST_BUTTON,
+  AUDIO_COMPRESSOR,
+  ONLIVE_REFRESH,
+} from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
 
@@ -26,7 +30,11 @@ export const editLivePage = () => {
 
   // Live 페이지 인데, 생방송 중이 아님.
   if (!document.querySelector(WEBPLAYER_VIDEO)) {
-    traceOpenLive();
+    chrome.storage.local.get([ONLIVE_REFRESH], (res) => {
+      if (res[ONLIVE_REFRESH]) {
+        traceOpenLive();
+      }
+    });
 
     return;
   }
