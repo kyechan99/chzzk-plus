@@ -22,7 +22,8 @@ export const traceOpenLive = async () => {
 
     if (isStreaming) {
       // WEBPLAYER_VIDEO 가 발견되면 생방송 중임
-      if (document.querySelector(WEBPLAYER_VIDEO)) {
+      const $video = document.querySelector(WEBPLAYER_VIDEO);
+      if ($video && $video.getAttribute("src")) {
         isStreaming = false;
         clearInterval(interTraceOpenLive);
       }
