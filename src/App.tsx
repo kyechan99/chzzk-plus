@@ -8,6 +8,7 @@ import ColorPicker from "./components/input/ColorPicker/ColorPicker";
 
 import {
   AUDIO_COMPRESSOR,
+  BLIND_REMOVER,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
@@ -18,6 +19,7 @@ import {
   FAST_BUTTON,
   ONLIVE_REFRESH,
   PLAYER_KEY_CONTROL,
+  SUBSCRIBE_REMOVER,
 } from "./constants/storage";
 
 function App() {
@@ -95,6 +97,20 @@ function App() {
             </div>
           </Checkbox>
 
+          <Checkbox id={BLIND_REMOVER}>
+            <div className="menu">
+              <p className="menu-title">블라인드 챗 완전 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={SUBSCRIBE_REMOVER}>
+            <div className="menu">
+              <p className="menu-title">구독 챗 완전 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
           <Select
             id={CHAT_COLOR_THEME}
             options={CHAT_COLOR_OPTIONS.map((op) => {
@@ -137,7 +153,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.1.0</p>
+      <p className="version">v1.1.1</p>
     </div>
   );
 }

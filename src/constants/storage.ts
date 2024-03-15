@@ -35,6 +35,8 @@ export const CHAT_SIZE_OPTIONS = [
   "20",
 ];
 export const CHEEZE_REMOVER = "czp-cheeze-remover"; // 치즈 제거 여부
+export const BLIND_REMOVER = "czp-blind-remover"; // 블라인드 챗 제거 여부
+export const SUBSCRIBE_REMOVER = "czp-subscribe-remover"; // 구독 챗 제거 여부
 
 // 즐겨찾기한 스트리머
 export const FAVORITE_STREAMER = "czp-favorite-streamer";
