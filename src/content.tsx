@@ -3,6 +3,7 @@ import { editVideoPage } from "./page/video";
 import { editGlobalPage } from "./page/global";
 
 import { LAYOUT_WRAP } from "./constants/class";
+import { editLiveListPage } from "./page/lives";
 
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
@@ -14,6 +15,7 @@ const waitingSPALoaded = setInterval(() => {
      */
     editGlobalPage();
     editLivePage();
+    editLiveListPage();
     editVideoPage();
 
     /**
@@ -24,6 +26,7 @@ const waitingSPALoaded = setInterval(() => {
      */
     const pageChangeOb = new MutationObserver(() => {
       editLivePage();
+      editLiveListPage();
       editVideoPage();
     });
     pageChangeOb.observe(document.head, { subtree: true, childList: true });
@@ -40,6 +43,7 @@ const waitingSPALoaded = setInterval(() => {
         if (addedNodes.length > 0) {
           editGlobalPage();
           editLivePage();
+          editLiveListPage();
           editVideoPage();
           break;
         }

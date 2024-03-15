@@ -9,6 +9,7 @@ import ColorPicker from "./components/input/ColorPicker/ColorPicker";
 import {
   AUDIO_COMPRESSOR,
   BLIND_REMOVER,
+  BLOCKED_STREAMER,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
@@ -82,6 +83,13 @@ function App() {
               <p className="menu-desc">방송 시작시 자동 새로고침</p>
             </div>
           </Checkbox>
+
+          <Checkbox id={BLOCKED_STREAMER}>
+            <div className="menu">
+              <p className="menu-title">차단한 방송 완전 제거</p>
+              <p className="menu-desc">라이브 목록에서 차단한 방송 완전 제거</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 
@@ -153,7 +161,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.1.1</p>
+      <p className="version">v1.1.2</p>
     </div>
   );
 }

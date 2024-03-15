@@ -35,3 +35,7 @@ export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";
 
 // 채팅
 export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";
+
+// 동영상 Card UI
+export const VIDEO_CARD_LIST = ".component_list__DNd2B";
+export const BLOCKED_VIDEO_CARD = ".video_card_is_block__cGuyo";

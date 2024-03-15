@@ -46,3 +46,6 @@ export const CHAT_STORAGE = "czp-chat-storage";
 
 // 생방송 새로고침
 export const ONLIVE_REFRESH = "czp-live-refresh";
+
+// 차단 방송
+export const BLOCKED_STREAMER = "czp-blocked-card";
