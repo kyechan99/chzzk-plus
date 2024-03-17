@@ -30,11 +30,14 @@ export default function Preview() {
           const addedNodes = mutation.addedNodes;
           const removedNodes = mutation.removedNodes;
 
+          console.log("aa", addedNodes, removedNodes);
+
           // 새로 추가된 자식 요소에 이벤트를 추가합니다.
           for (const addedNode of addedNodes) {
             addedNode.addEventListener("mouseenter", navHoverListener);
             addedNode.addEventListener("mouseleave", navLeaveListener);
           }
+
           // 제거된 자식 요소에서 이벤트를 제거합니다.
           for (const removedNode of removedNodes) {
             removedNode.removeEventListener("mouseenter", navHoverListener);
@@ -46,14 +49,7 @@ export default function Preview() {
     const observer = new MutationObserver(observerCallback);
 
     const $navigation = document.getElementById("navigation");
-    /*
-      <div className="navigator_wrapper__ruh6f">
-        <h2 className="navigator_title__9RhVJ" style={{ paddingLeft: "0.5rem" }}>
-          즐겨찾기 채널
-        </h2>
-        <div className="navigator_list__cHnuV">
-      </div>
-    */
+
     const $starNavigation = document.createElement("div");
     $starNavigation.className = "navigator_wrapper__ruh6f";
     $navigation?.prepend($starNavigation);

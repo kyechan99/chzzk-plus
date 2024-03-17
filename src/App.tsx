@@ -36,11 +36,37 @@ function App() {
       <hr />
 
       <div className="setting-group">
+        <h2 className="setting-label">채널</h2>
+        <div className="menus">
+          <div className="menu">
+            <p className="menu-title">프리뷰</p>
+            <p className="menu-desc">생방송 실시간 프리뷰 표시</p>
+          </div>
+
+          <div className="menu">
+            <p className="menu-title">[베타] 즐겨찾기</p>
+            <p className="menu-desc">'팔로우 채널' 중 우선순위 올리기</p>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div className="setting-group">
         <h2 className="setting-label">플레이어</h2>
         <div className="menus">
           <div className="menu">
-            <p className="menu-title">추가 설정</p>
+            <p className="menu-title">추가 키 기능</p>
             <p className="menu-desc">S: 스크린샷</p>
+          </div>
+
+          <div className="menu">
+            <p className="menu-title">플레이어 도우미</p>
+            <p className="menu-desc">오디오 압축</p>
+            <p className="menu-desc">빨리감기</p>
+            <p className="menu-desc">PIP 모드</p>
+            <p className="menu-desc">스크린샷</p>
+            <p className="menu-desc">[베타] 녹화</p>
           </div>
 
           <Checkbox id={PLAYER_KEY_CONTROL}>

@@ -33,7 +33,6 @@ export const editLiveListPage = () => {
                     BLOCKED_VIDEO_CARD
                   ) as HTMLElement;
 
-                  console.log(addedNode);
                   if (blockedCard) {
                     blockedCard.parentElement?.remove();
                   }
