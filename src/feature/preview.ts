@@ -12,7 +12,9 @@ import {
   CHAT_NAME_COLOR_DEFAULT,
   CHAT_TEXT_COLOR_DEFAULT,
 } from "../constants/color";
-import { STREAMER_MENU } from "../constants/class";
+import { NAVIGATOR_BUTTON, STREAMER_MENU } from "../constants/class";
+
+let refresher: number | undefined;
 
 export async function previewSetting(): Promise<void> {
   await waitingElement(STREAMER_MENU);
@@ -27,14 +29,14 @@ export async function previewSetting(): Promise<void> {
 
     chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, (res) => {
       if (res[FOLLOWING_REFRESH_ENABLE]) {
-        // setInterval(() => {
-        //   // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
-        //   const $refreshBtn = document.querySelector(
-        //     NAVIGATOR_BUTTON
-        //   ) as HTMLElement;
-        //   console.log("refresh", $refreshBtn);
-        //   $refreshBtn.click();
-        // }, 1000 * 10);
+        clearInterval(refresher);
+        refresher = setInterval(() => {
+          // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
+          const $refreshBtn = document.querySelector(
+            NAVIGATOR_BUTTON
+          ) as HTMLElement;
+          $refreshBtn.click();
+        }, 1000 * 30);
       }
     });
   }
