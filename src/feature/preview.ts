@@ -6,6 +6,7 @@ import {
   CHAT_NAME_COLOR,
   CHAT_TEXT_COLOR,
   COLOR_PROPERTIES,
+  FOLLOWING_REFRESH_ENABLE,
 } from "../constants/storage";
 import {
   CHAT_NAME_COLOR_DEFAULT,
@@ -14,7 +15,7 @@ import {
 import { STREAMER_MENU } from "../constants/class";
 
 export async function previewSetting(): Promise<void> {
-  await waitingElement(`.${STREAMER_MENU}`);
+  await waitingElement(STREAMER_MENU);
 
   const moreChannelBtnList = document.getElementsByClassName(
     "navigator_button_more__UE0v3"
@@ -23,13 +24,26 @@ export async function previewSetting(): Promise<void> {
     // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
     const moreChannelBtn = moreChannelBtnList[0] as HTMLElement;
     moreChannelBtn.click();
+
+    chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, (res) => {
+      if (res[FOLLOWING_REFRESH_ENABLE]) {
+        // setInterval(() => {
+        //   // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
+        //   const $refreshBtn = document.querySelector(
+        //     NAVIGATOR_BUTTON
+        //   ) as HTMLElement;
+        //   console.log("refresh", $refreshBtn);
+        //   $refreshBtn.click();
+        // }, 1000 * 10);
+      }
+    });
   }
 
   // Feat: Preview 썸네일 =====================================================================
   if (!document.getElementById("chzzk-plus-preview")) {
     const $preview = document.createElement("div");
     $preview.id = "chzzk-plus-preview";
-    document.querySelector(`.${STREAMER_MENU}`)?.appendChild($preview);
+    document.querySelector(STREAMER_MENU)?.appendChild($preview);
     createReactElement($preview, Preview);
 
     // Feat: 색상 설정 ==========================================================================

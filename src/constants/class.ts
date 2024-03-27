@@ -19,7 +19,7 @@ export const INPUT_UI_LIST = [
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
 export const STREAMER_MENU_LIST = "navigator_list__cHnuV";
-export const STREAMER_MENU = "navigator_item__qXlq9";
+export const STREAMER_MENU = ".navigator_item__qXlq9";
 
 // 채팅 부모
 export const CHAT_CONTAINER = ".live_chatting_list_wrapper__a5XTV";
@@ -33,6 +33,7 @@ export const CHAT_MESSAGE = ".live_chatting_message_wrapper__xpYre"; // 채팅 �
 // UI 정보
 export const LIVE_INFORMATION_HEAD = "video_information_row__HrQ0z";
 export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";
+export const NAVIGATOR_BUTTON = ".navigator_button__BbAEb"; //팔로우 채널에 2개,추천 채널에 2개 있음. 각각 새로고침,접기
 
 // 채팅
 export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";

@@ -18,6 +18,7 @@ import {
   CHAT_TEXT_COLOR,
   CHEEZE_REMOVER,
   FAST_BUTTON,
+  FOLLOWING_REFRESH_ENABLE,
   ONLIVE_REFRESH,
   SUBSCRIBE_REMOVER,
 } from "./constants/storage";
@@ -43,9 +44,22 @@ function App() {
           </div>
 
           <div className="menu">
-            <p className="menu-title">[베타] 즐겨찾기</p>
-            <p className="menu-desc">'팔로우 채널' 중 우선순위 올리기</p>
+            <p className="menu-title">
+              <del>[베타] 즐겨찾기</del>
+            </p>
+            <p className="menu-desc">
+              <del>'팔로우 채널' 중 우선순위 올리기</del>
+            </p>
+            <p className="menu-desc">v1.2.0 부터 기능을 제거하였습니다.</p>
+            <p className="menu-desc">버그 해결 후 돌아오겠습니다.</p>
           </div>
+
+          <Checkbox id={FOLLOWING_REFRESH_ENABLE}>
+            <div className="menu">
+              <p className="menu-title">팔로우 채널 자동 새로고침</p>
+              <p className="menu-desc">1분 간격으로 자동 새로고침합니다.</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 

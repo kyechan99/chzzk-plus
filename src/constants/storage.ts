@@ -6,6 +6,9 @@
 
 export const GLOBAL_SETTING = "czp-global-setting";
 
+// 네비게이터 갱신 모드
+export const FOLLOWING_REFRESH_ENABLE = "czp-following-refresh";
+
 // 비디오 플레이어 보호 모드
 export const BARRICADE = "barricade";
 

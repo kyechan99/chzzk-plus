@@ -41,6 +41,7 @@ const waitingSPALoaded = setInterval(() => {
       for (const mutation of mutationsList) {
         const addedNodes = mutation.addedNodes;
         if (addedNodes.length > 0) {
+          // if (mutationsList.length > 0) {
           editGlobalPage();
           editLivePage();
           editLiveListPage();

@@ -62,23 +62,22 @@ export const editLivePage = () => {
 
   if (!document.getElementById("chzzk-plus-live-chattools")) {
     // Feat: 채팅 저장소 =========================================================
-    const $chatToolsList = document.querySelector(CHATTING_TOOLS);
-
-    if (!$chatToolsList) {
-      /**
-       * [안전]
-       * 안전 호출용, SPA, 채팅 기능을 페이지 이동 후에 변경을 해서 페이지 이동시 null 이 됨
-       * 안전하게 3초 후에 재호출 시킴
-       */
-      setTimeout(() => {
-        editLivePage();
-      }, 300);
-    } else {
-      const $tools = document.createElement("div");
-      $tools.id = "chzzk-plus-live-chattools";
-      $chatToolsList?.prepend($tools);
-      createReactElement($tools, MessageStorageButton);
-    }
+    /**
+     * [안전]
+     * 안전 호출용, SPA, 채팅 기능을 페이지 이동 후에 변경을 해서 페이지 이동시 null 이 됨
+     * 안전하게 2초 후에 재호출 시킴
+     */
+    setTimeout(() => {
+      if (!document.getElementById("chzzk-plus-live-chattools")) {
+        const $chatToolsList = document.querySelector(CHATTING_TOOLS);
+        if ($chatToolsList) {
+          const $tools = document.createElement("div");
+          $tools.id = "chzzk-plus-live-chattools";
+          $chatToolsList?.prepend($tools);
+          createReactElement($tools, MessageStorageButton);
+        }
+      }
+    }, 2000);
   }
 
   if (!document.getElementById("chzzk-plus-live-btns")) {
