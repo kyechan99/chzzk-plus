@@ -8,6 +8,12 @@ export default function PipButton() {
     e.preventDefault();
     if (video) {
       video.requestPictureInPicture();
+
+      if (document.pictureInPictureElement === video) {
+        document.exitPictureInPicture();
+      } else {
+        video.requestPictureInPicture();
+      }
     }
   };
 
