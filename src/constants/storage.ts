@@ -8,7 +8,6 @@ export const GLOBAL_SETTING = "czp-global-setting";
 
 // 비디오 플레이어 보호 모드
 export const BARRICADE = "barricade";
-export const PLAYER_KEY_CONTROL = "czp-player-key";
 
 export const FAST_BUTTON = "czp-fast-btn";
 export const AUDIO_COMPRESSOR = "czp-compressor-btn";

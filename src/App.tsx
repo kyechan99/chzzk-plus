@@ -19,7 +19,6 @@ import {
   CHEEZE_REMOVER,
   FAST_BUTTON,
   ONLIVE_REFRESH,
-  PLAYER_KEY_CONTROL,
   SUBSCRIBE_REMOVER,
 } from "./constants/storage";
 
@@ -68,15 +67,6 @@ function App() {
             <p className="menu-desc">스크린샷</p>
             <p className="menu-desc">[베타] 녹화</p>
           </div>
-
-          <Checkbox id={PLAYER_KEY_CONTROL}>
-            <div className="menu">
-              <p className="menu-title">키 이벤트 활성화 *</p>
-              <p className="menu-desc">T: 넓은 화면</p>
-              <p className="menu-desc">F: 전체 화면</p>
-              <p className="menu-desc">M: 음소거</p>
-            </div>
-          </Checkbox>
 
           <Checkbox id={FAST_BUTTON}>
             <div className="menu">
