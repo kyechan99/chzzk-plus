@@ -1,5 +1,5 @@
 import CaptureButton from "../button/CaptureButton/CaptureButton";
-import FavoriteButton from "../button/FavoriteButton/FavoriteButton";
+// import FavoriteButton from "../button/FavoriteButton/FavoriteButton";
 import RecordButton from "../button/RecordButton/RecordButton";
 
 import "./LiveHelper.css";
@@ -7,7 +7,7 @@ import "./LiveHelper.css";
 export default function LiveHelper() {
   return (
     <div className="czp-live-helper">
-      <FavoriteButton />
+      {/* <FavoriteButton /> */}
       <RecordButton />
       <CaptureButton />
     </div>

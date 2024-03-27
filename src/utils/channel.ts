@@ -1,3 +1,5 @@
+import { log } from "./log";
+
 export const getChannelIDByUrl = (url: string) => {
   const regex = /\/live\/([^/?]+)/;
   const match = url.match(regex);
@@ -17,7 +19,9 @@ export const getChannelOpenLive = async (channelId: string) => {
     if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
     const data = await res.json();
-    
+
+    log("생방송 추적중..");
+
     return data.content.openLive;
   } catch (err) {
     return false;

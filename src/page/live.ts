@@ -68,11 +68,11 @@ export const editLivePage = () => {
       /**
        * [안전]
        * 안전 호출용, SPA, 채팅 기능을 페이지 이동 후에 변경을 해서 페이지 이동시 null 이 됨
-       * 안전하게 1.5초 후에 재호출 시킴
+       * 안전하게 3초 후에 재호출 시킴
        */
       setTimeout(() => {
         editLivePage();
-      }, 1500);
+      }, 300);
     } else {
       const $tools = document.createElement("div");
       $tools.id = "chzzk-plus-live-chattools";
