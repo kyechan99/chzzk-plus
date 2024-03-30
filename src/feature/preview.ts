@@ -19,30 +19,30 @@ let refresher: number | undefined;
 export async function previewSetting(): Promise<void> {
   await waitingElement(STREAMER_MENU);
 
-  const moreChannelBtnList = document.getElementsByClassName(
-    "navigator_button_more__UE0v3"
-  );
-  if (moreChannelBtnList.length > 0) {
-    // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
-    const moreChannelBtn = moreChannelBtnList[0] as HTMLElement;
-    moreChannelBtn.click();
-
-    chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, (res) => {
-      if (res[FOLLOWING_REFRESH_ENABLE]) {
-        clearInterval(refresher);
-        refresher = setInterval(() => {
-          // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
-          const $refreshBtn = document.querySelector(
-            NAVIGATOR_BUTTON
-          ) as HTMLElement;
-          $refreshBtn.click();
-        }, 1000 * 30);
-      }
-    });
-  }
-
   // Feat: Preview 썸네일 =====================================================================
   if (!document.getElementById("chzzk-plus-preview")) {
+    const moreChannelBtnList = document.getElementsByClassName(
+      "navigator_button_more__UE0v3"
+    );
+    if (moreChannelBtnList.length > 0) {
+      // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
+      const moreChannelBtn = moreChannelBtnList[0] as HTMLElement;
+      moreChannelBtn.click();
+
+      chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, (res) => {
+        if (res[FOLLOWING_REFRESH_ENABLE]) {
+          clearInterval(refresher);
+          refresher = setInterval(() => {
+            // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
+            const $refreshBtn = document.querySelector(
+              NAVIGATOR_BUTTON
+            ) as HTMLElement;
+            $refreshBtn.click();
+          }, 1000 * 30);
+        }
+      });
+    }
+
     const $preview = document.createElement("div");
     $preview.id = "chzzk-plus-preview";
     document.querySelector(STREAMER_MENU)?.appendChild($preview);

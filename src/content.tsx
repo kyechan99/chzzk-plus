@@ -25,6 +25,7 @@ const waitingSPALoaded = setInterval(() => {
      * 중복되어 event나 element를 추가할 수 있으니 id 확인 등으로 재생성 방지해야함
      */
     const pageChangeOb = new MutationObserver(() => {
+      editGlobalPage();
       editLivePage();
       editLiveListPage();
       editVideoPage();
