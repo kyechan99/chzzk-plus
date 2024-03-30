@@ -81,7 +81,7 @@ export default function RecordButton() {
   }
 
   return (
-    <>
+    <div>
       <video
         ref={recordedVideoRef}
         style={{ display: "none" }}
@@ -90,36 +90,70 @@ export default function RecordButton() {
       />
 
       <button
-        className={`record-btn ${recording === 1 && "recording"}`}
+        aria-label="녹화"
+        className={`pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button audio-compressor-button`}
+        data-active="false"
         onClick={clickedHandler}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="icon icon-tabler icon-tabler-player-record-filled"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M8 5.072a8 8 0 1 1 -3.995 7.213l-.005 -.285l.005 -.285a8 8 0 0 1 3.995 -6.643z"
-            stroke-width="0"
-            fill="currentColor"
-          />
-        </svg>
-        {
+        <span className="pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top">
           {
-            0: "녹화",
-            1: "녹화중",
-            2: "저장중",
-          }[recording]
-        }
+            {
+              0: "녹화",
+              1: "녹화중",
+              2: "저장중",
+            }[recording]
+          }
+        </span>
+        <span
+          className={`pzp-ui-icon pzp-pc-setting-button__icon czp-record-btn ${
+            recording === 1 ? "recording" : ""
+          }`}
+        >
+          {recording === 2 ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              className="pzp-ui-icon__svg"
+            >
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+              <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+              <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+              <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="pzp-ui-icon__svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M8 5.072a8 8 0 1 1 -3.995 7.213l-.005 -.285l.005 -.285a8 8 0 0 1 3.995 -6.643z"
+                stroke-width="0"
+                fill="currentColor"
+              />
+            </svg>
+          )}
+        </span>
       </button>
-    </>
+    </div>
   );
 }

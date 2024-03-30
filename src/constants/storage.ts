@@ -51,3 +51,6 @@ export const ONLIVE_REFRESH = "czp-live-refresh";
 
 // 차단 방송
 export const BLOCKED_STREAMER = "czp-blocked-card";
+
+// 기록 (녹화, 캡처)
+export const RECORD_ENABLE = "czp-record-enable";
