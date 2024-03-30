@@ -1,4 +1,4 @@
-import { chatSetting } from "../feature/chat";
+
 
 // import Barricade from "../components/video/Barricade/Barricade";
 import PipButton from "../components/button/PipButton/PipButton";
@@ -56,8 +56,6 @@ export const editLivePage = () => {
       $liveTitle.appendChild($liveHelper);
       createReactElement($liveHelper, LiveHelper);
     }
-
-    chatSetting();
   }
 
   if (!document.getElementById("chzzk-plus-live-chattools")) {

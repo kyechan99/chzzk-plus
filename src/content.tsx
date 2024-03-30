@@ -37,23 +37,23 @@ const waitingSPALoaded = setInterval(() => {
      * 중복되어 event나 element를 추가할 수 있으니 id 확인 등으로 재생성 방지해야함
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const screenChangeOb = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        const addedNodes = mutation.addedNodes;
-        if (addedNodes.length > 0) {
-          // if (mutationsList.length > 0) {
-          editGlobalPage();
-          editLivePage();
-          editLiveListPage();
-          editVideoPage();
-          break;
-        }
-      }
-    });
-    screenChangeOb.observe($layout, {
-      subtree: false,
-      childList: true,
-    });
+    // const screenChangeOb = new MutationObserver((mutationsList) => {
+    //   for (const mutation of mutationsList) {
+    //     const addedNodes = mutation.addedNodes;
+    //     if (addedNodes.length > 0) {
+    //       // if (mutationsList.length > 0) {
+    //       editGlobalPage();
+    //       editLivePage();
+    //       editLiveListPage();
+    //       editVideoPage();
+    //       break;
+    //     }
+    //   }
+    // });
+    // screenChangeOb.observe($layout, {
+    //   subtree: false,
+    //   childList: true,
+    // });
 
     clearInterval(waitingSPALoaded);
   }

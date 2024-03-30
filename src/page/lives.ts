@@ -8,9 +8,9 @@ export const editLiveListPage = () => {
 
   // 차단한 방송 완전 숨기기
   chrome.storage.local.get([BLOCKED_STREAMER], (res) => {
-    const cardList = document.querySelector(VIDEO_CARD_LIST);
-
     if (res[BLOCKED_STREAMER]) {
+      const cardList = document.querySelector(VIDEO_CARD_LIST);
+
       if (cardList && cardList.id !== "chzzk-plus-card-list") {
         cardList.id = "chzzk-plus-card-list";
 

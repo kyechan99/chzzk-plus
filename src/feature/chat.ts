@@ -1,5 +1,3 @@
-// import { getNameColor } from "../utils/color";
-import { logWarning } from "../utils/log";
 import { waitingElement } from "../utils/dom";
 import {
   BLIND_CHAT,
@@ -83,55 +81,6 @@ export async function chatSetting(): Promise<void> {
 
           style.innerHTML = innerHtml;
           document.head.appendChild(style);
-
-          try {
-            //   const observer = new MutationObserver(
-            //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            //     (mutationList, _observer) => {
-            //       for (const mutation of mutationList) {
-            //         for (const addedNode of mutation.addedNodes as NodeListOf<HTMLElement>) {
-            //           const nickname = addedNode.querySelector(
-            //             CHAT_NAME
-            //           ) as HTMLElement;
-            //           const text = addedNode.querySelector(
-            //             CHAT_CONTENT
-            //           ) as HTMLElement;
-            //           if (text) {
-            //             // 채팅 색상 넣기
-            //             if (
-            //               res[CHAT_COLOR_THEME] &&
-            //               res[CHAT_COLOR_THEME] === "커스텀"
-            //             ) {
-            //               text.style.color = `var(--${CHAT_TEXT_COLOR})`;
-            //             }
-            //             // 채팅 크기 넣기
-            //             if (res[CHAT_SIZE]) {
-            //               text.style.fontSize = `${res[CHAT_SIZE]}px`;
-            //             }
-            //           }
-            //           if (nickname) {
-            //             // 이름 커스텀 넣기
-            //             if (
-            //               res[CHAT_COLOR_THEME] &&
-            //               res[CHAT_COLOR_THEME] === "커스텀"
-            //             ) {
-            //               nickname.style.color = `var(--${CHAT_NAME_COLOR})`;
-            //             }
-            //             if (res[CHAT_SIZE]) {
-            //               nickname.style.fontSize = `${res[CHAT_SIZE]}px`;
-            //             }
-            //           }
-            //         }
-            //       }
-            //     }
-            //   );
-            //   observer.observe(chatContainer, {
-            //     childList: true,
-            //     subtree: true,
-            //   });
-          } catch (err) {
-            logWarning(err);
-          }
         }
       }
     }

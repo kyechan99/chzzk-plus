@@ -1,5 +1,5 @@
 import { previewSetting } from "../feature/preview";
-
+import { chatSetting } from "../feature/chat";
 import Global from "../components/Global";
 
 import { log } from "../utils/log";
@@ -18,6 +18,8 @@ export const editGlobalPage = () => {
   }
 
   previewSetting();
+
+  chatSetting();
 
   log("GLOBAL PAGE 설정");
 };
