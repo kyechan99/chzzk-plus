@@ -73,7 +73,6 @@ function App() {
             <p className="menu-title">플레이어 도우미</p>
             <p className="menu-desc">오디오 압축</p>
             <p className="menu-desc">빨리감기</p>
-            <p className="menu-desc">PIP 모드</p>
           </div>
 
           <Checkbox id={RECORD_ENABLE}>
@@ -193,7 +192,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.3.0</p>
+      <p className="version">v1.3.1</p>
     </div>
   );
 }

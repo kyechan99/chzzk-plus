@@ -1,5 +1,4 @@
 // import Barricade from "../components/video/Barricade/Barricade";
-import PipButton from "../components/button/PipButton/PipButton";
 import FastButton from "../components/button/FastButton/FastButton";
 import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
 
@@ -78,41 +77,59 @@ export const editLivePage = () => {
     }, 2000);
   }
 
-  if (!document.getElementById("chzzk-plus-live-btns")) {
-    const $btn_list = document.querySelector(VIDEO_BUTTONS);
-    // Feat: PIP 버튼 활성화 =========================================================
-    const $pipButtonRoot = document.createElement("div");
-    $pipButtonRoot.id = "chzzk-plus-live-btns";
-    $btn_list?.prepend($pipButtonRoot);
-    createReactElement($pipButtonRoot, PipButton);
+  /*
+    치지직내 PIP 기능 추가되어 제거함
+    // // Feat: PIP 버튼 활성화 =========================================================
+    // const $pipButtonRoot = document.createElement("div");
+    // $pipButtonRoot.id = "chzzk-plus-live-btns";
+    // $btn_list?.prepend($pipButtonRoot);
+    // createReactElement($pipButtonRoot, PipButton);
+  */
 
-    chrome.storage.local.get(
-      [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE],
-      (res) => {
-        // Feat: 빨리감기 버튼 활성화 =========================================================
-        if (res[FAST_BUTTON] && $btn_list) {
-          const $FastButton = document.createElement("div");
-          $btn_list?.prepend($FastButton);
-          createReactElement($FastButton, FastButton);
-        }
-        // Feat: 오디오 압축 버튼 활성화 =======================================================
-        if (res[AUDIO_COMPRESSOR] && $btn_list) {
-          const $AudioCompressorButton = document.createElement("div");
-          $btn_list?.prepend($AudioCompressorButton);
-          createReactElement($AudioCompressorButton, AudioCompressorButton);
-        }
-        // Feat: 녹화, 캡처 활성화 ============================================================
-        if (res[RECORD_ENABLE] && $btn_list) {
-          const $CaptureButton = document.createElement("div");
-          $btn_list?.prepend($CaptureButton);
-          createReactElement($CaptureButton, CaptureButton);
-          const $RecordButton = document.createElement("div");
-          $btn_list?.prepend($RecordButton);
-          createReactElement($RecordButton, RecordButton);
-        }
+  chrome.storage.local.get(
+    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE],
+    (res) => {
+      const $btn_list = document.querySelector(VIDEO_BUTTONS);
+
+      // Feat: 빨리감기 버튼 활성화 =========================================================
+      if (
+        res[FAST_BUTTON] &&
+        $btn_list &&
+        !document.getElementById("chzzk-plus-fast-btns")
+      ) {
+        const $FastButton = document.createElement("div");
+        $FastButton.id = "chzzk-plus-fast-btns";
+        $btn_list?.prepend($FastButton);
+        createReactElement($FastButton, FastButton);
       }
-    );
-  }
+      // Feat: 오디오 압축 버튼 활성화 =======================================================
+      if (
+        res[AUDIO_COMPRESSOR] &&
+        $btn_list &&
+        !document.getElementById("chzzk-plus-compr-btns")
+      ) {
+        const $AudioCompressorButton = document.createElement("div");
+        $AudioCompressorButton.id = "chzzk-plus-compr-btns";
+        $btn_list?.prepend($AudioCompressorButton);
+        createReactElement($AudioCompressorButton, AudioCompressorButton);
+      }
+      // Feat: 녹화, 캡처 활성화 ============================================================
+      if (
+        res[RECORD_ENABLE] &&
+        $btn_list &&
+        !document.getElementById("chzzk-plus-capture-btns")
+      ) {
+        const $CaptureButton = document.createElement("div");
+        $CaptureButton.id = "chzzk-plus-capture-btns";
+        $btn_list?.prepend($CaptureButton);
+        createReactElement($CaptureButton, CaptureButton);
+        const $RecordButton = document.createElement("div");
+        $RecordButton.id = "chzzk-plus-record-btns";
+        $btn_list?.prepend($RecordButton);
+        createReactElement($RecordButton, RecordButton);
+      }
+    }
+  );
 
   log("LIVE PAGE 설정");
 };
