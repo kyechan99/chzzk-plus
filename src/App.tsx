@@ -192,7 +192,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.3.1</p>
+      <p className="version">v1.3.2</p>
     </div>
   );
 }
