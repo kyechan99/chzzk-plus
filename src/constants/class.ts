@@ -39,5 +39,6 @@ export const NAVIGATOR_BUTTON = ".navigator_button__BbAEb"; //팔로우 채널�
 export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";
 
 // 동영상 Card UI
-export const VIDEO_CARD_LIST = ".component_list__DNd2B";
-export const BLOCKED_VIDEO_CARD = ".video_card_is_block__cGuyo";
+export const VIDEO_CARD_LIST = ".component_list__DNd2B"; // 라이브 페이지의 비디오 ul
+export const VIDEO_CARD_LIST_CT = ".component_list__Matsy"; // 카테고리 페이지의 비디오 ul
+export const BLOCKED_VIDEO_CARD = ".video_card_is_block__cGuyo"; // 차단된 방송

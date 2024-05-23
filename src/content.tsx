@@ -4,6 +4,7 @@ import { editGlobalPage } from "./page/global";
 
 import { LAYOUT_WRAP } from "./constants/class";
 import { editLiveListPage } from "./page/lives";
+import { editCategoryPage } from "./page/category";
 
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
@@ -16,6 +17,7 @@ const waitingSPALoaded = setInterval(() => {
     editGlobalPage();
     editLivePage();
     editLiveListPage();
+    editCategoryPage();
     editVideoPage();
 
     /**
@@ -28,6 +30,7 @@ const waitingSPALoaded = setInterval(() => {
       editGlobalPage();
       editLivePage();
       editLiveListPage();
+      editCategoryPage();
       editVideoPage();
     });
     pageChangeOb.observe(document.head, { subtree: true, childList: true });

@@ -12,3 +12,8 @@ export const isLiveListPage = (): boolean => {
 export const isVideoPage = (): boolean => {
   return document.URL.includes("video/");
 };
+
+// 카테고리 페이지 인지 확인
+export const isCategoryPage = (): boolean => {
+  return document.URL.includes("category");
+};
