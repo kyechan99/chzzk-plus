@@ -13,6 +13,7 @@ export const FOLLOWING_REFRESH_ENABLE = "czp-following-refresh";
 export const BARRICADE = "barricade";
 
 export const FAST_BUTTON = "czp-fast-btn";
+export const PIP_BUTTON = "czp-pip-btn";
 export const AUDIO_COMPRESSOR = "czp-compressor-btn";
 
 // 채팅 색상 옵션

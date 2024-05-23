@@ -18,11 +18,13 @@ import {
   AUDIO_COMPRESSOR,
   ONLIVE_REFRESH,
   RECORD_ENABLE,
+  PIP_BUTTON,
 } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
 import RecordButton from "../components/button/RecordButton/RecordButton";
 import CaptureButton from "../components/button/CaptureButton/CaptureButton";
+import PipButton from "../components/button/PipButton/PipButton";
 
 export const editLivePage = () => {
   if (!isLivePage()) return;
@@ -87,7 +89,7 @@ export const editLivePage = () => {
   */
 
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE, PIP_BUTTON],
     (res) => {
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
@@ -101,6 +103,17 @@ export const editLivePage = () => {
         $FastButton.id = "chzzk-plus-fast-btns";
         $btn_list?.prepend($FastButton);
         createReactElement($FastButton, FastButton);
+      }
+      // Feat: PIP 키 이벤트 활성화 =========================================================
+      if (
+        res[PIP_BUTTON] &&
+        $btn_list &&
+        !document.getElementById("chzzk-plus-pip-btn")
+      ) {
+        const $PipButton = document.createElement("div");
+        $PipButton.id = "chzzk-plus-pip-btn";
+        $btn_list?.prepend($PipButton);
+        createReactElement($PipButton, PipButton);
       }
       // Feat: 오디오 압축 버튼 활성화 =======================================================
       if (

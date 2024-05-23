@@ -20,6 +20,7 @@ import {
   FAST_BUTTON,
   FOLLOWING_REFRESH_ENABLE,
   ONLIVE_REFRESH,
+  PIP_BUTTON,
   RECORD_ENABLE,
   SUBSCRIBE_REMOVER,
 } from "./constants/storage";
@@ -90,6 +91,13 @@ function App() {
               <p className="menu-desc">]: 빨리 감기</p>
               <p className="menu-desc">[: 느리게 감기</p>
               <p className="menu-desc">=: 기본</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={PIP_BUTTON}>
+            <div className="menu">
+              <p className="menu-title">PIP 키 이벤트 활성화 *</p>
+              <p className="menu-desc">q: PIP ON / OFF</p>
             </div>
           </Checkbox>
 
@@ -192,7 +200,7 @@ function App() {
       <hr />
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.3.2</p>
+      <p className="version">v1.3.3</p>
     </div>
   );
 }
