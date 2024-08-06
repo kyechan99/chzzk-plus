@@ -21,6 +21,7 @@ import {
   FOLLOWING_REFRESH_ENABLE,
   ONLIVE_REFRESH,
   PIP_BUTTON,
+  PREVIEW_ENABLE,
   RECORD_ENABLE,
   SUBSCRIBE_REMOVER,
 } from "./constants/storage";
@@ -35,15 +36,19 @@ function App() {
         버그 및 기능 제보
       </URLButton>
 
+      <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
+
       <hr />
 
       <div className="setting-group">
         <h2 className="setting-label">채널</h2>
         <div className="menus">
-          <div className="menu">
-            <p className="menu-title">프리뷰</p>
-            <p className="menu-desc">생방송 실시간 프리뷰 표시</p>
-          </div>
+          <Checkbox id={PREVIEW_ENABLE}>
+            <div className="menu">
+              <p className="menu-title">프리뷰 *</p>
+              <p className="menu-desc">생방송 실시간 프리뷰 표시</p>
+            </div>
+          </Checkbox>
 
           <div className="menu">
             <p className="menu-title">
@@ -199,8 +204,7 @@ function App() {
 
       <hr />
 
-      <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
-      <p className="version">v1.3.3</p>
+      <p className="version">v1.3.4</p>
     </div>
   );
 }

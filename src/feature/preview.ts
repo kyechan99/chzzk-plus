@@ -7,6 +7,7 @@ import {
   CHAT_TEXT_COLOR,
   COLOR_PROPERTIES,
   FOLLOWING_REFRESH_ENABLE,
+  PREVIEW_ENABLE,
 } from "../constants/storage";
 import {
   CHAT_NAME_COLOR_DEFAULT,
@@ -46,7 +47,11 @@ export async function previewSetting(): Promise<void> {
     const $preview = document.createElement("div");
     $preview.id = "chzzk-plus-preview";
     document.querySelector(STREAMER_MENU)?.appendChild($preview);
-    createReactElement($preview, Preview);
+
+    // Feat: 미리보기 설정 ======================================================================
+    chrome.storage.local.get(PREVIEW_ENABLE, (res) => {
+      if (res[PREVIEW_ENABLE]) createReactElement($preview, Preview);
+    });
 
     // Feat: 색상 설정 ==========================================================================
     chrome.storage.local.get(COLOR_PROPERTIES, (res) => {
