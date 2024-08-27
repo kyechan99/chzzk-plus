@@ -195,9 +195,9 @@
     to-fast-properties "^2.0.0"
 
 "@crxjs/vite-plugin@^2.0.0-beta.21":
-  version "2.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/@crxjs/vite-plugin/-/vite-plugin-2.0.0-beta.21.tgz#c0ffc3cc9eb2d5d669d25cfd46bd8739e2fc9c60"
-  integrity sha512-kSXgHHqCXASqJ8NmY94+KLGVwdtkJ0E7KsRQ+vbMpRliJ5ze0xnSk0l41p4txlUysmEoqaeo4Xb7rEFdcU2zjQ==
+  version "2.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/@crxjs/vite-plugin/-/vite-plugin-2.0.0-beta.22.tgz#f0227471bf8f2e2693823148359db06b9bcc4e36"
+  integrity sha512-YFK1icyLOctDAF4K/rLausZAKbpA8as3F/d2pveEBXgnsYf62LtMdbxmL/vjcS6cL2IOCmEg0t3cuqupU+N2ng==
   dependencies:
     "@rollup/pluginutils" "^4.1.2"
     "@webcomponents/custom-elements" "^1.5.0"
