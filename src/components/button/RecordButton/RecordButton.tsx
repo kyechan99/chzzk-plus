@@ -69,6 +69,10 @@ export default function RecordButton() {
       recordedChunksRef.current = [];
     };
 
+    $video.addEventListener("ended", () => {
+      stopRecording();
+    });
+
     mediaRecorderRef.current.start();
     setRecording(1);
   };

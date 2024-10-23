@@ -58,3 +58,6 @@ export const BLOCKED_STREAMER = "czp-blocked-card";
 
 // 기록 (녹화, 캡처)
 export const RECORD_ENABLE = "czp-record-enable";
+
+// 자동 넓은 화면
+export const AUTO_WIDE_MODE = "czp-auto-wide";

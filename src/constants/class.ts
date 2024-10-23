@@ -6,7 +6,7 @@ export const WEBPLAYER_VIDEO = ".webplayer-internal-video";
 
 // 플레이어를 덮어주는 UI의 부모 클래스명
 export const PLAYER_UI = "player_header";
-export const VIDEO_VIEW_BTN = ".pzp-pc-viewmode-button__icon";
+export const VIDEO_VIEW_BTN = ".pzp-pc-viewmode-button";
 export const VIDEO_FULL_BTN = ".pzp-pc-fullscreen-button__icon";
 export const VIDEO_VOLUME_BTN = ".pzp-pc-volume-button__icon";
 export const VIDEO_CONTAINER = ".live_chatting_container__SvtrD";
