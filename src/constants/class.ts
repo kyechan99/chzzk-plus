@@ -15,6 +15,8 @@ export const INPUT_UI_LIST = [
   "live_chatting_input_input__2F3Et",
   "search_input__tKVgq",
   "czp-storage-form-input",
+  "live_chatting_donation_message_input__3X7ug",
+  "live_chatting_popup_donation_mission_input_text__ZqIZr",
 ];
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
