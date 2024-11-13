@@ -16,6 +16,7 @@ import {
   CHAT_SIZE,
   CHAT_SIZE_OPTIONS,
   CHAT_TEXT_COLOR,
+  CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
   FAST_BUTTON,
   FOLLOWING_REFRESH_ENABLE,
@@ -145,6 +146,13 @@ function App() {
           <Checkbox id={CHEEZE_REMOVER}>
             <div className="menu">
               <p className="menu-title">치즈 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={CHEEZE_RANKING_REMOVER}>
+            <div className="menu">
+              <p className="menu-title">주간 후원 랭킹 제거 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>
