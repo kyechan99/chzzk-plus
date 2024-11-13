@@ -64,7 +64,7 @@ const MessageStorage = () => {
       <div className="live_chatting_input_container__qA0ad czp-storage-form">
         <input
           type="text"
-          className="live_chatting_input_input__2F3Et czp-storage-form-input"
+          className="czp-storage-form-input"
           placeholder="저장할 채팅을 입력하세요."
           value={text}
           onChange={(e) => {
