@@ -7,6 +7,7 @@ import {
   CHAT_NAME,
   CHEEZE_CHAT,
   SUBSCRIBE_CHAT,
+  CHEEZE_RANKING_CHAT,
 } from "../constants/class";
 import {
   BLIND_REMOVER,
@@ -14,6 +15,7 @@ import {
   CHAT_NAME_COLOR,
   CHAT_SIZE,
   CHAT_TEXT_COLOR,
+  CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
   SUBSCRIBE_REMOVER,
 } from "../constants/storage";
@@ -29,6 +31,7 @@ export async function chatSetting(): Promise<void> {
       CHAT_SIZE,
       BLIND_REMOVER,
       SUBSCRIBE_REMOVER,
+      CHEEZE_RANKING_REMOVER,
     ],
     (res) => {
       const chatContainer = document.querySelector(CHAT_CONTAINER);
@@ -39,6 +42,13 @@ export async function chatSetting(): Promise<void> {
           const style = document.createElement("style");
           style.type = "text/css";
           style.innerHTML = `${CHEEZE_CHAT} { display: none; }`;
+          document.head.appendChild(style);
+        }
+        // 주간 후원 랭킹 제거 활성화
+        if (res[CHEEZE_RANKING_REMOVER]) {
+          const style = document.createElement("style");
+          style.type = "text/css";
+          style.innerHTML = `${CHEEZE_RANKING_CHAT} { display: none; }`;
           document.head.appendChild(style);
         }
         // 블라인드 챗 제거 활성화
