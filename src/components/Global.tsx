@@ -61,7 +61,7 @@ const MessageStorage = () => {
   return (
     <>
       <h2 className="czp-storage-heading">채팅 저장소</h2>
-      <div className="czp-storage-form">
+      <div className="live_chatting_input_container__qA0ad czp-storage-form">
         <input
           type="text"
           className="czp-storage-form-input"
@@ -73,28 +73,31 @@ const MessageStorage = () => {
         ></input>
         <button
           type="button"
-          className="czp-storage-form-btn"
+          className={`live_chatting_input_send_button__8KBrn ${
+            text && "live_chatting_input_is_active__WeOjk"
+          }`}
           onClick={addMessage}
         >
           저장
         </button>
       </div>
+
       <div className="czp-storage">
         {storage.map((data, idx) => (
           <div
-            className="czp-chat-st-btn"
+            className="component_box__ah2Dn component_default__AJk9D component_is_medium__-6eb7 czp-select-none czp-chat-st-btn"
             key={`${data}-${idx}`}
             onClick={() => {
               copyMessage(data);
             }}
           >
-            {data}
+            <span>{data}</span>
             <button
               type="button"
               className="czp-chat-st-remove-btn"
               key={`${data}-${idx}`}
               onClick={(e) => {
-                e.preventDefault;
+                e.stopPropagation();
                 removeMessage(idx);
               }}
             >
@@ -133,7 +136,7 @@ export default function Global() {
       {open && (
         <div className="czp-global">
           <button
-            className="czp-global-close-btn"
+            className="czp-global-close-btn button_container__ppWwB button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
             onClick={() => {
               chrome.storage.local.set({
                 [GLOBAL_SETTING]: false,
