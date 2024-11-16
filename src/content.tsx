@@ -26,14 +26,19 @@ const waitingSPALoaded = setInterval(() => {
      * /live 페이지에 editLivePage()를 호출하는 것 처럼 global 이 아닌 상황에는 이에 맞게 재호출 해줘야함
      * 중복되어 event나 element를 추가할 수 있으니 id 확인 등으로 재생성 방지해야함
      */
+    let lastUrl = location.href;
     const pageChangeOb = new MutationObserver(() => {
-      editGlobalPage();
-      editLivePage();
-      editLiveListPage();
-      editCategoryPage();
-      editVideoPage();
+      if (location.href !== lastUrl) {
+        lastUrl = location.href;
+        editGlobalPage();
+        editLivePage();
+        editLiveListPage();
+        editCategoryPage();
+        editVideoPage();
+      }
     });
-    pageChangeOb.observe(document.head, { subtree: true, childList: true });
+
+    pageChangeOb.observe(document, { subtree: true, childList: true });
 
     /**
      * [주의]

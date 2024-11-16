@@ -1,0 +1,104 @@
+#chzzk-plus-message-pin {
+  /* 메시지 핀 리스트 스타일 */
+  .czp-message-pin-list {
+    border-radius: 0 0 6px 6px;
+    background-color: rgba(var(--color-bg-white-rgb), 0.04);
+    background-image: linear-gradient(
+      rgba(var(--color-bg-layer-02-rgb), 0.7),
+      rgba(var(--color-bg-layer-02-rgb), 0.7)
+    );
+    -webkit-box-shadow: 0 8px 6px 0 var(--color-shadow-layer04-02),
+      0 0 1px 0 var(--color-shadow-layer04-01);
+    box-shadow: 0 8px 6px 0 var(--color-shadow-layer04-02),
+      0 0 1px 0 var(--color-shadow-layer04-01);
+    position: relative;
+    height: fit-content;
+    max-height: 40vh;
+    overflow-y: auto;
+    z-index: 1000;
+    top: unset;
+    display: none;
+  }
+
+  .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list {
+    display: block;
+
+    button {
+      cursor: default;
+    }
+  }
+
+  /* 스크롤바 스타일 */
+  .czp-message-pin-list::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .czp-message-pin-list::-webkit-scrollbar-thumb {
+    background-color: rgb(158, 158, 158);
+    border-radius: 10px;
+  }
+
+  .czp-message-pin-list::-webkit-scrollbar-track {
+    background-color: rgb(71, 71, 71);
+    border-radius: 10px;
+    background-clip: padding-box;
+  }
+
+  /* 헤더 스타일 */
+  .live_chatting_fixed_mission_header__EvP2K {
+    border-bottom: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .live_chatting_fixed_mission_header__EvP2K:not(.isOpen) {
+    border-radius: 8px !important;
+  }
+
+  /* 버튼 및 아이콘 스타일 */
+  .live_chatting_fixed_mission_mission_button__GkYx4 {
+    padding: 0px !important;
+  }
+
+  .live_chatting_fixed_mission_folded_button__bBWS2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #chzzk-plus-message-pin-title-container {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+
+  /* 새 메시지 표시 스타일 */
+  #chzzk-plus-new-message-dot {
+    color: red;
+    font-size: 20px;
+    margin-left: 4px;
+    display: none;
+  }
+
+  /* 빈 메시지 스타일 */
+  #chzzk-plus-message-pin-empty-message {
+    padding: 12px;
+    text-align: center;
+    color: var(--color-text-sub);
+    font-family: Sandoll Nemony2;
+  }
+
+  /* 채팅 리스트 마진 수정 */
+  .czp-message-pin-list .live_chatting_list_item__0SGhw:first-child:before {
+    content: "";
+    display: block;
+    height: 0px !important;
+    margin-top: 0px !important;
+  }
+}

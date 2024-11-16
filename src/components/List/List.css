@@ -1,0 +1,44 @@
+#czp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#czp-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  position: relative;
+  width: 100%;
+  color: #c9cedc;
+  font-size: 14px;
+  line-height: 1.2;
+  user-select: none;
+  height: fit-content;
+  padding-block: 5px;
+  font-weight: 600;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  button {
+    margin-right: 0.5rem;
+  }
+}
+
+#czp-list-item:hover {
+  text-decoration: none;
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+
+#czp-list-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#czp-list-input-wrapper input {
+  flex: 1;
+}

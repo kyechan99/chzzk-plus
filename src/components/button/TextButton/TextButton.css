@@ -1,0 +1,23 @@
+#text-button {
+  background-color: #2e3033;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  flex: none;
+  font-size: 13px;
+  height: 28px;
+  margin-left: auto;
+  padding: 0 9px;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 0;
+  font-weight: 900;
+}
+#text-button:hover {
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+
+#text-button.isActive {
+  background-color: rgba(0, 255, 163, 0.9);
+  color: #000;
+}

@@ -1,0 +1,25 @@
+#close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #9da5b6;
+  outline: none;
+  background: 0 0;
+  border: 0;
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+}
+
+#close-button:hover {
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
