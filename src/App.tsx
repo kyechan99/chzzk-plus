@@ -211,29 +211,24 @@ function App() {
             </div>
           </Select>
 
-          <Checkbox id={MESSAGE_PIN_ENABLE}>
-            <div className="menu">
-              <p className="menu-title">메시지 고정 기능 *</p>
-              <p className="menu-desc">새로고침 후 적용</p>
-            </div>
-          </Checkbox>
-
           <List
             id={MESSAGE_PIN_USERS}
             saveButtonText="추가"
             inputPlaceholder="닉네임 입력"
           >
-            <div className="menu">
-              <p className="menu-title">유저 고정 리스트 *</p>
-              <p className="menu-desc">새로고침 후 적용</p>
-            </div>
+            <Checkbox id={MESSAGE_PIN_ENABLE}>
+              <div className="menu">
+                <p className="menu-title">유저 고정 리스트 *</p>
+                <p className="menu-desc">새로고침 후 적용</p>
+              </div>
+            </Checkbox>
           </List>
         </div>
       </div>
 
       <hr />
 
-      <p className="version">v1.3.6</p>
+      <p className="version">v1.3.7</p>
     </div>
   );
 }

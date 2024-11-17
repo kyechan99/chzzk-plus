@@ -11,7 +11,7 @@ export const userPopupObserve = () => {
     const userPopupContents = document.querySelector(USER_POPUP_CONTENTS);
     if (
       userPopupContents &&
-      !document.getElementById("chzzk-plus-user-pin-btn")
+      !userPopupContents.querySelector("#chzzk-plus-user-pin-btn")
     ) {
       const container = document.createElement("div");
       userPopupContents.appendChild(container);
