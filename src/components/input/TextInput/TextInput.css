@@ -1,0 +1,28 @@
+#text-input-container {
+  align-items: center;
+  background-color: #373a3f;
+  border-radius: 8px;
+  display: flex;
+  padding: 3px 5px;
+  position: relative;
+  width: 100%;
+}
+
+#text-input-container input {
+  height: 40px;
+  margin: -10px 0 -10px 4px;
+  padding: 10px 0;
+  background-color: transparent;
+  border: 0;
+  color: #dfe2ea;
+  line-height: 20px;
+  margin-left: 4px;
+  max-height: 60px;
+  min-height: 20px;
+  outline: none;
+  overflow-y: auto;
+  position: relative;
+  resize: none;
+  white-space: normal;
+  width: 100%;
+}

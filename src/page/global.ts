@@ -15,11 +15,10 @@ export const editGlobalPage = () => {
     $global.id = "chzzk-plus-global";
     document.body.appendChild($global);
     createReactElement($global, Global);
-
-    chatSetting();
   }
 
   previewSetting();
+  chatSetting();
 
   log("GLOBAL PAGE 설정");
 };

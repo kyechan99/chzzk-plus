@@ -25,6 +25,7 @@ export const STREAMER_MENU = ".navigator_item__qXlq9";
 
 // 채팅 부모
 export const CHAT_CONTAINER = ".live_chatting_list_wrapper__a5XTV";
+export const CHAT_ITEM = ".live_chatting_list_item__0SGhw";
 export const CHAT_NAME = ".name_text__yQG50";
 export const CHAT_CONTENT = ".live_chatting_message_text__DyleH";
 export const CHEEZE_CHAT = ".live_chatting_list_donation__Fy6Vz";
@@ -37,6 +38,9 @@ export const CHEEZE_RANKING_CHAT = ".live_chatting_ranking_container__RVHvS";
 export const LIVE_INFORMATION_HEAD = "video_information_row__HrQ0z";
 export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";
 export const NAVIGATOR_BUTTON = ".navigator_button__BbAEb"; //팔로우 채널에 2개,추천 채널에 2개 있음. 각각 새로고침,접기
+export const USER_POPUP_CONTENTS = ".live_chatting_popup_profile_list__-AYwN";
+export const USER_POPUP_NAME =
+  "span.live_chatting_popup_profile_wrapper__Tcu6x > strong > span > span";
 
 // 채팅
 export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";

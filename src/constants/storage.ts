@@ -62,3 +62,9 @@ export const RECORD_ENABLE = "czp-record-enable";
 
 // 자동 넓은 화면
 export const AUTO_WIDE_MODE = "czp-auto-wide";
+
+// 메시지 고정 유저 리스트
+export const MESSAGE_PIN_USERS = "czp-message-pin-users";
+
+// 메시지 고정 여부
+export const MESSAGE_PIN_ENABLE = "czp-message-pin-enable";

@@ -1,4 +1,4 @@
-import { waitingElement } from "../utils/dom";
+import { createReactElement, waitingElement } from "../utils/dom";
 import {
   BLIND_CHAT,
   CHAT_CONTAINER,
@@ -17,8 +17,11 @@ import {
   CHAT_TEXT_COLOR,
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
+  MESSAGE_PIN_ENABLE,
   SUBSCRIBE_REMOVER,
 } from "../constants/storage";
+import PinnedMessageBox from "../components/pinnedMessageBox/PinnedMessageBox";
+import { chatObserve, userPopupObserve } from "../utils/observe";
 
 export async function chatSetting(): Promise<void> {
   await waitingElement(CHAT_CONTAINER);
@@ -32,6 +35,7 @@ export async function chatSetting(): Promise<void> {
       BLIND_REMOVER,
       SUBSCRIBE_REMOVER,
       CHEEZE_RANKING_REMOVER,
+      MESSAGE_PIN_ENABLE,
     ],
     (res) => {
       const chatContainer = document.querySelector(CHAT_CONTAINER);
@@ -91,6 +95,35 @@ export async function chatSetting(): Promise<void> {
 
           style.innerHTML = innerHtml;
           document.head.appendChild(style);
+        }
+
+        //유저 메시지 고정 기능 추가
+        if (
+          res[MESSAGE_PIN_ENABLE] &&
+          !document.getElementById("chzzk-plus-message-pin")
+        ) {
+          userPopupObserve();
+          chatObserve();
+
+          //고정된 메시지 박스 추가
+          const fixedList = document.querySelector(
+            ".live_chatting_list_fixed__Wy3TT"
+          );
+          if (fixedList) {
+            const container = document.createElement("div");
+            fixedList.appendChild(container);
+            createReactElement(container, PinnedMessageBox);
+          } else {
+            const wrapper = document.createElement("div");
+            wrapper.className = "live_chatting_list_fixed__Wy3TT";
+            const fixedContainer = document.querySelector(
+              ".live_chatting_list_exist_fixed_message__2EP21"
+            );
+            fixedContainer?.appendChild(wrapper);
+            const container = document.createElement("div");
+            wrapper.appendChild(container);
+            createReactElement(container, PinnedMessageBox);
+          }
         }
       }
     }
