@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 import { USER_POPUP_NAME } from "../../../constants/class";
 import { MESSAGE_PIN_USERS } from "../../../constants/storage";
+import { waitingElement } from "../../../utils/dom";
 
 export default function UserPinButton() {
   const [isPinned, setIsPinned] = useState(false);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const userNameElement = document.querySelector(USER_POPUP_NAME);
-    if (userNameElement?.textContent) {
-      setUserName(userNameElement.textContent);
-      chrome.storage.local.get([MESSAGE_PIN_USERS], (res) => {
-        const pinnedUsers = res[MESSAGE_PIN_USERS] || [];
-        setIsPinned(pinnedUsers.includes(userNameElement.textContent));
-      });
-    }
+    waitingElement(USER_POPUP_NAME).then((userNameElement) => {
+      if (userNameElement?.textContent) {
+        setUserName(userNameElement.textContent);
+        chrome.storage.local.get([MESSAGE_PIN_USERS], (res) => {
+          const pinnedUsers = res[MESSAGE_PIN_USERS] || [];
+          setIsPinned(pinnedUsers.includes(userNameElement.textContent));
+        });
+      }
+    });
     return () => {
       setUserName("");
       setIsPinned(false);
@@ -46,6 +48,8 @@ export default function UserPinButton() {
       );
     });
   };
+
+  if (!userName) return <></>;
 
   return (
     <button
