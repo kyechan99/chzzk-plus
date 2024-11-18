@@ -1,22 +1,34 @@
 import { MESSAGE_PIN_USERS } from "../constants/storage";
 import { CHAT_CONTAINER, CHAT_NAME } from "../constants/class";
-import { createReactElement, waitingElement } from "./dom";
+import { createReactElement } from "./dom";
 import { USER_POPUP_CONTENTS } from "../constants/class";
 import UserPinButton from "../components/button/UserPinButton/UserPinButton";
 
 export const userPopupObserve = () => {
-  const userPopupOb = new MutationObserver(async () => {
-    await waitingElement(USER_POPUP_CONTENTS);
+  const userPopupOb = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node: Node) => {
+        if (node.nodeName === "#text") return;
 
-    const userPopupContents = document.querySelector(USER_POPUP_CONTENTS);
-    if (
-      userPopupContents &&
-      !userPopupContents.querySelector("#chzzk-plus-user-pin-btn")
-    ) {
-      const container = document.createElement("div");
-      userPopupContents.appendChild(container);
-      createReactElement(container, UserPinButton);
-    }
+        let popupContents: Element | null;
+        if ((node as Element).matches?.(USER_POPUP_CONTENTS)) {
+          popupContents = node as Element;
+        } else {
+          popupContents = (node as Element).querySelector?.(
+            USER_POPUP_CONTENTS
+          );
+        }
+
+        if (
+          popupContents &&
+          !popupContents.querySelector("#chzzk-plus-user-pin-btn")
+        ) {
+          const container = document.createElement("div");
+          popupContents.appendChild(container);
+          createReactElement(container, UserPinButton);
+        }
+      });
+    });
   });
 
   const chatContainer = document.querySelector(CHAT_CONTAINER);
