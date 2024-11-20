@@ -9,6 +9,7 @@ import List from "./components/List/List";
 
 import {
   AUDIO_COMPRESSOR,
+  AUTO_WIDE_MODE,
   BLIND_REMOVER,
   BLOCKED_STREAMER,
   CHAT_COLOR_OPTIONS,
@@ -163,6 +164,13 @@ function App() {
           <Checkbox id={BLIND_REMOVER}>
             <div className="menu">
               <p className="menu-title">블라인드 챗 완전 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={AUTO_WIDE_MODE}>
+            <div className="menu">
+              <p className="menu-title">자동 넓은 화면 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>

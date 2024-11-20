@@ -24,9 +24,7 @@ import PinnedMessageBox from "../components/pinnedMessageBox/PinnedMessageBox";
 import { chatObserve, userPopupObserve } from "../utils/observe";
 
 export async function chatSetting(): Promise<void> {
-  await waitingElement(CHAT_CONTAINER);
-
-  // Feat: 채팅 색상, 치즈 제거 ===============================================================
+  const chatContainer = await waitingElement(CHAT_CONTAINER);
   chrome.storage.local.get(
     [
       CHAT_COLOR_THEME,
@@ -37,9 +35,7 @@ export async function chatSetting(): Promise<void> {
       CHEEZE_RANKING_REMOVER,
       MESSAGE_PIN_ENABLE,
     ],
-    (res) => {
-      const chatContainer = document.querySelector(CHAT_CONTAINER);
-
+    async (res) => {
       if (chatContainer) {
         // 치즈 제거 활성화
         if (res[CHEEZE_REMOVER]) {
@@ -98,10 +94,7 @@ export async function chatSetting(): Promise<void> {
         }
 
         //유저 메시지 고정 기능 추가
-        if (
-          res[MESSAGE_PIN_ENABLE] &&
-          !document.getElementById("chzzk-plus-message-pin")
-        ) {
+        if (res[MESSAGE_PIN_ENABLE]) {
           userPopupObserve();
           chatObserve();
 
@@ -116,13 +109,15 @@ export async function chatSetting(): Promise<void> {
           } else {
             const wrapper = document.createElement("div");
             wrapper.className = "live_chatting_list_fixed__Wy3TT";
-            const fixedContainer = document.querySelector(
-              ".live_chatting_list_exist_fixed_message__2EP21"
+            const chatListContainer = await waitingElement(
+              ".live_chatting_list_container__vwsbZ"
             );
-            fixedContainer?.appendChild(wrapper);
-            const container = document.createElement("div");
-            wrapper.appendChild(container);
-            createReactElement(container, PinnedMessageBox);
+            if (chatListContainer) {
+              chatListContainer.appendChild(wrapper);
+              const container = document.createElement("div");
+              wrapper.appendChild(container);
+              createReactElement(container, PinnedMessageBox);
+            }
           }
         }
       }
