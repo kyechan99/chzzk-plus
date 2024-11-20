@@ -118,6 +118,13 @@ function App() {
               <p className="menu-desc">일정한 음량 수준을 유지</p>
             </div>
           </Checkbox>
+
+          <Checkbox id={AUTO_WIDE_MODE}>
+            <div className="menu">
+              <p className="menu-title">자동 넓은 화면 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 
@@ -164,13 +171,6 @@ function App() {
           <Checkbox id={BLIND_REMOVER}>
             <div className="menu">
               <p className="menu-title">블라인드 챗 완전 제거 *</p>
-              <p className="menu-desc">새로고침 후 적용</p>
-            </div>
-          </Checkbox>
-
-          <Checkbox id={AUTO_WIDE_MODE}>
-            <div className="menu">
-              <p className="menu-title">자동 넓은 화면 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>
@@ -236,7 +236,7 @@ function App() {
 
       <hr />
 
-      <p className="version">v1.3.8</p>
+      <p className="version">v1.4.0</p>
     </div>
   );
 }
