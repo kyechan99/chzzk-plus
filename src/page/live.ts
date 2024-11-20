@@ -4,7 +4,7 @@ import AudioCompressorButton from "../components/button/AudioCompressorButton/Au
 
 import { log } from "../utils/log";
 import { isLivePage } from "../utils/page";
-import { createReactElement } from "../utils/dom";
+import { createReactElement, waitingElement } from "../utils/dom";
 
 import {
   VIDEO_BUTTONS,
@@ -12,6 +12,7 @@ import {
   // LIVE_INFORMATION_HEAD,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
+  VIDEO_VIEW_BTN,
 } from "../constants/class";
 import {
   FAST_BUTTON,
@@ -19,6 +20,7 @@ import {
   ONLIVE_REFRESH,
   RECORD_ENABLE,
   PIP_BUTTON,
+  AUTO_WIDE_MODE,
 } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
@@ -26,11 +28,12 @@ import RecordButton from "../components/button/RecordButton/RecordButton";
 import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 import PipButton from "../components/button/PipButton/PipButton";
 
-export const editLivePage = () => {
+export const editLivePage = async () => {
   if (!isLivePage()) return;
 
   // Live 페이지 인데, 생방송 중이 아님.
-  if (!document.querySelector(WEBPLAYER_VIDEO)) {
+  const webPlayerVideo = await waitingElement(WEBPLAYER_VIDEO);
+  if (!webPlayerVideo) {
     chrome.storage.local.get([ONLIVE_REFRESH], (res) => {
       if (res[ONLIVE_REFRESH]) {
         traceOpenLive();
@@ -58,25 +61,14 @@ export const editLivePage = () => {
   //   createReactElement($liveHelper, LiveHelper);
   // }
   // }
+  const $chatToolsList = await waitingElement(CHATTING_TOOLS);
+  if (!$chatToolsList) return;
 
   if (!document.getElementById("chzzk-plus-live-chattools")) {
-    // Feat: 채팅 저장소 =========================================================
-    /**
-     * [안전]
-     * 안전 호출용, SPA, 채팅 기능을 페이지 이동 후에 변경을 해서 페이지 이동시 null 이 됨
-     * 안전하게 2초 후에 재호출 시킴
-     */
-    setTimeout(() => {
-      if (!document.getElementById("chzzk-plus-live-chattools")) {
-        const $chatToolsList = document.querySelector(CHATTING_TOOLS);
-        if ($chatToolsList) {
-          const $tools = document.createElement("div");
-          $tools.id = "chzzk-plus-live-chattools";
-          $chatToolsList?.prepend($tools);
-          createReactElement($tools, MessageStorageButton);
-        }
-      }
-    }, 2000);
+    const $tools = document.createElement("div");
+    $tools.id = "chzzk-plus-live-chattools";
+    $chatToolsList?.prepend($tools);
+    createReactElement($tools, MessageStorageButton);
   }
 
   /*
@@ -89,7 +81,7 @@ export const editLivePage = () => {
   */
 
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE, PIP_BUTTON],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE, PIP_BUTTON, AUTO_WIDE_MODE],
     (res) => {
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
@@ -140,6 +132,13 @@ export const editLivePage = () => {
         $RecordButton.id = "chzzk-plus-record-btns";
         $btn_list?.prepend($RecordButton);
         createReactElement($RecordButton, RecordButton);
+      }
+      // Feat: 자동 넓은 화면 활성화 =========================================================
+      if (res[AUTO_WIDE_MODE]) {
+        const wideScreenButton = document.querySelector(VIDEO_VIEW_BTN);
+        if (wideScreenButton) {
+          (wideScreenButton as HTMLButtonElement).click();
+        }
       }
     }
   );

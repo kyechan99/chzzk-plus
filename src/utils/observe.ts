@@ -1,10 +1,10 @@
 import { MESSAGE_PIN_USERS } from "../constants/storage";
 import { CHAT_CONTAINER, CHAT_NAME } from "../constants/class";
-import { createReactElement } from "./dom";
+import { createReactElement, waitingElement } from "./dom";
 import { USER_POPUP_CONTENTS } from "../constants/class";
 import UserPinButton from "../components/button/UserPinButton/UserPinButton";
 
-export const userPopupObserve = () => {
+export const userPopupObserve = async () => {
   const userPopupOb = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node: Node) => {
@@ -31,7 +31,7 @@ export const userPopupObserve = () => {
     });
   });
 
-  const chatContainer = document.querySelector(CHAT_CONTAINER);
+  const chatContainer = await waitingElement(CHAT_CONTAINER);
   if (chatContainer) {
     userPopupOb.observe(chatContainer, {
       subtree: true,
@@ -40,7 +40,7 @@ export const userPopupObserve = () => {
   }
 };
 
-export const chatObserve = () => {
+export const chatObserve = async () => {
   const chatOb = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node: Node) => {
@@ -85,7 +85,7 @@ export const chatObserve = () => {
     });
   });
 
-  const chatContainer = document.querySelector(CHAT_CONTAINER);
+  const chatContainer = await waitingElement(CHAT_CONTAINER);
   if (chatContainer) {
     chatOb.observe(chatContainer, {
       subtree: true,

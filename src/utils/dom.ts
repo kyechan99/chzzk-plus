@@ -8,15 +8,18 @@ export const createReactElement = (
   ReactDOM.createRoot(root).render(React.createElement(element));
 };
 
-export async function waitingElement(selector: string): Promise<HTMLElement> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return await new Promise((resolve, _reject) => {
-    const interval = setInterval(() => {
-      const element = document.querySelector(selector);
-      if (element !== null) {
-        clearInterval(interval);
-        resolve(element as HTMLElement);
-      }
-    }, 500);
-  });
+export async function waitingElement(
+  selector: string,
+  timeout: number = 5000
+): Promise<HTMLElement | null> {
+  const startTime = Date.now();
+  while (document.querySelector(selector) === null) {
+    // 타임아웃
+    if (Date.now() - startTime >= timeout) {
+      return null;
+    }
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+
+  return document.querySelector(selector) as HTMLElement;
 }
