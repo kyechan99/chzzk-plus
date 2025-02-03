@@ -29,6 +29,9 @@ export const CHAT_TEXT_COLOR = "czp-chat-text";
 export const COLOR_PROPERTIES = [CHAT_NAME_COLOR, CHAT_TEXT_COLOR];
 export const CHAT_SIZE = "czp-chat-size";
 export const CHAT_SIZE_OPTIONS = [
+  "11",
+  "12",
+  "13",
   "기본(14)",
   "15",
   "16",
@@ -36,6 +39,10 @@ export const CHAT_SIZE_OPTIONS = [
   "18",
   "19",
   "20",
+  "21",
+  "22",
+  "23",
+  "24",
 ];
 export const CHEEZE_REMOVER = "czp-cheeze-remover"; // 치즈 제거 여부
 export const BLIND_REMOVER = "czp-blind-remover"; // 블라인드 챗 제거 여부
