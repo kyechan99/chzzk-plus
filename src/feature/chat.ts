@@ -8,6 +8,7 @@ import {
   CHEEZE_CHAT,
   SUBSCRIBE_CHAT,
   CHEEZE_RANKING_CHAT,
+  CHATTING_PIN,
 } from "../constants/class";
 import {
   BLIND_REMOVER,
@@ -98,17 +99,17 @@ export async function chatSetting(): Promise<void> {
           userPopupObserve();
           chatObserve();
 
+          await waitingElement(`.${CHATTING_PIN}`, 2000);
+
           //고정된 메시지 박스 추가
-          const fixedList = document.querySelector(
-            ".live_chatting_list_fixed__Wy3TT"
-          );
+          const fixedList = document.querySelector(`.${CHATTING_PIN}`);
           if (fixedList) {
             const container = document.createElement("div");
             fixedList.appendChild(container);
             createReactElement(container, PinnedMessageBox);
           } else {
             const wrapper = document.createElement("div");
-            wrapper.className = "live_chatting_list_fixed__Wy3TT";
+            wrapper.className = CHATTING_PIN;
             const chatListContainer = await waitingElement(
               ".live_chatting_list_container__vwsbZ"
             );

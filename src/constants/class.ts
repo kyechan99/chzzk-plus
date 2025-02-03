@@ -45,6 +45,7 @@ export const USER_POPUP_NAME =
 // 채팅
 export const CHATTING_TOOLS = ".live_chatting_input_tools__OPA1R";
 export const CHATTING_ACTIONS = ".live_chatting_input_action__SfGhd";
+export const CHATTING_PIN = "live_chatting_list_fixed__Wy3TT";
 
 // 동영상 Card UI
 export const VIDEO_CARD_LIST = ".component_list__DNd2B"; // 라이브 페이지의 비디오 ul
