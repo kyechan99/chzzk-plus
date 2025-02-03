@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { WEBPLAYER_VIDEO } from "../../../constants/class";
+import "./AudioCompressorButton.css";
 
 export default function AudioCompressorButton() {
   const video: HTMLVideoElement = document.querySelector(WEBPLAYER_VIDEO)!;
@@ -68,14 +69,14 @@ export default function AudioCompressorButton() {
   return (
     <button
       aria-label="오디오 압축"
-      className="pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button audio-compressor-button"
+      className="pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button"
       data-active="false"
       onClick={onClickHandler}
     >
-      <span className="pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top">
+      <span className="pzp-button__tooltip pzp-button__tooltip--top">
         오디오 압축
       </span>
-      <span className="pzp-ui-icon pzp-pc-setting-button__icon czp-pc-fast-button">
+      <span className="pzp-ui-icon pzp-setting-button__icon czp-compressor-button">
         {acActive ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"

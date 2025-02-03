@@ -50,14 +50,12 @@ export default function CaptureButton() {
   return (
     <button
       aria-label="캡처"
-      className="pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button"
+      className="pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button"
       data-active="false"
       onClick={captureVideo}
     >
-      <span className="pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top">
-        캡처
-      </span>
-      <span className="pzp-ui-icon pzp-pc-setting-button__icon czp-pc-capture-button">
+      <span className="pzp-button__tooltip pzp-button__tooltip--top">캡처</span>
+      <span className="pzp-ui-icon pzp-setting-button__icon czp-capture-button">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="pzp-ui-icon__svg"

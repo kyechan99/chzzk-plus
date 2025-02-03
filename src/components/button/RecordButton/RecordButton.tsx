@@ -95,11 +95,11 @@ export default function RecordButton() {
 
       <button
         aria-label="녹화"
-        className={`pzp-button pzp-pc-setting-button pzp-pc__setting-button pzp-pc-ui-button audio-compressor-button`}
+        className={`pzp-button pzp-setting-button pzp-pc-setting-button pzp-pc__setting-button audio-compressor-button`}
         data-active="false"
         onClick={clickedHandler}
       >
-        <span className="pzp-pc-ui-button__tooltip pzp-pc-ui-button__tooltip--top">
+        <span className="pzp-button__tooltip pzp-button__tooltip--top">
           {
             {
               0: "녹화",
@@ -109,7 +109,7 @@ export default function RecordButton() {
           }
         </span>
         <span
-          className={`pzp-ui-icon pzp-pc-setting-button__icon czp-record-btn ${
+          className={`pzp-ui-icon pzp-setting-button__icon czp-record-btn ${
             recording === 1 ? "recording" : ""
           }`}
         >
