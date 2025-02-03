@@ -1,0 +1,16 @@
+.czp-screen-guard-btn {
+    border: 1px solid rgba(var(--color-border-01-rgb), .2);
+    border-color: rgba(var(--color-border-01-rgb),.12);
+    border-radius: 17px;
+    color: var(--color-content-chzzk-01);
+    display: block;
+    font-family: Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif;
+    font-size: 13px;
+    line-height: 17px;
+    padding: 7px 14px;
+    margin-right: 16px;
+}
+.czp-screen-guard-btn.active {
+    background: var(--color-content-chzzk-04);
+    color: var(--color-bg-04); 
+}

@@ -75,3 +75,6 @@ export const MESSAGE_PIN_USERS = "czp-message-pin-users";
 
 // 메시지 고정 여부
 export const MESSAGE_PIN_ENABLE = "czp-message-pin-enable";
+
+// 화면 보호기
+export const GUARD_ENALBE = "czp-guard-enable";

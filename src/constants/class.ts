@@ -19,6 +19,9 @@ export const INPUT_UI_LIST = [
   "live_chatting_popup_donation_mission_input_text__ZqIZr",
 ];
 
+// 툴바
+export const SECTION_TOOLBAR = ".toolbar_section__IPbBC";
+
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
 export const STREAMER_MENU_LIST = "navigator_list__cHnuV";
 export const STREAMER_MENU = ".navigator_item__qXlq9";

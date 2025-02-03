@@ -1,7 +1,8 @@
-import { PREVIEW_ENABLE } from "./constants/storage";
+import { PREVIEW_ENABLE, GUARD_ENALBE } from "./constants/storage";
 
 const defaultValues: Record<string, unknown> = {
   [PREVIEW_ENABLE]: true,
+  [GUARD_ENALBE]: true,
 };
 
 chrome.runtime.onInstalled.addListener(() => {

@@ -22,6 +22,7 @@ import {
   CHEEZE_REMOVER,
   FAST_BUTTON,
   FOLLOWING_REFRESH_ENABLE,
+  GUARD_ENALBE,
   MESSAGE_PIN_ENABLE,
   MESSAGE_PIN_USERS,
   ONLIVE_REFRESH,
@@ -146,6 +147,13 @@ function App() {
               <p className="menu-desc">라이브 목록에서 차단한 방송 완전 제거</p>
             </div>
           </Checkbox>
+
+          <Checkbox id={GUARD_ENALBE}>
+            <div className="menu">
+              <p className="menu-title">방송 보호기</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 
@@ -236,7 +244,7 @@ function App() {
 
       <hr />
 
-      <p className="version">v1.4.0</p>
+      <p className="version">v1.5.1</p>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import {
   WEBPLAYER_VIDEO,
   VIDEO_VIEW_BTN,
   CHATTING_ACTIONS,
+  SECTION_TOOLBAR,
 } from "../constants/class";
 import {
   FAST_BUTTON,
@@ -22,12 +23,14 @@ import {
   RECORD_ENABLE,
   PIP_BUTTON,
   AUTO_WIDE_MODE,
+  GUARD_ENALBE,
 } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
 import RecordButton from "../components/button/RecordButton/RecordButton";
 import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 import PipButton from "../components/button/PipButton/PipButton";
+import ScreenGuardButton from "../components/button/ScreenGuardButton/ScreenGuardButton";
 
 export const editLivePage = async () => {
   if (!isLivePage()) return;
@@ -86,9 +89,15 @@ export const editLivePage = async () => {
     // $btn_list?.prepend($pipButtonRoot);
     // createReactElement($pipButtonRoot, PipButton);
   */
-
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, RECORD_ENABLE, PIP_BUTTON, AUTO_WIDE_MODE],
+    [
+      FAST_BUTTON,
+      AUDIO_COMPRESSOR,
+      RECORD_ENABLE,
+      PIP_BUTTON,
+      AUTO_WIDE_MODE,
+      GUARD_ENALBE,
+    ],
     (res) => {
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
@@ -145,6 +154,18 @@ export const editLivePage = async () => {
         const wideScreenButton = document.querySelector(VIDEO_VIEW_BTN);
         if (wideScreenButton) {
           (wideScreenButton as HTMLButtonElement).click();
+        }
+      }
+      if (res[GUARD_ENALBE]) {
+        const $sectionToolbar = document.querySelector(SECTION_TOOLBAR);
+        if (
+          $sectionToolbar &&
+          !document.getElementById("chzzk-plus-screen-guard")
+        ) {
+          const $tools = document.createElement("div");
+          $tools.id = "chzzk-plus-screen-guard";
+          $sectionToolbar?.prepend($tools);
+          createReactElement($tools, ScreenGuardButton);
         }
       }
     }
