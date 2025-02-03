@@ -13,6 +13,7 @@ import {
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
   VIDEO_VIEW_BTN,
+  CHATTING_ACTIONS,
 } from "../constants/class";
 import {
   FAST_BUTTON,
@@ -65,10 +66,16 @@ export const editLivePage = async () => {
   if (!$chatToolsList) return;
 
   if (!document.getElementById("chzzk-plus-live-chattools")) {
-    const $tools = document.createElement("div");
-    $tools.id = "chzzk-plus-live-chattools";
-    $chatToolsList?.prepend($tools);
-    createReactElement($tools, MessageStorageButton);
+    const $donationTools = $chatToolsList.querySelector(CHATTING_ACTIONS);
+    if ($donationTools) {
+      const $tools = document.createElement("div");
+      $tools.id = "chzzk-plus-live-chattools";
+      $tools.style.display = "inline-flex";
+      $tools.style.width = "28px";
+      $tools.style.height = "28px";
+      $donationTools?.append($tools);
+      createReactElement($tools, MessageStorageButton);
+    }
   }
 
   /*

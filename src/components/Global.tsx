@@ -76,6 +76,14 @@ const MessageStorage = () => {
           className={`live_chatting_input_send_button__8KBrn ${
             text && "live_chatting_input_is_active__WeOjk"
           }`}
+          style={{
+            background: "var(--color-bg-layer-02)",
+            padding: "8px",
+            fontSize: "12px",
+            borderRadius: "4px",
+            fontFamily:
+              "Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif",
+          }}
           onClick={addMessage}
         >
           저장
