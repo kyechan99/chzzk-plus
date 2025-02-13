@@ -34,7 +34,7 @@ export const CHAT_CONTENT = ".live_chatting_message_text__DyleH";
 export const CHEEZE_CHAT = ".live_chatting_list_donation__Fy6Vz";
 export const BLIND_CHAT = ".live_chatting_message_is_hidden__CLKiR";
 export const SUBSCRIBE_CHAT = ".live_chatting_list_subscription__TlgcM";
-export const CHAT_MESSAGE = ".live_chatting_message_wrapper__xpYre"; // 채팅 부모 (type 은 button 임)
+export const CHAT_MESSAGE = ".live_chatting_message_chatting_message__7TKns"; // 채팅 부모
 export const CHEEZE_RANKING_CHAT = ".live_chatting_ranking_container__RVHvS";
 
 // UI 정보
