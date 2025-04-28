@@ -1,11 +1,11 @@
 export const log = (msg: unknown) => {
-  console.log(`[Chzzk-Plus] : ${msg}`);
+  console.log(`[Cheese-Plus] : ${msg}`);
 };
 
 export const logError = (msg: unknown) => {
-  console.error(`[Chzzk-Plus] : ${msg}`);
+  console.error(`[Cheese-Plus] : ${msg}`);
 };
 
 export const logWarning = (msg: unknown) => {
-  console.warn(`[Chzzk-Plus] : ${msg}`);
+  console.warn(`[Cheese-Plus] : ${msg}`);
 };

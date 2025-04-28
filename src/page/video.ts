@@ -5,10 +5,10 @@ import { isVideoPage } from "../utils/page";
 import { createReactElement } from "../utils/dom";
 
 import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
-import RecordButton from "../components/button/RecordButton/RecordButton";
-import CaptureButton from "../components/button/CaptureButton/CaptureButton";
+// import RecordButton from "../components/button/RecordButton/RecordButton";
+// import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 
-import { AUDIO_COMPRESSOR, RECORD_ENABLE } from "../constants/storage";
+import { AUDIO_COMPRESSOR } from "../constants/storage";
 import { VIDEO_BUTTONS } from "../constants/class";
 
 export const editVideoPage = () => {
@@ -48,7 +48,7 @@ export const editVideoPage = () => {
     //   createReactElement($pipButtonRoot, PipButton);
     // }
   */
-  chrome.storage.local.get([AUDIO_COMPRESSOR, RECORD_ENABLE], (res) => {
+  chrome.storage.local.get([AUDIO_COMPRESSOR], (res) => {
     const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
     // Feat: 오디오 압축 버튼 활성화 =======================================================
@@ -63,20 +63,20 @@ export const editVideoPage = () => {
       createReactElement($AudioCompressorButton, AudioCompressorButton);
     }
     // Feat: 녹화, 캡처 활성화 ============================================================
-    if (
-      res[RECORD_ENABLE] &&
-      $btn_list &&
-      !document.getElementById("chzzk-plus-capture-btns")
-    ) {
-      const $CaptureButton = document.createElement("div");
-      $CaptureButton.id = "chzzk-plus-capture-btns";
-      $btn_list?.prepend($CaptureButton);
-      createReactElement($CaptureButton, CaptureButton);
-      const $RecordButton = document.createElement("div");
-      $RecordButton.id = "chzzk-plus-record-btns";
-      $btn_list?.prepend($RecordButton);
-      createReactElement($RecordButton, RecordButton);
-    }
+    // if (
+    //   res[RECORD_ENABLE] &&
+    //   $btn_list &&
+    //   !document.getElementById("chzzk-plus-capture-btns")
+    // ) {
+    //   const $CaptureButton = document.createElement("div");
+    //   $CaptureButton.id = "chzzk-plus-capture-btns";
+    //   $btn_list?.prepend($CaptureButton);
+    //   createReactElement($CaptureButton, CaptureButton);
+    //   const $RecordButton = document.createElement("div");
+    //   $RecordButton.id = "chzzk-plus-record-btns";
+    //   $btn_list?.prepend($RecordButton);
+    //   createReactElement($RecordButton, RecordButton);
+    // }
   });
 
   log("VIDEO PAGE 설정");

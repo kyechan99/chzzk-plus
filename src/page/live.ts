@@ -20,15 +20,12 @@ import {
   FAST_BUTTON,
   AUDIO_COMPRESSOR,
   ONLIVE_REFRESH,
-  RECORD_ENABLE,
   PIP_BUTTON,
   AUTO_WIDE_MODE,
   GUARD_ENALBE,
 } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
-import RecordButton from "../components/button/RecordButton/RecordButton";
-import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 import PipButton from "../components/button/PipButton/PipButton";
 import ScreenGuardButton from "../components/button/ScreenGuardButton/ScreenGuardButton";
 
@@ -90,14 +87,7 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [
-      FAST_BUTTON,
-      AUDIO_COMPRESSOR,
-      RECORD_ENABLE,
-      PIP_BUTTON,
-      AUTO_WIDE_MODE,
-      GUARD_ENALBE,
-    ],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE],
     (res) => {
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
@@ -135,20 +125,20 @@ export const editLivePage = async () => {
         createReactElement($AudioCompressorButton, AudioCompressorButton);
       }
       // Feat: 녹화, 캡처 활성화 ============================================================
-      if (
-        res[RECORD_ENABLE] &&
-        $btn_list &&
-        !document.getElementById("chzzk-plus-capture-btns")
-      ) {
-        const $CaptureButton = document.createElement("div");
-        $CaptureButton.id = "chzzk-plus-capture-btns";
-        $btn_list?.prepend($CaptureButton);
-        createReactElement($CaptureButton, CaptureButton);
-        const $RecordButton = document.createElement("div");
-        $RecordButton.id = "chzzk-plus-record-btns";
-        $btn_list?.prepend($RecordButton);
-        createReactElement($RecordButton, RecordButton);
-      }
+      // if (
+      //   res[RECORD_ENABLE] &&
+      //   $btn_list &&
+      //   !document.getElementById("chzzk-plus-capture-btns")
+      // ) {
+      //   const $CaptureButton = document.createElement("div");
+      //   $CaptureButton.id = "chzzk-plus-capture-btns";
+      //   $btn_list?.prepend($CaptureButton);
+      //   createReactElement($CaptureButton, CaptureButton);
+      //   const $RecordButton = document.createElement("div");
+      //   $RecordButton.id = "chzzk-plus-record-btns";
+      //   $btn_list?.prepend($RecordButton);
+      //   createReactElement($RecordButton, RecordButton);
+      // }
       // Feat: 자동 넓은 화면 활성화 =========================================================
       if (res[AUTO_WIDE_MODE]) {
         const wideScreenButton = document.querySelector(VIDEO_VIEW_BTN);

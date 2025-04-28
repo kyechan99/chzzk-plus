@@ -28,14 +28,13 @@ import {
   ONLIVE_REFRESH,
   PIP_BUTTON,
   PREVIEW_ENABLE,
-  RECORD_ENABLE,
   SUBSCRIBE_REMOVER,
 } from "./constants/storage";
 
 function App() {
   return (
     <div className="popup">
-      <img src={Logo} alt="chzzk-plus" />
+      <img src={Logo} alt="cheese-plus" />
 
       <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">
@@ -86,14 +85,6 @@ function App() {
             <p className="menu-desc">오디오 압축</p>
             <p className="menu-desc">빨리감기</p>
           </div>
-
-          <Checkbox id={RECORD_ENABLE}>
-            <div className="menu">
-              <p className="menu-title">녹화 기능 활성화 *</p>
-              <p className="menu-desc">스크린샷 (단축키: S)</p>
-              <p className="menu-desc">[베타] 녹화</p>
-            </div>
-          </Checkbox>
 
           <Checkbox id={FAST_BUTTON}>
             <div className="menu">
@@ -244,7 +235,7 @@ function App() {
 
       <hr />
 
-      <p className="version">v1.5.2</p>
+      <p className="version">v1.6.0</p>
     </div>
   );
 }
