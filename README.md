@@ -40,8 +40,8 @@
 ![0](/README/0.png)
 ![1](/README/1.png)
 ![2](/README/2.png)
-![3](/README/3.png)
-![4](/README/4.jpg)
+![3](/README/3.jpg)
+![4](/README/4.png)
 
 ## 알림사항
 
