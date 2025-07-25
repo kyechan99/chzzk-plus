@@ -17,14 +17,11 @@ export default function Preview() {
 
   useEffect(() => {
     const $nav_left = document.querySelectorAll(NAV_LEFT);
-    console.log($nav_left);
 
     if (!$nav_left || $nav_left.length < 2) return;
 
     const $following_channel_nav = $nav_left[1];
     const $navigation = $following_channel_nav.querySelector("ul");
-
-    console.log($navigation);
 
     if ($navigation) {
       $navigation.addEventListener("mouseover", navHoverListener);
@@ -44,8 +41,6 @@ export default function Preview() {
    */
   const fetchData = async () => {
     try {
-      console.log("fetch ");
-
       const res = await fetch(
         `https://api.chzzk.naver.com/service/v2/channels/${channelId}/live-detail`
       );
@@ -70,8 +65,6 @@ export default function Preview() {
    * @param event
    */
   const navHoverListener = (event: Event) => {
-    console.log("nav");
-
     const eventTarget = event.target as HTMLElement;
     if (eventTarget.tagName === "A") {
       try {
