@@ -13,7 +13,11 @@ import {
   CHAT_NAME_COLOR_DEFAULT,
   CHAT_TEXT_COLOR_DEFAULT,
 } from "../constants/color";
-import { NAVIGATOR_BUTTON, STREAMER_MENU } from "../constants/class";
+import {
+  REFRESH_BUTTON,
+  STREAMER_MENU,
+  STREAMER_MORE_BTN,
+} from "../constants/class";
 
 let refresher: number | undefined;
 
@@ -22,9 +26,8 @@ export async function previewSetting(): Promise<void> {
 
   // Feat: Preview 썸네일 =====================================================================
   if (!document.getElementById("chzzk-plus-preview")) {
-    const moreChannelBtnList = document.getElementsByClassName(
-      "navigator_button_more__UE0v3"
-    );
+    const moreChannelBtnList =
+      document.getElementsByClassName(STREAMER_MORE_BTN);
     if (moreChannelBtnList.length > 0) {
       // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
       const moreChannelBtn = moreChannelBtnList[0] as HTMLElement;
@@ -34,12 +37,12 @@ export async function previewSetting(): Promise<void> {
         if (res[FOLLOWING_REFRESH_ENABLE]) {
           clearInterval(refresher);
           refresher = setInterval(() => {
-            // NAVIGATOR_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
+            // REFRESH_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
             const $refreshBtn = document.querySelector(
-              NAVIGATOR_BUTTON
+              REFRESH_BUTTON
             ) as HTMLElement;
             $refreshBtn.click();
-          }, 1000 * 30);
+          }, 1000 * 20);
         }
       });
     }

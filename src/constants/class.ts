@@ -23,8 +23,11 @@ export const INPUT_UI_LIST = [
 export const SECTION_TOOLBAR = ".toolbar_section__IPbBC";
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
-export const STREAMER_MENU_LIST = "navigator_list__cHnuV";
-export const STREAMER_MENU = ".navigator_item__qXlq9";
+export const NAV_LEFT =
+  "nav.navigation_bar_section__hDpyD.navigation_bar_is_expanded__Z69d7";
+export const STREAMER_MENU_LIST = ".navigation_bar_list__+d2qh";
+export const STREAMER_MENU = ".navigator_item__mH4JG";
+export const STREAMER_MORE_BTN = "navigation_bar_more_button__7DoyA ";
 
 // 채팅 부모
 export const CHAT_CONTAINER = ".live_chatting_list_wrapper__a5XTV";
@@ -40,7 +43,7 @@ export const CHEEZE_RANKING_CHAT = ".live_chatting_ranking_container__RVHvS";
 // UI 정보
 export const LIVE_INFORMATION_HEAD = "video_information_row__HrQ0z";
 export const VIDEO_BUTTONS = ".pzp-pc__bottom-buttons-right";
-export const NAVIGATOR_BUTTON = ".navigator_button__BbAEb"; //팔로우 채널에 2개,추천 채널에 2개 있음. 각각 새로고침,접기
+export const REFRESH_BUTTON = `button[aria-label="새로고침"]`; //  새로고침 버튼
 export const USER_POPUP_CONTENTS = ".live_chatting_popup_profile_list__-AYwN";
 export const USER_POPUP_NAME =
   "span.live_chatting_popup_profile_wrapper__Tcu6x > strong > span > span";
