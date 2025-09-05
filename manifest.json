@@ -1,7 +1,7 @@
 {
   "name": "Cheese Plus",
   "description": "Cheese Plus",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "manifest_version": 3,
   "icons": {
     "16": "icon16.png",
