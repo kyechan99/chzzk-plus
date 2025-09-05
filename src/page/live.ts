@@ -14,7 +14,9 @@ import {
   WEBPLAYER_VIDEO,
   VIDEO_VIEW_BTN,
   CHATTING_ACTIONS,
+  CHATTING_DONATION_POPUP,
   SECTION_TOOLBAR,
+  CHATTING_AREA,
 } from "../constants/class";
 import {
   FAST_BUTTON,
@@ -66,6 +68,46 @@ export const editLivePage = async () => {
   const $chatToolsList = await waitingElement(CHATTING_TOOLS);
   if (!$chatToolsList) return;
 
+  const ensureMessageStorageButton = () => {
+    if (!document.getElementById("chzzk-plus-live-chattools")) {
+      const $chatTools = document.querySelector(CHATTING_TOOLS);
+      const $donationTools = $chatTools?.querySelector(CHATTING_ACTIONS);
+      if ($donationTools) {
+        const $tools = document.createElement("div");
+        $tools.id = "chzzk-plus-live-chattools";
+        $tools.style.display = "inline-flex";
+        $tools.style.width = "28px";
+        $tools.style.height = "28px";
+        $donationTools.append($tools);
+        createReactElement($tools, MessageStorageButton);
+      }
+    }
+  };
+
+  // CHATTING_DONATION_POPUP 엘리먼트가 제거될 때 MessageStorageButton 버튼을 재생성
+  const observeDonationPopupRemoval = () => {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type !== "childList") continue;
+        mutation.removedNodes.forEach((node) => {
+          if (!(node instanceof Element)) return;
+          if (
+            node.matches?.(CHATTING_DONATION_POPUP) ||
+            node.querySelector?.(CHATTING_DONATION_POPUP)
+          ) {
+            // 약간의 지연 후 재시도 (DOM 재구성이 끝난 뒤)
+            setTimeout(() => {
+              ensureMessageStorageButton();
+            }, 0);
+          }
+        });
+      }
+    });
+    const $chat_area = document.querySelector(CHATTING_AREA);
+    if ($chat_area)
+      observer.observe($chat_area, { childList: true, subtree: true });
+  };
+
   /*
     치지직내 PIP 기능 추가되어 제거함
     // // Feat: PIP 버튼 활성화 =========================================================
@@ -84,20 +126,9 @@ export const editLivePage = async () => {
       CHAT_STORAGE_ENABLE,
     ],
     (res) => {
-      if (
-        res[CHAT_STORAGE_ENABLE] &&
-        !document.getElementById("chzzk-plus-live-chattools")
-      ) {
-        const $donationTools = $chatToolsList.querySelector(CHATTING_ACTIONS);
-        if ($donationTools) {
-          const $tools = document.createElement("div");
-          $tools.id = "chzzk-plus-live-chattools";
-          $tools.style.display = "inline-flex";
-          $tools.style.width = "28px";
-          $tools.style.height = "28px";
-          $donationTools?.append($tools);
-          createReactElement($tools, MessageStorageButton);
-        }
+      if (res[CHAT_STORAGE_ENABLE]) {
+        ensureMessageStorageButton();
+        observeDonationPopupRemoval();
       }
 
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
