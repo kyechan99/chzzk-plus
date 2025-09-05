@@ -144,7 +144,7 @@ export default function Global() {
       {open && (
         <div className="czp-global">
           <button
-            className="czp-global-close-btn button_container__ppWwB button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
+            className="czp-global-close-btn button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
             onClick={() => {
               chrome.storage.local.set({
                 [GLOBAL_SETTING]: false,

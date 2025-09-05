@@ -23,6 +23,7 @@ import {
   PIP_BUTTON,
   AUTO_WIDE_MODE,
   GUARD_ENALBE,
+  CHAT_STORAGE_ENABLE,
 } from "../constants/storage";
 import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
 import { traceOpenLive } from "../utils/trace";
@@ -65,19 +66,6 @@ export const editLivePage = async () => {
   const $chatToolsList = await waitingElement(CHATTING_TOOLS);
   if (!$chatToolsList) return;
 
-  if (!document.getElementById("chzzk-plus-live-chattools")) {
-    const $donationTools = $chatToolsList.querySelector(CHATTING_ACTIONS);
-    if ($donationTools) {
-      const $tools = document.createElement("div");
-      $tools.id = "chzzk-plus-live-chattools";
-      $tools.style.display = "inline-flex";
-      $tools.style.width = "28px";
-      $tools.style.height = "28px";
-      $donationTools?.append($tools);
-      createReactElement($tools, MessageStorageButton);
-    }
-  }
-
   /*
     치지직내 PIP 기능 추가되어 제거함
     // // Feat: PIP 버튼 활성화 =========================================================
@@ -87,8 +75,31 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE],
+    [
+      FAST_BUTTON,
+      AUDIO_COMPRESSOR,
+      PIP_BUTTON,
+      AUTO_WIDE_MODE,
+      GUARD_ENALBE,
+      CHAT_STORAGE_ENABLE,
+    ],
     (res) => {
+      if (
+        res[CHAT_STORAGE_ENABLE] &&
+        !document.getElementById("chzzk-plus-live-chattools")
+      ) {
+        const $donationTools = $chatToolsList.querySelector(CHATTING_ACTIONS);
+        if ($donationTools) {
+          const $tools = document.createElement("div");
+          $tools.id = "chzzk-plus-live-chattools";
+          $tools.style.display = "inline-flex";
+          $tools.style.width = "28px";
+          $tools.style.height = "28px";
+          $donationTools?.append($tools);
+          createReactElement($tools, MessageStorageButton);
+        }
+      }
+
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
       // Feat: 빨리감기 버튼 활성화 =========================================================

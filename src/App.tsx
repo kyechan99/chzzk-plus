@@ -17,6 +17,7 @@ import {
   CHAT_NAME_COLOR,
   CHAT_SIZE,
   CHAT_SIZE_OPTIONS,
+  CHAT_STORAGE_ENABLE,
   CHAT_TEXT_COLOR,
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
@@ -177,6 +178,13 @@ function App() {
           <Checkbox id={SUBSCRIBE_REMOVER}>
             <div className="menu">
               <p className="menu-title">구독 챗 완전 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={CHAT_STORAGE_ENABLE}>
+            <div className="menu">
+              <p className="menu-title">채팅 저장소 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>
