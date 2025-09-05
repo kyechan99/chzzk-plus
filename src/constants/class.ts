@@ -20,7 +20,7 @@ export const INPUT_UI_LIST = [
 ];
 
 // 툴바
-export const SECTION_TOOLBAR = ".toolbar_section__IPbBC";
+export const SECTION_TOOLBAR = ".toolbar_section__maAwZ";
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
 export const NAV_LEFT =
