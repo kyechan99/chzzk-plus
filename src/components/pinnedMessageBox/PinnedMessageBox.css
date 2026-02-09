@@ -1,3 +1,8 @@
+@keyframes chpNewPinnedEffect {
+  from { background-color: #83838341; }
+  to { background-color: #83838300; }
+}
+
 #chzzk-plus-message-pin {
   /* 메시지 핀 리스트 스타일 */
   .czp-message-pin-list {
@@ -14,6 +19,7 @@
     position: relative;
     height: fit-content;
     max-height: 40vh;
+    overflow-x: hidden;
     overflow-y: auto;
     z-index: 1000;
     top: unset;
@@ -94,8 +100,13 @@
     font-family: Sandoll Nemony2;
   }
 
+  .czp-message-pin-list .live_chatting_list_item__0SGhw {
+    animation: chpNewPinnedEffect 0.2s ease-out forwards;
+  }
+
   /* 채팅 리스트 마진 수정 */
-  .czp-message-pin-list .live_chatting_list_item__0SGhw:first-child:before {
+  .czp-message-pin-list .live_chatting_list_item__0SGhw:first-child:before,
+  .czp-message-pin-list .live_chatting_list_item__0SGhw:last-child:before {
     content: "";
     display: block;
     height: 0px !important;
