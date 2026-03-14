@@ -50,7 +50,7 @@ export default function UserPinButton() {
   if (!userName) return <></>;
 
   return (
-    <button onClick={handlerClick} className="live_chatting_popup_profile_item__tOguB" id="chzzk-plus-user-pin-btn">
+    <button onClick={handlerClick} className="live_chatting_popup_profile_item__tOguB">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

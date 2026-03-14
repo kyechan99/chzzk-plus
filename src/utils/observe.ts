@@ -19,6 +19,7 @@ export const userPopupObserve = async () => {
 
         if (popupContents && !popupContents.querySelector('#chzzk-plus-user-pin-btn')) {
           const container = document.createElement('div');
+          container.id = 'chzzk-plus-user-pin-btn';
           popupContents.appendChild(container);
           createReactElement(container, UserPinButton);
         }
