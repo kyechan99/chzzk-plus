@@ -1,7 +1,7 @@
 {
   "name": "Cheese Plus",
   "description": "Cheese Plus",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "manifest_version": 3,
   "icons": {
     "16": "icon16.png",
@@ -13,7 +13,8 @@
   "content_scripts": [
     {
       "matches": ["*://chzzk.naver.com/*"],
-      "js": ["src/content.tsx"]
+      "js": ["src/content.tsx"],
+      "exclude_globs": ["*://api.chzzk.naver.com/*"]
     }
   ],
   "host_permissions": ["http://www.google.com/", "https://www.google.com/"],
@@ -23,6 +24,6 @@
   "action": {
     "default_icon": "icon128.png",
     "default_popup": "index.html",
-    "default_title": "Open Extension App"
+    "default_title": "Cheese Plus Setting"
   }
 }

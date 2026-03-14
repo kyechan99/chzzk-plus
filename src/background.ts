@@ -19,7 +19,7 @@ chrome.runtime.onInstalled.addListener(() => {
         }
         return acc;
       },
-      {} as Record<string, unknown>
+      {} as Record<string, unknown>,
     );
 
     if (Object.keys(valuesToSet).length > 0) {

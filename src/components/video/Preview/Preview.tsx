@@ -1,20 +1,61 @@
 import { useEffect, useRef, useState } from "react";
+import Hls from "hls.js";
 
 import { logWarning } from "../../../utils/log";
 import { getChannelIDByUrl } from "../../../utils/channel";
-
-import "./Preview.css";
+import { getHlsUrl } from "../../../utils/stream";
 import { NAV_LEFT } from "../../../constants/class";
 
+import "./Preview.css";
+
 export default function Preview() {
-  const ref = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
   const [channelId, setChannelId] = useState<string>("");
-  const [thumbnail, setThumbnail] = useState<string>("");
+  const [visible, setVisible] = useState<boolean>(false);
 
+  // 채널 변경 시 HLS 스트림 연결
   useEffect(() => {
-    fetchData();
-  }, [channelId]);
+    if (!visible || !channelId || !videoRef.current) return;
 
+    const video = videoRef.current;
+
+    const startStream = async () => {
+      const hlsUrl = await getHlsUrl(channelId);
+      if (!hlsUrl || !videoRef.current) return;
+
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+
+      if (Hls.isSupported()) {
+        const hls = new Hls({ enableWorker: false });
+        hlsRef.current = hls;
+        hls.loadSource(hlsUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {});
+        });
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = hlsUrl;
+        video.play().catch(() => {});
+      }
+    };
+
+    startStream().catch(logWarning);
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      video.src = "";
+    };
+  }, [channelId, visible]);
+
+  // 좌측 nav 마우스 이벤트 등록
   useEffect(() => {
     const $nav_left = document.querySelectorAll(NAV_LEFT);
 
@@ -34,51 +75,25 @@ export default function Preview() {
         $navigation.removeEventListener("mouseleave", navLeaveListener);
       }
     };
-  }, [ref]);
+  }, [containerRef]);
 
-  /**
-   * 라이브 생방송 썸네일 가져오기
-   */
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        `https://api.chzzk.naver.com/service/v2/channels/${channelId}/live-detail`
-      );
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
-      const data = await res.json();
-
-      if (data.content && data.content.liveImageUrl) {
-        const liveImageUrl = data.content.liveImageUrl.replace("{type}", 480);
-        setThumbnail(liveImageUrl);
-      } else {
-        setThumbnail("");
-      }
-    } catch (err) {
-      setThumbnail("");
-      logWarning(err);
-    }
-  };
-
-  /**
-   * 스트리머 메뉴에 hover 시 썸네일 띄워주는 element 위치 조정
-   * @param event
-   */
   const navHoverListener = (event: Event) => {
     const eventTarget = event.target as HTMLElement;
     if (eventTarget.tagName === "A") {
       try {
         const rect = eventTarget.getBoundingClientRect();
-        if (ref.current) {
-          ref.current.style.left = 8 + rect.right + "px";
-          ref.current.style.top = rect.top + 60 + "px";
-          ref.current.style.display = "block";
+        if (containerRef.current) {
+          containerRef.current.style.left = 8 + rect.right + "px";
+          containerRef.current.style.top = rect.top + "px";
         }
 
         const href = eventTarget.getAttribute("href");
         if (href) {
           const channelID = getChannelIDByUrl(href);
-          setChannelId(channelID);
+          if (channelID) {
+            setChannelId(channelID);
+            setVisible(true);
+          }
         }
       } catch (err) {
         logWarning(err);
@@ -86,25 +101,24 @@ export default function Preview() {
     }
   };
 
-  /**
-   * 스트리머 메뉴에 hover leave 시 썸네일 띄워주는 element 비활성화
-   * @param event
-   */
   const navLeaveListener = () => {
-    if (ref.current) {
-      ref.current.style.display = "none";
-    }
+    setVisible(false);
+    setChannelId("");
   };
 
   return (
-    <div className="preview" ref={ref}>
-      {thumbnail && (
-        <img
-          src={thumbnail}
-          alt="preview-thumbnail"
-          className="preview-thumbnail"
-        />
-      )}
+    <div
+      className="preview"
+      ref={containerRef}
+      style={{ display: visible ? "block" : "none" }}
+    >
+      <video
+        ref={videoRef}
+        className="preview-video"
+        muted
+        playsInline
+        autoPlay
+      />
     </div>
   );
 }

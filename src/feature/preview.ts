@@ -39,7 +39,7 @@ export async function previewSetting(): Promise<void> {
           refresher = setInterval(() => {
             // REFRESH_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
             const $refreshBtn = document.querySelector(
-              REFRESH_BUTTON
+              REFRESH_BUTTON,
             ) as HTMLElement;
             $refreshBtn.click();
           }, 1000 * 20);
@@ -49,7 +49,7 @@ export async function previewSetting(): Promise<void> {
 
     const $preview = document.createElement("div");
     $preview.id = "chzzk-plus-preview";
-    document.querySelector(STREAMER_MENU)?.appendChild($preview);
+    document.querySelector(".aside_content__j2eTE")?.appendChild($preview);
 
     // Feat: 미리보기 설정 ======================================================================
     chrome.storage.local.get(PREVIEW_ENABLE, (res) => {
@@ -61,11 +61,11 @@ export async function previewSetting(): Promise<void> {
       // 채팅 이름 및 텍스트 색상 저장되어 있는 값으로 설정
       document.documentElement.style.setProperty(
         `--${CHAT_NAME_COLOR}`,
-        res[CHAT_NAME_COLOR] || CHAT_NAME_COLOR_DEFAULT
+        res[CHAT_NAME_COLOR] || CHAT_NAME_COLOR_DEFAULT,
       );
       document.documentElement.style.setProperty(
         `--${CHAT_TEXT_COLOR}`,
-        res[CHAT_TEXT_COLOR] || CHAT_TEXT_COLOR_DEFAULT
+        res[CHAT_TEXT_COLOR] || CHAT_TEXT_COLOR_DEFAULT,
       );
 
       if (!res[CHAT_NAME_COLOR])
@@ -86,7 +86,7 @@ export async function previewSetting(): Promise<void> {
         if (COLOR_PROPERTIES.includes(key))
           document.documentElement.style.setProperty(
             `--${key}`,
-            storageChange.newValue
+            storageChange.newValue,
           );
       }
     });

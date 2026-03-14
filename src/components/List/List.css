@@ -19,13 +19,12 @@
   padding-block: 5px;
   font-weight: 600;
 
-  span {
-    margin-left: 0.5rem;
-  }
-
-  button {
-    margin-right: 0.5rem;
-  }
+}
+#czp-list-item span {
+  margin-left: 0.5rem;
+}
+#czp-list-item button {
+  margin-right: 0.5rem;
 }
 
 #czp-list-item:hover {

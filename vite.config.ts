@@ -8,4 +8,14 @@ import manifest from "./manifest.json";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svgr(), react(), crx({ manifest })],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-hls": ["hls.js"],
+        },
+      },
+    },
+  },
 });

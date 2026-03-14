@@ -27,11 +27,10 @@
   }
 
   .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list {
-    display: block;
-
-    button {
-      cursor: default;
-    }
+    display: block; 
+  }
+  .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list button { 
+      cursor: default; 
   }
 
   /* 스크롤바 스타일 */

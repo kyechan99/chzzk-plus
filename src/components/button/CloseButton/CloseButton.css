@@ -12,13 +12,12 @@
   padding: 4px;
   width: 24px;
   height: 24px;
-
-  svg {
+}
+#close-button svg {
     width: 13px;
     height: 13px;
     flex-shrink: 0;
   }
-}
 
 #close-button:hover {
   background-color: hsla(0, 0%, 100%, 0.1);
