@@ -9,7 +9,7 @@
   text-indent: -9999px;
 }
 .form-switch-label:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0.125rem;
   left: 0.125rem;

@@ -10,9 +10,22 @@
   align-items: center;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  font-family: Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica,
-    나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림,
-    noto sans, 돋움, Dotum, sans-serif;
+  font-family:
+    Sandoll Nemony2,
+    Apple SD Gothic NEO,
+    Helvetica Neue,
+    Helvetica,
+    나눔고딕,
+    NanumGothic,
+    Malgun Gothic,
+    맑은 고딕,
+    굴림,
+    gulim,
+    새굴림,
+    noto sans,
+    돋움,
+    Dotum,
+    sans-serif;
   gap: 0 4px;
   justify-content: center;
   letter-spacing: -0.3px;

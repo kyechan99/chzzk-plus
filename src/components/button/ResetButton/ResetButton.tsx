@@ -1,4 +1,4 @@
-import "./ResetButton.css";
+import './ResetButton.css';
 
 export default function ResetButton({ id }: { id: string }) {
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

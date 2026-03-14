@@ -1,4 +1,4 @@
-import { createReactElement, waitingElement } from "../utils/dom";
+import { createReactElement, waitingElement } from '../utils/dom';
 import {
   BLIND_CHAT,
   CHAT_CONTAINER,
@@ -9,7 +9,7 @@ import {
   SUBSCRIBE_CHAT,
   CHEEZE_RANKING_CHAT,
   CHATTING_PIN,
-} from "../constants/class";
+} from '../constants/class';
 import {
   BLIND_REMOVER,
   CHAT_COLOR_THEME,
@@ -20,9 +20,9 @@ import {
   CHEEZE_REMOVER,
   MESSAGE_PIN_ENABLE,
   SUBSCRIBE_REMOVER,
-} from "../constants/storage";
-import PinnedMessageBox from "../components/pinnedMessageBox/PinnedMessageBox";
-import { chatObserve, userPopupObserve } from "../utils/observe";
+} from '../constants/storage';
+import PinnedMessageBox from '../components/pinnedMessageBox/PinnedMessageBox';
+import { chatObserve, userPopupObserve } from '../utils/observe';
 
 export async function chatSetting(): Promise<void> {
   const chatContainer = await waitingElement(CHAT_CONTAINER);
@@ -36,41 +36,41 @@ export async function chatSetting(): Promise<void> {
       CHEEZE_RANKING_REMOVER,
       MESSAGE_PIN_ENABLE,
     ],
-    async (res) => {
+    async res => {
       if (chatContainer) {
         // 치즈 제거 활성화
         if (res[CHEEZE_REMOVER]) {
-          const style = document.createElement("style");
-          style.type = "text/css";
+          const style = document.createElement('style');
+          style.type = 'text/css';
           style.innerHTML = `${CHEEZE_CHAT} { display: none; }`;
           document.head.appendChild(style);
         }
         // 주간 후원 랭킹 제거 활성화
         if (res[CHEEZE_RANKING_REMOVER]) {
-          const style = document.createElement("style");
-          style.type = "text/css";
+          const style = document.createElement('style');
+          style.type = 'text/css';
           style.innerHTML = `${CHEEZE_RANKING_CHAT} { display: none; }`;
           document.head.appendChild(style);
         }
         // 블라인드 챗 제거 활성화
         if (res[BLIND_REMOVER]) {
-          const style = document.createElement("style");
-          style.type = "text/css";
+          const style = document.createElement('style');
+          style.type = 'text/css';
           style.innerHTML = `${BLIND_CHAT} { display: none; }`;
           document.head.appendChild(style);
         }
         // 구독 챗 제거 활성화
         if (res[SUBSCRIBE_REMOVER]) {
-          const style = document.createElement("style");
-          style.type = "text/css";
+          const style = document.createElement('style');
+          style.type = 'text/css';
           style.innerHTML = `${SUBSCRIBE_CHAT} { display: none; }`;
           document.head.appendChild(style);
         }
 
         if (res[CHAT_COLOR_THEME] || res[CHAT_SIZE]) {
-          const style = document.createElement("style");
-          style.type = "text/css";
-          let innerHtml = "";
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          let innerHtml = '';
 
           // 채팅 크기 설정을 넣고 값이 default 가 아니라면 추가함
           if (res[CHAT_SIZE] && res[CHAT_SIZE] != 14) {
@@ -81,12 +81,12 @@ export async function chatSetting(): Promise<void> {
           }
 
           // 채팅 닉네임에 색상 넣기
-          if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === "커스텀") {
+          if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === '커스텀') {
             innerHtml += `${CHAT_MESSAGE} ${CHAT_NAME} { color: var(--${CHAT_NAME_COLOR}) !important; }`;
           }
 
           // 채팅 내용에 색상 넣기
-          if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === "커스텀") {
+          if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === '커스텀') {
             innerHtml += `${CHAT_MESSAGE} ${CHAT_CONTENT} { color: var(--${CHAT_TEXT_COLOR}) !important; }`;
           }
 
@@ -104,24 +104,22 @@ export async function chatSetting(): Promise<void> {
           //고정된 메시지 박스 추가
           const fixedList = document.querySelector(`.${CHATTING_PIN}`);
           if (fixedList) {
-            const container = document.createElement("div");
+            const container = document.createElement('div');
             fixedList.appendChild(container);
             createReactElement(container, PinnedMessageBox);
           } else {
-            const wrapper = document.createElement("div");
+            const wrapper = document.createElement('div');
             wrapper.className = CHATTING_PIN;
-            const chatListContainer = await waitingElement(
-              ".live_chatting_list_container__vwsbZ"
-            );
+            const chatListContainer = await waitingElement('.live_chatting_list_container__vwsbZ');
             if (chatListContainer) {
               chatListContainer.appendChild(wrapper);
-              const container = document.createElement("div");
+              const container = document.createElement('div');
               wrapper.appendChild(container);
               createReactElement(container, PinnedMessageBox);
             }
           }
         }
       }
-    }
+    },
   );
 }

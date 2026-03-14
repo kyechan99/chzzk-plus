@@ -1,15 +1,15 @@
-import { VIDEO_LAYOUT_ID } from "../constants/class";
+import { VIDEO_LAYOUT_ID } from '../constants/class';
 
-import { log } from "../utils/log";
-import { isVideoPage } from "../utils/page";
-import { createReactElement } from "../utils/dom";
+import { log } from '../utils/log';
+import { isVideoPage } from '../utils/page';
+import { createReactElement } from '../utils/dom';
 
-import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
+import AudioCompressorButton from '../components/button/AudioCompressorButton/AudioCompressorButton';
 // import RecordButton from "../components/button/RecordButton/RecordButton";
 // import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 
-import { AUDIO_COMPRESSOR } from "../constants/storage";
-import { VIDEO_BUTTONS } from "../constants/class";
+import { AUDIO_COMPRESSOR } from '../constants/storage';
+import { VIDEO_BUTTONS } from '../constants/class';
 
 export const editVideoPage = () => {
   if (!isVideoPage()) return;
@@ -48,17 +48,13 @@ export const editVideoPage = () => {
     //   createReactElement($pipButtonRoot, PipButton);
     // }
   */
-  chrome.storage.local.get([AUDIO_COMPRESSOR], (res) => {
+  chrome.storage.local.get([AUDIO_COMPRESSOR], res => {
     const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
     // Feat: 오디오 압축 버튼 활성화 =======================================================
-    if (
-      res[AUDIO_COMPRESSOR] &&
-      $btn_list &&
-      !document.getElementById("chzzk-plus-compr-btns")
-    ) {
-      const $AudioCompressorButton = document.createElement("div");
-      $AudioCompressorButton.id = "chzzk-plus-compr-btns";
+    if (res[AUDIO_COMPRESSOR] && $btn_list && !document.getElementById('chzzk-plus-compr-btns')) {
+      const $AudioCompressorButton = document.createElement('div');
+      $AudioCompressorButton.id = 'chzzk-plus-compr-btns';
       $btn_list?.prepend($AudioCompressorButton);
       createReactElement($AudioCompressorButton, AudioCompressorButton);
     }
@@ -79,5 +75,5 @@ export const editVideoPage = () => {
     // }
   });
 
-  log("VIDEO PAGE 설정");
+  log('VIDEO PAGE 설정');
 };

@@ -1,4 +1,4 @@
-import { log } from "./log";
+import { log } from './log';
 
 export const getChannelIDByUrl = (url: string) => {
   const regex = /\/live\/([^/?]+)/;
@@ -8,19 +8,17 @@ export const getChannelIDByUrl = (url: string) => {
     const channelID = match[1];
     return channelID;
   }
-  return "";
+  return '';
 };
 
 export const getChannelOpenLive = async (channelId: string) => {
   try {
-    const res = await fetch(
-      `https://api.chzzk.naver.com/service/v1/channels/${channelId}`
-    );
+    const res = await fetch(`https://api.chzzk.naver.com/service/v1/channels/${channelId}`);
     if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
     const data = await res.json();
 
-    log("생방송 추적중..");
+    log('생방송 추적중..');
 
     return data.content.openLive;
   } catch (err) {

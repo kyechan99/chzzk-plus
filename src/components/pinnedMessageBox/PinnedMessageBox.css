@@ -1,6 +1,10 @@
 @keyframes chpNewPinnedEffect {
-  from { background-color: #83838341; }
-  to { background-color: #83838300; }
+  from {
+    background-color: #83838341;
+  }
+  to {
+    background-color: #83838300;
+  }
 }
 
 #chzzk-plus-message-pin {
@@ -8,13 +12,12 @@
   .czp-message-pin-list {
     border-radius: 0 0 6px 6px;
     background-color: rgba(var(--color-bg-white-rgb), 0.04);
-    background-image: linear-gradient(
-      rgba(var(--color-bg-layer-02-rgb), 0.7),
-      rgba(var(--color-bg-layer-02-rgb), 0.7)
-    );
-    -webkit-box-shadow: 0 8px 6px 0 var(--color-shadow-layer04-02),
+    background-image: linear-gradient(rgba(var(--color-bg-layer-02-rgb), 0.7), rgba(var(--color-bg-layer-02-rgb), 0.7));
+    -webkit-box-shadow:
+      0 8px 6px 0 var(--color-shadow-layer04-02),
       0 0 1px 0 var(--color-shadow-layer04-01);
-    box-shadow: 0 8px 6px 0 var(--color-shadow-layer04-02),
+    box-shadow:
+      0 8px 6px 0 var(--color-shadow-layer04-02),
       0 0 1px 0 var(--color-shadow-layer04-01);
     position: relative;
     height: fit-content;
@@ -27,10 +30,10 @@
   }
 
   .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list {
-    display: block; 
+    display: block;
   }
-  .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list button { 
-      cursor: default; 
+  .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list button {
+    cursor: default;
   }
 
   /* 스크롤바 스타일 */
@@ -106,7 +109,7 @@
   /* 채팅 리스트 마진 수정 */
   .czp-message-pin-list .live_chatting_list_item__0SGhw:first-child:before,
   .czp-message-pin-list .live_chatting_list_item__0SGhw:last-child:before {
-    content: "";
+    content: '';
     display: block;
     height: 0px !important;
     margin-top: 0px !important;

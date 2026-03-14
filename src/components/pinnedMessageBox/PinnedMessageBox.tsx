@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import "./PinnedMessageBox.css";
+import { useState, useRef, useEffect } from 'react';
+import './PinnedMessageBox.css';
 
 export default function PinnedMessageBox() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +16,8 @@ export default function PinnedMessageBox() {
       setIsScrolledUp(scrollTop + clientHeight < scrollHeight);
     };
 
-    pinList.addEventListener("scroll", handleScroll);
-    return () => pinList.removeEventListener("scroll", handleScroll);
+    pinList.addEventListener('scroll', handleScroll);
+    return () => pinList.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -39,31 +39,22 @@ export default function PinnedMessageBox() {
   }, [isScrolledUp]);
 
   const handleToggleOpen = () => {
-    setIsOpen((prev) => !prev);
-    const newMessageDot = document.getElementById("chzzk-plus-new-message-dot");
+    setIsOpen(prev => !prev);
+    const newMessageDot = document.getElementById('chzzk-plus-new-message-dot');
     if (newMessageDot) {
-      newMessageDot.style.display = "none";
+      newMessageDot.style.display = 'none';
     }
   };
 
   return (
-    <div
-      className="live_chatting_list_fixed__Wy3TT"
-      id="chzzk-plus-message-pin"
-      style={{ top: "unset" }}
-    >
+    <div className="live_chatting_list_fixed__Wy3TT" id="chzzk-plus-message-pin" style={{ top: 'unset' }}>
       <div className="live_chatting_fixed_mission_container__T6EY5">
         <div
-          className={`live_chatting_fixed_mission_header__EvP2K ${
-            isOpen ? "isOpen" : ""
-          }`}
+          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'isOpen' : ''}`}
           onClick={handleToggleOpen}
         >
           <div id="chzzk-plus-message-pin-title-container">
-            <span
-              id="chzzk-plus-message-pin-title"
-              className="live_chatting_fixed_mission_mission_button__GkYx4"
-            >
+            <span id="chzzk-plus-message-pin-title" className="live_chatting_fixed_mission_mission_button__GkYx4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -102,7 +93,7 @@ export default function PinnedMessageBox() {
               viewBox="0 0 22 22"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
+              style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}
             >
               <path
                 d="M7 9L11 13L15 9"
@@ -115,11 +106,7 @@ export default function PinnedMessageBox() {
           </div>
         </div>
         <div ref={pinListRef} className="czp-message-pin-list">
-          {!hasMessages && (
-            <div id="chzzk-plus-message-pin-empty-message">
-              메시지가 없습니다
-            </div>
-          )}
+          {!hasMessages && <div id="chzzk-plus-message-pin-empty-message">메시지가 없습니다</div>}
         </div>
       </div>
     </div>

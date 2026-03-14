@@ -1,4 +1,4 @@
-import { themeColors } from "../constants/color";
+import { themeColors } from '../constants/color';
 
 export const getThemeColor = (idx: number) => {
   return themeColors[idx % themeColors.length];

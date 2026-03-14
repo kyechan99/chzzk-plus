@@ -1,7 +1,7 @@
-import React from "react";
-import { logWarning } from "../../../utils/log";
-import "./CaptureButton.css";
-import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from "../../../constants/class";
+import React from 'react';
+import { logWarning } from '../../../utils/log';
+import './CaptureButton.css';
+import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from '../../../constants/class';
 
 export default function CaptureButton() {
   React.useEffect(() => {
@@ -10,16 +10,16 @@ export default function CaptureButton() {
       if (target instanceof HTMLElement)
         if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
           // S: 캡처
-          if (event.key === "s" || event.key === "S") {
+          if (event.key === 's' || event.key === 'S') {
             captureVideo();
           }
         }
     };
 
     // Feat: 플레이커 키 단축키 활성화 =========================================================
-    document.addEventListener("keydown", captureEvent);
+    document.addEventListener('keydown', captureEvent);
     return () => {
-      document.removeEventListener("keydown", captureEvent);
+      document.removeEventListener('keydown', captureEvent);
     };
   }, []);
 
@@ -28,17 +28,17 @@ export default function CaptureButton() {
 
     try {
       const video = document.querySelector(WEBPLAYER_VIDEO) as HTMLVideoElement;
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext('2d');
 
       if (!context) return;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const imageDataURL = canvas.toDataURL("image/png");
+      const imageDataURL = canvas.toDataURL('image/png');
 
-      const downloadLink = document.createElement("a");
+      const downloadLink = document.createElement('a');
       downloadLink.href = imageDataURL;
       downloadLink.download = `chzzk_plus_${new Date().getTime()}.png`;
       downloadLink.click();

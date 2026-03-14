@@ -1,11 +1,11 @@
-import "./App.css";
+import './App.css';
 
-import Logo from "../public/icon128.png";
-import { Select } from "./components/input/Select/Select";
-import Checkbox from "./components/input/Checkbox/Checkbox";
-import URLButton from "./components/button/URLButton/URLButton";
-import ColorPicker from "./components/input/ColorPicker/ColorPicker";
-import List from "./components/List/List";
+import Logo from '../public/icon128.png';
+import { Select } from './components/input/Select/Select';
+import Checkbox from './components/input/Checkbox/Checkbox';
+import URLButton from './components/button/URLButton/URLButton';
+import ColorPicker from './components/input/ColorPicker/ColorPicker';
+import List from './components/List/List';
 
 import {
   AUDIO_COMPRESSOR,
@@ -30,7 +30,7 @@ import {
   PIP_BUTTON,
   PREVIEW_ENABLE,
   SUBSCRIBE_REMOVER,
-} from "./constants/storage";
+} from './constants/storage';
 
 function App() {
   return (
@@ -38,9 +38,7 @@ function App() {
       <img src={Logo} alt="cheese-plus" />
 
       <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
-      <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">
-        버그 및 기능 제보
-      </URLButton>
+      <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
 
@@ -191,7 +189,7 @@ function App() {
 
           <Select
             id={CHAT_COLOR_THEME}
-            options={CHAT_COLOR_OPTIONS.map((op) => {
+            options={CHAT_COLOR_OPTIONS.map(op => {
               return { name: op, value: op };
             })}
           >
@@ -216,7 +214,7 @@ function App() {
 
           <Select
             id={CHAT_SIZE}
-            options={CHAT_SIZE_OPTIONS.map((op) => {
+            options={CHAT_SIZE_OPTIONS.map(op => {
               return { name: op, value: op };
             })}
           >
@@ -226,11 +224,7 @@ function App() {
             </div>
           </Select>
 
-          <List
-            id={MESSAGE_PIN_USERS}
-            saveButtonText="추가"
-            inputPlaceholder="닉네임 입력"
-          >
+          <List id={MESSAGE_PIN_USERS} saveButtonText="추가" inputPlaceholder="닉네임 입력">
             <Checkbox id={MESSAGE_PIN_ENABLE}>
               <div className="menu">
                 <p className="menu-title">유저 고정 리스트 *</p>

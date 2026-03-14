@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import "./List.css";
-import TextInput from "../input/TextInput/TextInput";
-import TextButton from "../button/TextButton/TextButton";
-import CloseButton from "../button/CloseButton/CloseButton";
+import { useEffect, useState } from 'react';
+import './List.css';
+import TextInput from '../input/TextInput/TextInput';
+import TextButton from '../button/TextButton/TextButton';
+import CloseButton from '../button/CloseButton/CloseButton';
 
 interface ListProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
@@ -10,18 +10,12 @@ interface ListProps extends React.HTMLAttributes<HTMLDivElement> {
   saveButtonText?: string;
 }
 
-const List = ({
-  children,
-  id,
-  inputPlaceholder = "입력해주세요",
-  saveButtonText = "추가",
-  ...props
-}: ListProps) => {
+const List = ({ children, id, inputPlaceholder = '입력해주세요', saveButtonText = '추가', ...props }: ListProps) => {
   const [listItems, setListItems] = useState<string[]>([]);
-  const [newItem, setNewItem] = useState<string>("");
+  const [newItem, setNewItem] = useState<string>('');
 
   useEffect(() => {
-    chrome.storage.local.get([id], (result) => {
+    chrome.storage.local.get([id], result => {
       if (result[id]) {
         setListItems(result[id]);
       }
@@ -29,10 +23,10 @@ const List = ({
   }, []);
 
   const handleAddItem = () => {
-    if (newItem.trim() !== "") {
+    if (newItem.trim() !== '') {
       const updatedItems = [...listItems, newItem.trim()];
       setListItems(updatedItems);
-      setNewItem("");
+      setNewItem('');
       chrome.storage.local.set({ [id]: updatedItems });
     }
   };
@@ -47,16 +41,8 @@ const List = ({
     <div id="czp-list" {...props}>
       {children}
       <div id="czp-list-input-wrapper">
-        <TextInput
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-          placeholder={inputPlaceholder}
-        >
-          <TextButton
-            text={saveButtonText}
-            onClick={handleAddItem}
-            isActive={newItem.trim() !== ""}
-          />
+        <TextInput value={newItem} onChange={e => setNewItem(e.target.value)} placeholder={inputPlaceholder}>
+          <TextButton text={saveButtonText} onClick={handleAddItem} isActive={newItem.trim() !== ''} />
         </TextInput>
       </div>
       {listItems.map((item, index) => (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type OptionType = {
   name: string;
@@ -14,7 +14,7 @@ export const Select = ({ id, options, children }: SelectProps) => {
   const [selectValue, setSelectValue] = useState<string>();
 
   useEffect(() => {
-    chrome.storage.local.get([id], (res) => {
+    chrome.storage.local.get([id], res => {
       setSelectValue(res[id]);
     });
   }, []);
@@ -29,7 +29,7 @@ export const Select = ({ id, options, children }: SelectProps) => {
       <div className="form-group">
         {children}
         <select value={selectValue} onChange={onChangeHandler}>
-          {options.map((option) => (
+          {options.map(option => (
             <option key={option.name} value={option.value}>
               {option.name}
             </option>

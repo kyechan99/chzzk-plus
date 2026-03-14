@@ -1,6 +1,6 @@
-import "./URLButton.css";
+import './URLButton.css';
 
-interface URLButtonProps extends React.ComponentProps<"button"> {
+interface URLButtonProps extends React.ComponentProps<'button'> {
   href: string;
 }
 

@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import { USER_POPUP_NAME } from "../../../constants/class";
-import { MESSAGE_PIN_USERS } from "../../../constants/storage";
-import { waitingElement } from "../../../utils/dom";
+import { useState, useEffect } from 'react';
+import { USER_POPUP_NAME } from '../../../constants/class';
+import { MESSAGE_PIN_USERS } from '../../../constants/storage';
+import { waitingElement } from '../../../utils/dom';
 
 export default function UserPinButton() {
   const [isPinned, setIsPinned] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    waitingElement(USER_POPUP_NAME).then((userNameElement) => {
+    waitingElement(USER_POPUP_NAME).then(userNameElement => {
       if (userNameElement?.textContent) {
         setUserName(userNameElement.textContent);
-        chrome.storage.local.get([MESSAGE_PIN_USERS], (res) => {
+        chrome.storage.local.get([MESSAGE_PIN_USERS], res => {
           const pinnedUsers = res[MESSAGE_PIN_USERS] || [];
           setIsPinned(pinnedUsers.includes(userNameElement.textContent));
         });
       }
     });
     return () => {
-      setUserName("");
+      setUserName('');
       setIsPinned(false);
     };
   }, []);
@@ -26,14 +26,12 @@ export default function UserPinButton() {
   const handlerClick = () => {
     if (!userName) return;
 
-    chrome.storage.local.get([MESSAGE_PIN_USERS], (res) => {
+    chrome.storage.local.get([MESSAGE_PIN_USERS], res => {
       const pinnedUsers = res[MESSAGE_PIN_USERS] || [];
       let newPinnedUsers: string[];
 
       if (isPinned) {
-        newPinnedUsers = pinnedUsers.filter(
-          (user: string) => user !== userName
-        );
+        newPinnedUsers = pinnedUsers.filter((user: string) => user !== userName);
       } else {
         newPinnedUsers = [...pinnedUsers, userName];
       }
@@ -43,8 +41,8 @@ export default function UserPinButton() {
           [MESSAGE_PIN_USERS]: newPinnedUsers,
         },
         () => {
-          setIsPinned((prev) => !prev);
-        }
+          setIsPinned(prev => !prev);
+        },
       );
     });
   };
@@ -52,11 +50,7 @@ export default function UserPinButton() {
   if (!userName) return <></>;
 
   return (
-    <button
-      onClick={handlerClick}
-      className="live_chatting_popup_profile_item__tOguB"
-      id="chzzk-plus-user-pin-btn"
-    >
+    <button onClick={handlerClick} className="live_chatting_popup_profile_item__tOguB" id="chzzk-plus-user-pin-btn">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -84,7 +78,7 @@ export default function UserPinButton() {
           clipRule="evenodd"
         ></path>
       </svg>
-      <span>{isPinned ? "유저 메시지 고정 해제" : "유저 메시지 고정"}</span>
+      <span>{isPinned ? '유저 메시지 고정 해제' : '유저 메시지 고정'}</span>
     </button>
   );
 }

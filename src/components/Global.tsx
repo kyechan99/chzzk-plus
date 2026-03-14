@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import "./Global.css";
-import { CHAT_STORAGE, GLOBAL_SETTING } from "../constants/storage";
+import { useEffect, useState } from 'react';
+import { CHAT_STORAGE, GLOBAL_SETTING } from '../constants/storage';
+import './Global.css';
 
 const MessageStorage = () => {
   const [storage, setStorage] = useState<string[]>([]);
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string>('');
   const [showCopied, setShowCopied] = useState<boolean>(false);
 
   // 저장되어있는 storage 불러오기
   useEffect(() => {
-    chrome.storage.local.get([CHAT_STORAGE], (res) => {
+    chrome.storage.local.get([CHAT_STORAGE], res => {
       if (res[CHAT_STORAGE]) {
         setStorage(res[CHAT_STORAGE]);
       }
@@ -24,10 +24,10 @@ const MessageStorage = () => {
 
   // 메세지 추가로 저장
   const addMessage = () => {
-    if (text.replaceAll(" ", "").length == 0) return;
+    if (text.replaceAll(' ', '').length == 0) return;
 
     setStorage([...storage, text]);
-    setText("");
+    setText('');
     chrome.storage.local.set({
       [CHAT_STORAGE]: [...storage, text],
     });
@@ -67,22 +67,20 @@ const MessageStorage = () => {
           className="czp-storage-form-input"
           placeholder="저장할 채팅을 입력하세요."
           value={text}
-          onChange={(e) => {
+          onChange={e => {
             setText(e.target.value);
           }}
         ></input>
         <button
           type="button"
-          className={`live_chatting_input_send_button__8KBrn ${
-            text && "live_chatting_input_is_active__WeOjk"
-          }`}
+          className={`live_chatting_input_send_button__8KBrn ${text && 'live_chatting_input_is_active__WeOjk'}`}
           style={{
-            background: "var(--color-bg-layer-02)",
-            padding: "8px",
-            fontSize: "12px",
-            borderRadius: "4px",
+            background: 'var(--color-bg-layer-02)',
+            padding: '8px',
+            fontSize: '12px',
+            borderRadius: '4px',
             fontFamily:
-              "Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif",
+              'Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif',
           }}
           onClick={addMessage}
         >
@@ -104,7 +102,7 @@ const MessageStorage = () => {
               type="button"
               className="czp-chat-st-remove-btn"
               key={`${data}-${idx}`}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 removeMessage(idx);
               }}
@@ -123,7 +121,7 @@ export default function Global() {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    chrome.storage.onChanged.addListener((changes) => {
+    chrome.storage.onChanged.addListener(changes => {
       for (const key in changes) {
         const storageChange = changes[key];
         if (GLOBAL_SETTING === key) {
@@ -132,7 +130,7 @@ export default function Global() {
       }
     });
 
-    chrome.storage.local.get([GLOBAL_SETTING], (res) => {
+    chrome.storage.local.get([GLOBAL_SETTING], res => {
       if (res[GLOBAL_SETTING]) {
         setOpen(res[GLOBAL_SETTING]);
       }

@@ -1,11 +1,11 @@
-import { GLOBAL_SETTING } from "../../../constants/storage";
+import { GLOBAL_SETTING } from '../../../constants/storage';
 
 export default function MessageStorageButton() {
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     chrome.storage.local.set({
-      [GLOBAL_SETTING]: "true",
+      [GLOBAL_SETTING]: 'true',
     });
   };
 
@@ -16,10 +16,10 @@ export default function MessageStorageButton() {
         id="chzzk-plus-strage-btn"
         className="live_chatting_input_send_button__8KBrn"
         style={{
-          marginLeft: "5px",
-          color: "#2cbf8a",
+          marginLeft: '5px',
+          color: '#2cbf8a',
           fontFamily:
-            "Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif",
+            'Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif',
         }}
         onClick={onClickHandler}
       >

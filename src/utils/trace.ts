@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WEBPLAYER_VIDEO } from "../constants/class";
-import { getChannelIDByUrl, getChannelOpenLive } from "./channel";
-import { isLivePage } from "./page";
+import { WEBPLAYER_VIDEO } from '../constants/class';
+import { getChannelIDByUrl, getChannelOpenLive } from './channel';
+import { isLivePage } from './page';
 
 let interTraceOpenLive: number | undefined;
 export const traceOpenLive = async () => {
@@ -23,7 +23,7 @@ export const traceOpenLive = async () => {
     if (isStreaming) {
       // WEBPLAYER_VIDEO 가 발견되면 생방송 중임
       const $video = document.querySelector(WEBPLAYER_VIDEO);
-      if ($video && $video.getAttribute("src")) {
+      if ($video && $video.getAttribute('src')) {
         isStreaming = false;
         clearInterval(interTraceOpenLive);
       }

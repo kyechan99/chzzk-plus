@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 // import { logError } from "../../../utils/log";
-import "./RecordButton.css";
-import { WEBPLAYER_VIDEO } from "../../../constants/class";
+import './RecordButton.css';
+import { WEBPLAYER_VIDEO } from '../../../constants/class';
 
 interface Video extends HTMLMediaElement {
   captureStream: () => MediaStream;
@@ -33,29 +33,29 @@ export default function RecordButton() {
 
     const stream = $video.captureStream();
     mediaRecorderRef.current = new MediaRecorder(stream, {
-      mimeType: "video/webm",
+      mimeType: 'video/webm',
     });
 
-    mediaRecorderRef.current.ondataavailable = (event) => {
+    mediaRecorderRef.current.ondataavailable = event => {
       if (event.data.size > 0) {
         recordedChunksRef.current.push(event.data);
       }
     };
 
     mediaRecorderRef.current.onstop = () => {
-      const blob = new Blob(recordedChunksRef.current, { type: "video/webm" });
+      const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
       if (recordedVideoRef.current) {
         recordedVideoRef.current.src = URL.createObjectURL(blob);
 
         recordedVideoRef.current.addEventListener(
-          "loadedmetadata",
+          'loadedmetadata',
           () => {
             void (async () => {
               setRecording(2);
 
-              await new Promise((resolve) => setTimeout(resolve, 1000));
+              await new Promise(resolve => setTimeout(resolve, 1000));
 
-              const a = document.createElement("a");
+              const a = document.createElement('a');
               a.href = URL.createObjectURL(blob);
               a.download = `chzzk_plus_v${new Date().getTime()}.mp4`;
               a.click();
@@ -63,13 +63,13 @@ export default function RecordButton() {
               setRecording(0);
             })();
           },
-          { once: true }
+          { once: true },
         );
       }
       recordedChunksRef.current = [];
     };
 
-    $video.addEventListener("ended", () => {
+    $video.addEventListener('ended', () => {
       stopRecording();
     });
 
@@ -86,12 +86,7 @@ export default function RecordButton() {
 
   return (
     <div>
-      <video
-        ref={recordedVideoRef}
-        style={{ display: "none" }}
-        width="1280"
-        height="720"
-      />
+      <video ref={recordedVideoRef} style={{ display: 'none' }} width="1280" height="720" />
 
       <button
         aria-label="녹화"
@@ -102,17 +97,13 @@ export default function RecordButton() {
         <span className="pzp-button__tooltip pzp-button__tooltip--top">
           {
             {
-              0: "녹화",
-              1: "녹화중",
-              2: "저장중",
+              0: '녹화',
+              1: '녹화중',
+              2: '저장중',
             }[recording]
           }
         </span>
-        <span
-          className={`pzp-ui-icon pzp-setting-button__icon czp-record-btn ${
-            recording === 1 ? "recording" : ""
-          }`}
-        >
+        <span className={`pzp-ui-icon pzp-setting-button__icon czp-record-btn ${recording === 1 ? 'recording' : ''}`}>
           {recording === 2 ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"

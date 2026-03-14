@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { logWarning } from "../../../utils/log";
-import "./FavoriteButton.css";
-import { FAVORITE_STREAMER } from "../../../constants/storage";
-import { getChannelIDByUrl } from "../../../utils/channel";
+import React, { useEffect, useState } from 'react';
+import { logWarning } from '../../../utils/log';
+import './FavoriteButton.css';
+import { FAVORITE_STREAMER } from '../../../constants/storage';
+import { getChannelIDByUrl } from '../../../utils/channel';
 
 export default function FavoriteButton() {
   const [favorited, setFavorited] = useState<boolean>(false);
@@ -10,7 +10,7 @@ export default function FavoriteButton() {
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const observer = new MutationObserver((_mutations) => {
+    const observer = new MutationObserver(_mutations => {
       checkFavorite();
     });
     observer.observe(document.head, { subtree: true, childList: true });
@@ -24,7 +24,7 @@ export default function FavoriteButton() {
 
   const checkFavorite = () => {
     try {
-      chrome.storage.local.get(FAVORITE_STREAMER, (res) => {
+      chrome.storage.local.get(FAVORITE_STREAMER, res => {
         if (res[FAVORITE_STREAMER]) {
           const streamers = JSON.parse(res[FAVORITE_STREAMER]);
           setFavStreamerList(streamers);
@@ -50,16 +50,11 @@ export default function FavoriteButton() {
 
       if (nowFav) {
         chrome.storage.local.set({
-          "czp-favorite-streamer": JSON.stringify([
-            ...favStreamerList,
-            channelID,
-          ]),
+          'czp-favorite-streamer': JSON.stringify([...favStreamerList, channelID]),
         });
       } else {
         chrome.storage.local.set({
-          "czp-favorite-streamer": JSON.stringify([
-            ...favStreamerList.filter((st) => st !== channelID),
-          ]),
+          'czp-favorite-streamer': JSON.stringify([...favStreamerList.filter(st => st !== channelID)]),
         });
       }
     } catch (err) {
@@ -68,10 +63,7 @@ export default function FavoriteButton() {
   };
 
   return (
-    <button
-      className={`favorite-btn ${favorited && "favorited"}`}
-      onClick={captureVideo}
-    >
+    <button className={`favorite-btn ${favorited && 'favorited'}`} onClick={captureVideo}>
       {favorited ? (
         <>
           <svg

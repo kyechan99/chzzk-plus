@@ -1,8 +1,4 @@
-import {
-  PREVIEW_ENABLE,
-  GUARD_ENALBE,
-  CHAT_STORAGE_ENABLE,
-} from "./constants/storage";
+import { PREVIEW_ENABLE, GUARD_ENALBE, CHAT_STORAGE_ENABLE } from './constants/storage';
 
 const defaultValues: Record<string, unknown> = {
   [PREVIEW_ENABLE]: true,
@@ -11,7 +7,7 @@ const defaultValues: Record<string, unknown> = {
 };
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get(Object.keys(defaultValues), (result) => {
+  chrome.storage.local.get(Object.keys(defaultValues), result => {
     const valuesToSet = Object.entries(defaultValues).reduce(
       (acc, [key, value]) => {
         if (result[key] === undefined) {

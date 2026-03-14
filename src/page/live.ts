@@ -1,10 +1,10 @@
 // import Barricade from "../components/video/Barricade/Barricade";
-import FastButton from "../components/button/FastButton/FastButton";
-import AudioCompressorButton from "../components/button/AudioCompressorButton/AudioCompressorButton";
+import FastButton from '../components/button/FastButton/FastButton';
+import AudioCompressorButton from '../components/button/AudioCompressorButton/AudioCompressorButton';
 
-import { log } from "../utils/log";
-import { isLivePage } from "../utils/page";
-import { createReactElement, waitingElement } from "../utils/dom";
+import { log } from '../utils/log';
+import { isLivePage } from '../utils/page';
+import { createReactElement, waitingElement } from '../utils/dom';
 
 import {
   VIDEO_BUTTONS,
@@ -17,7 +17,7 @@ import {
   CHATTING_DONATION_POPUP,
   SECTION_TOOLBAR,
   CHATTING_AREA,
-} from "../constants/class";
+} from '../constants/class';
 import {
   FAST_BUTTON,
   AUDIO_COMPRESSOR,
@@ -26,11 +26,11 @@ import {
   AUTO_WIDE_MODE,
   GUARD_ENALBE,
   CHAT_STORAGE_ENABLE,
-} from "../constants/storage";
-import MessageStorageButton from "../components/button/MessageStorageButton/MessageStorageButton";
-import { traceOpenLive } from "../utils/trace";
-import PipButton from "../components/button/PipButton/PipButton";
-import ScreenGuardButton from "../components/button/ScreenGuardButton/ScreenGuardButton";
+} from '../constants/storage';
+import MessageStorageButton from '../components/button/MessageStorageButton/MessageStorageButton';
+import { traceOpenLive } from '../utils/trace';
+import PipButton from '../components/button/PipButton/PipButton';
+import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 
 export const editLivePage = async () => {
   if (!isLivePage()) return;
@@ -38,7 +38,7 @@ export const editLivePage = async () => {
   // Live 페이지 인데, 생방송 중이 아님.
   const webPlayerVideo = await waitingElement(WEBPLAYER_VIDEO);
   if (!webPlayerVideo) {
-    chrome.storage.local.get([ONLIVE_REFRESH], (res) => {
+    chrome.storage.local.get([ONLIVE_REFRESH], res => {
       if (res[ONLIVE_REFRESH]) {
         traceOpenLive();
       }
@@ -69,15 +69,15 @@ export const editLivePage = async () => {
   if (!$chatToolsList) return;
 
   const ensureMessageStorageButton = () => {
-    if (!document.getElementById("chzzk-plus-live-chattools")) {
+    if (!document.getElementById('chzzk-plus-live-chattools')) {
       const $chatTools = document.querySelector(CHATTING_TOOLS);
       const $donationTools = $chatTools?.querySelector(CHATTING_ACTIONS);
       if ($donationTools) {
-        const $tools = document.createElement("div");
-        $tools.id = "chzzk-plus-live-chattools";
-        $tools.style.display = "inline-flex";
-        $tools.style.width = "28px";
-        $tools.style.height = "28px";
+        const $tools = document.createElement('div');
+        $tools.id = 'chzzk-plus-live-chattools';
+        $tools.style.display = 'inline-flex';
+        $tools.style.width = '28px';
+        $tools.style.height = '28px';
         $donationTools.append($tools);
         createReactElement($tools, MessageStorageButton);
       }
@@ -86,15 +86,12 @@ export const editLivePage = async () => {
 
   // CHATTING_DONATION_POPUP 엘리먼트가 제거될 때 MessageStorageButton 버튼을 재생성
   const observeDonationPopupRemoval = () => {
-    const observer = new MutationObserver((mutations) => {
+    const observer = new MutationObserver(mutations => {
       for (const mutation of mutations) {
-        if (mutation.type !== "childList") continue;
-        mutation.removedNodes.forEach((node) => {
+        if (mutation.type !== 'childList') continue;
+        mutation.removedNodes.forEach(node => {
           if (!(node instanceof Element)) return;
-          if (
-            node.matches?.(CHATTING_DONATION_POPUP) ||
-            node.querySelector?.(CHATTING_DONATION_POPUP)
-          ) {
+          if (node.matches?.(CHATTING_DONATION_POPUP) || node.querySelector?.(CHATTING_DONATION_POPUP)) {
             // 약간의 지연 후 재시도 (DOM 재구성이 끝난 뒤)
             setTimeout(() => {
               ensureMessageStorageButton();
@@ -104,8 +101,7 @@ export const editLivePage = async () => {
       }
     });
     const $chat_area = document.querySelector(CHATTING_AREA);
-    if ($chat_area)
-      observer.observe($chat_area, { childList: true, subtree: true });
+    if ($chat_area) observer.observe($chat_area, { childList: true, subtree: true });
   };
 
   /*
@@ -117,15 +113,8 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [
-      FAST_BUTTON,
-      AUDIO_COMPRESSOR,
-      PIP_BUTTON,
-      AUTO_WIDE_MODE,
-      GUARD_ENALBE,
-      CHAT_STORAGE_ENABLE,
-    ],
-    (res) => {
+    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE],
+    res => {
       if (res[CHAT_STORAGE_ENABLE]) {
         ensureMessageStorageButton();
         observeDonationPopupRemoval();
@@ -134,35 +123,23 @@ export const editLivePage = async () => {
       const $btn_list = document.querySelector(VIDEO_BUTTONS);
 
       // Feat: 빨리감기 버튼 활성화 =========================================================
-      if (
-        res[FAST_BUTTON] &&
-        $btn_list &&
-        !document.getElementById("chzzk-plus-fast-btns")
-      ) {
-        const $FastButton = document.createElement("div");
-        $FastButton.id = "chzzk-plus-fast-btns";
+      if (res[FAST_BUTTON] && $btn_list && !document.getElementById('chzzk-plus-fast-btns')) {
+        const $FastButton = document.createElement('div');
+        $FastButton.id = 'chzzk-plus-fast-btns';
         $btn_list?.prepend($FastButton);
         createReactElement($FastButton, FastButton);
       }
       // Feat: PIP 키 이벤트 활성화 =========================================================
-      if (
-        res[PIP_BUTTON] &&
-        $btn_list &&
-        !document.getElementById("chzzk-plus-pip-btn")
-      ) {
-        const $PipButton = document.createElement("div");
-        $PipButton.id = "chzzk-plus-pip-btn";
+      if (res[PIP_BUTTON] && $btn_list && !document.getElementById('chzzk-plus-pip-btn')) {
+        const $PipButton = document.createElement('div');
+        $PipButton.id = 'chzzk-plus-pip-btn';
         $btn_list?.prepend($PipButton);
         createReactElement($PipButton, PipButton);
       }
       // Feat: 오디오 압축 버튼 활성화 =======================================================
-      if (
-        res[AUDIO_COMPRESSOR] &&
-        $btn_list &&
-        !document.getElementById("chzzk-plus-compr-btns")
-      ) {
-        const $AudioCompressorButton = document.createElement("div");
-        $AudioCompressorButton.id = "chzzk-plus-compr-btns";
+      if (res[AUDIO_COMPRESSOR] && $btn_list && !document.getElementById('chzzk-plus-compr-btns')) {
+        const $AudioCompressorButton = document.createElement('div');
+        $AudioCompressorButton.id = 'chzzk-plus-compr-btns';
         $btn_list?.prepend($AudioCompressorButton);
         createReactElement($AudioCompressorButton, AudioCompressorButton);
       }
@@ -190,18 +167,15 @@ export const editLivePage = async () => {
       }
       if (res[GUARD_ENALBE]) {
         const $sectionToolbar = document.querySelector(SECTION_TOOLBAR);
-        if (
-          $sectionToolbar &&
-          !document.getElementById("chzzk-plus-screen-guard")
-        ) {
-          const $tools = document.createElement("div");
-          $tools.id = "chzzk-plus-screen-guard";
+        if ($sectionToolbar && !document.getElementById('chzzk-plus-screen-guard')) {
+          const $tools = document.createElement('div');
+          $tools.id = 'chzzk-plus-screen-guard';
           $sectionToolbar?.prepend($tools);
           createReactElement($tools, ScreenGuardButton);
         }
       }
-    }
+    },
   );
 
-  log("LIVE PAGE 설정");
+  log('LIVE PAGE 설정');
 };

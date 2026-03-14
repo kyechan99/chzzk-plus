@@ -1,6 +1,6 @@
-import React from "react";
-import "./FastButton.css";
-import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from "../../../constants/class";
+import React from 'react';
+import './FastButton.css';
+import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from '../../../constants/class';
 
 export default function FastButton() {
   React.useEffect(() => {
@@ -9,20 +9,20 @@ export default function FastButton() {
       if (target instanceof HTMLElement)
         if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
           // ]: 빨리 감기
-          if (event.key === "]" || event.key === "}") {
+          if (event.key === ']' || event.key === '}') {
             faster();
-          } else if (event.key === "[" || event.key === "{") {
+          } else if (event.key === '[' || event.key === '{') {
             slower();
-          } else if (event.key === "=" || event.key === "+") {
+          } else if (event.key === '=' || event.key === '+') {
             normal();
           }
         }
     };
 
     // Feat: 플레이커 키 단축키 활성화 =========================================================
-    document.addEventListener("keydown", captureEvent);
+    document.addEventListener('keydown', captureEvent);
     return () => {
-      document.removeEventListener("keydown", captureEvent);
+      document.removeEventListener('keydown', captureEvent);
     };
   }, []);
 
@@ -58,9 +58,7 @@ export default function FastButton() {
       onClick={faster}
       //   command="SettingCommands.Toggle"
     >
-      <span className="pzp-button__tooltip pzp-button__tooltip--top">
-        빨리감기
-      </span>
+      <span className="pzp-button__tooltip pzp-button__tooltip--top">빨리감기</span>
       <span className="pzp-ui-icon pzp-setting-button__icon czp-fast-button">
         <svg
           xmlns="http://www.w3.org/2000/svg"

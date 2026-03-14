@@ -1,10 +1,10 @@
-import { editLivePage } from "./page/live";
-import { editVideoPage } from "./page/video";
-import { editGlobalPage } from "./page/global";
+import { editLivePage } from './page/live';
+import { editVideoPage } from './page/video';
+import { editGlobalPage } from './page/global';
 
-import { LAYOUT_WRAP } from "./constants/class";
-import { editLiveListPage } from "./page/lives";
-import { editCategoryPage } from "./page/category";
+import { LAYOUT_WRAP } from './constants/class';
+import { editLiveListPage } from './page/lives';
+import { editCategoryPage } from './page/category';
 
 const waitingSPALoaded = setInterval(() => {
   const isBodyLoaded = !!document.body;
