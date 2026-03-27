@@ -1,11 +1,11 @@
-import { GLOBAL_SETTING } from '../../../constants/storage';
+import { MESSAGE_STORAGE_MODAL } from '../../../constants/storage';
 
 export default function MessageStorageButton() {
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     chrome.storage.local.set({
-      [GLOBAL_SETTING]: 'true',
+      [MESSAGE_STORAGE_MODAL]: 'true',
     });
   };
 

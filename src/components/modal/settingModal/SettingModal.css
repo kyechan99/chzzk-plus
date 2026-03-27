@@ -1,0 +1,42 @@
+.czp-setting-modal {
+    position: fixed;
+    width: 30rem;
+    height: 40rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 30px 0 var(--color-shadow-layer03-02), 0 0 6px 0 var(--color-shadow-layer03-01);
+    z-index: 1000;
+    scrollbar-width: none;
+    padding: 3rem 0 0rem 0rem;
+    border-radius: 0.5rem;
+    background: var(--color-bg-01);
+}
+.czp-setting-modal .popup {
+    padding: 0rem 2rem 2rem 2rem;
+    overflow-y: auto;
+    height: 100%; 
+    scrollbar-color: transparent;
+}
+
+.czp-setting-modal .popup::-webkit-scrollbar {
+    width: 8px; 
+    border-radius: 4px;
+}
+.czp-setting-modal .popup::-webkit-scrollbar-thumb {
+    background-color: var(--Surface-Neutral-Base, #2e3033);
+    border-radius: 4px;
+} 
+.czp-setting-modal .popup::-webkit-scrollbar-track {
+    background-color: var(--Surface-Neutral-Weakest, #f0f1f2);
+    border-radius: 4px;
+    background-clip: padding-box; 
+} 
+.czp-setting-modal-close-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  color: var(--color-content-02);
+  font-size: 1.5rem;
+  font-family: 'Sandoll Nemony2';
+}

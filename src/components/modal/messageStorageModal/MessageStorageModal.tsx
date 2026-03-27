@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { CHAT_STORAGE, GLOBAL_SETTING } from '../constants/storage';
-import './Global.css';
+import { CHAT_STORAGE, MESSAGE_STORAGE_MODAL } from '../../../constants/storage';
+import './MessageStorageModal.css';
 
 const MessageStorage = () => {
   const [storage, setStorage] = useState<string[]>([]);
@@ -117,22 +117,22 @@ const MessageStorage = () => {
   );
 };
 
-export default function Global() {
+export default function MessageStorageModal() {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     chrome.storage.onChanged.addListener(changes => {
       for (const key in changes) {
         const storageChange = changes[key];
-        if (GLOBAL_SETTING === key) {
+        if (MESSAGE_STORAGE_MODAL === key) {
           setOpen(storageChange.newValue);
         }
       }
     });
 
-    chrome.storage.local.get([GLOBAL_SETTING], res => {
-      if (res[GLOBAL_SETTING]) {
-        setOpen(res[GLOBAL_SETTING]);
+    chrome.storage.local.get([MESSAGE_STORAGE_MODAL], res => {
+      if (res[MESSAGE_STORAGE_MODAL]) {
+        setOpen(res[MESSAGE_STORAGE_MODAL]);
       }
     });
   }, []);
@@ -140,12 +140,12 @@ export default function Global() {
   return (
     <>
       {open && (
-        <div className="czp-global">
+        <div className="czp-storage-modal">
           <button
-            className="czp-global-close-btn button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
+            className="czp-storage-modal-close-btn button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
             onClick={() => {
               chrome.storage.local.set({
-                [GLOBAL_SETTING]: false,
+                [MESSAGE_STORAGE_MODAL]: false,
               });
             }}
           >

@@ -7,7 +7,12 @@ interface URLButtonProps extends React.ComponentProps<'button'> {
 export default function URLButton(props: URLButtonProps) {
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    chrome.tabs.create({ url: props.href });
+
+    if (chrome.tabs && chrome.tabs.create) {
+      chrome.tabs.create({ url: props.href });
+    } else {
+      window.open(props.href, '_blank');
+    }
   };
 
   return (

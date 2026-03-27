@@ -4,7 +4,8 @@
  *
  *******************************************/
 
-export const GLOBAL_SETTING = 'czp-global-setting';
+export const MESSAGE_STORAGE_MODAL = 'czp-storage-modal';
+export const SETTING_MODAL = 'czp-setting-modal';
 
 // 네비게이터 갱신 모드
 export const FOLLOWING_REFRESH_ENABLE = 'czp-following-refresh';

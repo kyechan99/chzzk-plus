@@ -5,7 +5,7 @@
   color: var(--czp-chat-text) !important;
 } */
 
-.czp-global {
+.czp-storage-modal {
   position: fixed;
   width: 30rem;
   height: 30rem;
@@ -23,10 +23,10 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-.czp-global::-webkit-scrollbar {
+.czp-storage-modal::-webkit-scrollbar {
   display: none;
 }
-.czp-global-close-btn {
+.czp-storage-modal-close-btn {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;

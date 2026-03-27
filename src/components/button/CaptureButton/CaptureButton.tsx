@@ -3,6 +3,9 @@ import { logWarning } from '../../../utils/log';
 import './CaptureButton.css';
 import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from '../../../constants/class';
 
+/**
+ * @deprecated
+ */
 export default function CaptureButton() {
   React.useEffect(() => {
     const captureEvent = (event: KeyboardEvent) => {

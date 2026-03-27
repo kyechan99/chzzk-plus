@@ -1,6 +1,5 @@
 import './App.css';
 
-import Logo from '../public/icon128.png';
 import { Select } from './components/input/Select/Select';
 import Checkbox from './components/input/Checkbox/Checkbox';
 import URLButton from './components/button/URLButton/URLButton';
@@ -35,10 +34,9 @@ import {
 function App() {
   return (
     <div className="popup">
-      <img src={Logo} alt="cheese-plus" />
+      <img src={'https://github.com/kyechan99/chzzk-plus/raw/main/public/icon128.png'} alt="cheese-plus" />
 
       <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
-      <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
 
       <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
 
@@ -237,6 +235,7 @@ function App() {
 
       <hr />
 
+      <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
       <p className="version">v1.7.1</p>
     </div>
   );

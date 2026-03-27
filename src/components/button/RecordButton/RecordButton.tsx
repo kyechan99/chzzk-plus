@@ -7,6 +7,9 @@ interface Video extends HTMLMediaElement {
   captureStream: () => MediaStream;
 }
 
+/**
+ * @deprecated
+ */
 export default function RecordButton() {
   const [recording, setRecording] = useState<number>(0); // 0: 준비상태   1: 녹화중    2: 저장중
   const recordedVideoRef = useRef<HTMLVideoElement>(null);
