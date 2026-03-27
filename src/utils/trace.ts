@@ -6,9 +6,6 @@ import { isLivePage } from './page';
 let interTraceOpenLive: number | undefined;
 export const traceOpenLive = async () => {
   let isStreaming: boolean = false;
-  const channelId: string = getChannelIDByUrl(window.location.href);
-
-  isStreaming = await getChannelOpenLive(channelId);
 
   if (interTraceOpenLive) {
     clearInterval(interTraceOpenLive);
@@ -19,6 +16,9 @@ export const traceOpenLive = async () => {
       clearInterval(interTraceOpenLive);
       return;
     }
+
+    const channelId: string = getChannelIDByUrl(window.location.href);
+    isStreaming = await getChannelOpenLive(channelId);
 
     if (isStreaming) {
       // WEBPLAYER_VIDEO 가 발견되면 생방송 중임

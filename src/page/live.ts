@@ -113,7 +113,7 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE, ONLIVE_REFRESH],
     res => {
       if (res[CHAT_STORAGE_ENABLE]) {
         ensureMessageStorageButton();
@@ -173,6 +173,15 @@ export const editLivePage = async () => {
           $sectionToolbar?.prepend($tools);
           createReactElement($tools, ScreenGuardButton);
         }
+      }
+      // Feat: 방송 종료시 재방송 추적 ==========================================================
+      if (res[ONLIVE_REFRESH]) {
+        const observer = new MutationObserver(() => {
+          if (!document.querySelector(WEBPLAYER_VIDEO)) {
+            traceOpenLive();
+          }
+        });
+        observer.observe($playerLayout, { childList: true, subtree: true });
       }
     },
   );
