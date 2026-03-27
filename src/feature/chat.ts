@@ -9,6 +9,8 @@ import {
   SUBSCRIBE_CHAT,
   CHEEZE_RANKING_CHAT,
   CHATTING_PIN,
+  CHAT_ITEM,
+  CHAT_BUTTON,
 } from '../constants/class';
 import {
   BLIND_REMOVER,
@@ -74,10 +76,11 @@ export async function chatSetting(): Promise<void> {
 
           // 채팅 크기 설정을 넣고 값이 default 가 아니라면 추가함
           if (res[CHAT_SIZE] && res[CHAT_SIZE] != 14) {
-            innerHtml += `${CHAT_MESSAGE} { 
-              --czp-fontSize: ${res[CHAT_SIZE]}px;
-              font-size: var(--czp-fontSize);
-            }`;
+            innerHtml += `${CHAT_ITEM} ${CHAT_MESSAGE}, ${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_BUTTON} { 
+                --czp-fontSize: ${res[CHAT_SIZE]}px;
+                font-size: var(--czp-fontSize);
+                ${res[CHAT_SIZE] > 14 ? 'line-height: var(--czp-fontSize) !important;' : ''}
+              }`;
           }
 
           // 채팅 닉네임에 색상 넣기

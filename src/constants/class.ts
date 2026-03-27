@@ -39,6 +39,7 @@ export const BLIND_CHAT = '.live_chatting_message_is_hidden__CLKiR';
 export const SUBSCRIBE_CHAT = '.live_chatting_list_subscription__TlgcM';
 export const CHAT_MESSAGE = '.live_chatting_message_chatting_message__7TKns'; // 채팅 부모
 export const CHEEZE_RANKING_CHAT = '.live_chatting_ranking_container__RVHvS';
+export const CHAT_BUTTON = '.live_chatting_message_nickname__UdLXa';
 
 // UI 정보
 export const LIVE_INFORMATION_HEAD = 'video_information_row__HrQ0z';
