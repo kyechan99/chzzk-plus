@@ -18,6 +18,7 @@ export const INPUT_UI_LIST = [
   'live_chatting_donation_message_input__3X7ug',
   'live_chatting_popup_donation_mission_input_text__ZqIZr',
 ];
+export const VIDEO_PIP_BTN = '.pzp-pip-button';
 
 // 툴바
 export const SECTION_TOOLBAR = '.toolbar_section__maAwZ';

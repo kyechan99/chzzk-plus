@@ -1,22 +1,17 @@
 // import "./PipButton.css";
 
 import React from 'react';
-import { INPUT_UI_LIST } from '../../../constants/class';
+import { INPUT_UI_LIST, VIDEO_PIP_BTN } from '../../../constants/class';
 
 export default function PipButton() {
-  const video = document.getElementsByTagName('video')[0];
-  video.disablePictureInPicture = false;
+  const getVideo = () => document.getElementsByTagName('video')[0];
 
   const operatePIP = () => {
-    if (video) {
-      video.requestPictureInPicture();
+    const video = getVideo();
+    if (!video) return;
 
-      if (document.pictureInPictureElement === video) {
-        document.exitPictureInPicture();
-      } else {
-        video.requestPictureInPicture();
-      }
-    }
+    const $pip_btn = document.querySelector(VIDEO_PIP_BTN) as HTMLButtonElement;
+    $pip_btn?.click();
   };
 
   React.useEffect(() => {

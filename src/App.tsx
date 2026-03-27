@@ -237,7 +237,7 @@ function App() {
 
       <hr />
 
-      <p className="version">v1.7.0</p>
+      <p className="version">v1.7.1</p>
     </div>
   );
 }
