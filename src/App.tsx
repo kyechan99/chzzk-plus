@@ -11,6 +11,7 @@ import {
   AUTO_WIDE_MODE,
   BLIND_REMOVER,
   BLOCKED_STREAMER,
+  CHAT_BADGE_REMOVER,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
   CHAT_NAME_COLOR,
@@ -174,6 +175,13 @@ function App() {
           <Checkbox id={SUBSCRIBE_REMOVER}>
             <div className="menu">
               <p className="menu-title">구독 챗 완전 제거 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={CHAT_BADGE_REMOVER}>
+            <div className="menu">
+              <p className="menu-title">채팅 뱃지 완전 제거 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>

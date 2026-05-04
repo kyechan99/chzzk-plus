@@ -11,6 +11,7 @@ import {
   CHATTING_PIN,
   CHAT_ITEM,
   CHAT_BUTTON,
+  CHATTING_BADGE,
 } from '../constants/class';
 import {
   BLIND_REMOVER,
@@ -22,6 +23,7 @@ import {
   CHEEZE_REMOVER,
   MESSAGE_PIN_ENABLE,
   SUBSCRIBE_REMOVER,
+  CHAT_BADGE_REMOVER,
 } from '../constants/storage';
 import PinnedMessageBox from '../components/pinnedMessageBox/PinnedMessageBox';
 import { chatObserve, userPopupObserve } from '../utils/observe';
@@ -37,6 +39,7 @@ export async function chatSetting(): Promise<void> {
       SUBSCRIBE_REMOVER,
       CHEEZE_RANKING_REMOVER,
       MESSAGE_PIN_ENABLE,
+      CHAT_BADGE_REMOVER,
     ],
     async res => {
       if (chatContainer) {
@@ -66,6 +69,13 @@ export async function chatSetting(): Promise<void> {
           const style = document.createElement('style');
           style.type = 'text/css';
           style.innerHTML = `${SUBSCRIBE_CHAT} { display: none; }`;
+          document.head.appendChild(style);
+        }
+        // 채팅 뱃지 제거 활성화
+        if (res[CHAT_BADGE_REMOVER]) {
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          style.innerHTML = `${CHATTING_BADGE} { display: none; }`;
           document.head.appendChild(style);
         }
 

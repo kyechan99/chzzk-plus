@@ -54,6 +54,7 @@ export const CHATTING_ACTIONS = '.live_chatting_input_action__SfGhd';
 export const CHATTING_PIN = 'live_chatting_list_fixed__Wy3TT';
 export const CHATTING_DONATION_POPUP = '.live_chatting_popup_donation_layer__sQ9nX'; // 채팅창 후원하기 창
 export const CHATTING_AREA = '.live_chatting_area__hUPJw';
+export const CHATTING_BADGE = '.live_chatting_username_wrapper__iJpJB';
 
 // 동영상 Card UI
 export const VIDEO_CARD_LIST = '.component_list__DNd2B'; // 라이브 페이지의 비디오 ul

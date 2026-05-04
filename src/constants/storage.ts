@@ -48,6 +48,7 @@ export const CHAT_SIZE_OPTIONS = [
 export const CHEEZE_REMOVER = 'czp-cheeze-remover'; // 치즈 제거 여부
 export const BLIND_REMOVER = 'czp-blind-remover'; // 블라인드 챗 제거 여부
 export const SUBSCRIBE_REMOVER = 'czp-subscribe-remover'; // 구독 챗 제거 여부
+export const CHAT_BADGE_REMOVER = 'czp-chat-badge-remover'; // 채팅 뱃지 제거 여부
 export const CHEEZE_RANKING_REMOVER = 'czp-cheeze-ranking-remover'; // 주간 후원 랭킹 제거 여부
 
 // 미리보기
