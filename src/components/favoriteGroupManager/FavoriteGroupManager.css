@@ -3,6 +3,32 @@
   flex-direction: column;
   gap: 8px;
   margin-top: 8px;
+  color: var(--color-content-03, #c9cedc);
+}
+
+.czp-fav-mgr-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--color-bg-05, #4d4d4d);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: inherit;
+}
+.czp-fav-mgr-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.czp-fav-mgr-toggle-caret {
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+.czp-fav-mgr-toggle-caret.is-open {
+  transform: rotate(180deg);
 }
 
 .czp-fav-mgr-list {
@@ -21,7 +47,7 @@
 }
 
 .czp-fav-mgr-item {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--color-bg-05, #4d4d4d);
   border-radius: 6px;
   padding: 6px;
 }
@@ -65,7 +91,7 @@
   color: inherit;
 }
 .czp-fav-mgr-name:hover {
-  background: #f1f3f5;
+  background: var(--color-bg-03, #373a3f);
 }
 
 .czp-fav-mgr-name-input {
@@ -82,11 +108,11 @@
 .czp-fav-mgr-count {
   font-size: 11px;
   color: #868e96;
-  background: #f1f3f5;
   padding: 2px 8px;
   border-radius: 10px;
   min-width: 18px;
   text-align: center;
+  background: var(--color-bg-02, #212325);
 }
 
 .czp-fav-mgr-delete {

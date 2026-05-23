@@ -32,9 +32,9 @@
   max-width: 140px;
 }
 .favorite-btn .czp-fav-caret {
-  font-size: 10px;
-  opacity: 0.6;
+  opacity: 0.7;
   max-width: none;
+  flex-shrink: 0;
 }
 .favorite-btn.favorited {
   background-color: #2e3033;

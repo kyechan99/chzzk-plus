@@ -125,9 +125,22 @@ export default function FavoriteButton() {
           <FavoriteIcon id={currentGroup?.icon ?? 'star'} size={12} />
         </span>
         <span>{currentGroup ? currentGroup.name : '즐겨찾기'}</span>
-        <span className="czp-fav-caret" aria-hidden>
-          ▾
-        </span>
+        <svg
+          className="czp-fav-caret"
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 9l6 6l6 -6" />
+        </svg>
       </button>
 
       {open && (

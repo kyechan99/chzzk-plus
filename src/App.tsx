@@ -59,7 +59,7 @@ function App() {
             <div className="menu">
               <p className="menu-title">즐겨찾기 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
-              <p className="menu-desc">팔로우 채널 목록에서 즐겨찾기 채널을 그룹별로 상단 고정</p>
+              <p className="menu-desc">즐겨찾기 채널 그룹별로 상단 고정</p>
               <p className="menu-desc">라이브 페이지의 즐겨찾기 버튼으로 그룹 지정</p>
             </div>
           </Checkbox>
@@ -250,7 +250,7 @@ function App() {
       <hr />
 
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-      <p className="version">v1.7.2</p>
+      <p className="version">v1.8.0</p>
     </div>
   );
 }

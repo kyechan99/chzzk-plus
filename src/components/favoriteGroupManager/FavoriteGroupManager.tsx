@@ -22,6 +22,7 @@ import './FavoriteGroupManager.css';
 
 export default function FavoriteGroupManager() {
   const [data, setData] = useState<FavoriteData>({ groups: [] });
+  const [expanded, setExpanded] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState<string>('');
   const [iconPickerFor, setIconPickerFor] = useState<string | null>(null);
@@ -89,7 +90,34 @@ export default function FavoriteGroupManager() {
 
   return (
     <div className="czp-fav-mgr">
-      <ul className="czp-fav-mgr-list">
+      <button
+        type="button"
+        className="czp-fav-mgr-toggle"
+        onClick={() => setExpanded(v => !v)}
+        aria-expanded={expanded}
+      >
+        <span>그룹 {data.groups.length}개</span>
+        <svg
+          className={`czp-fav-mgr-toggle-caret ${expanded ? 'is-open' : ''}`}
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 9l6 6l6 -6" />
+        </svg>
+      </button>
+
+      {expanded && (
+        <>
+          <ul className="czp-fav-mgr-list">
         {data.groups.length === 0 && !creating && (
           <li className="czp-fav-mgr-empty">아직 그룹이 없습니다. 라이브 페이지의 즐겨찾기 버튼이나 아래에서 추가하세요.</li>
         )}
@@ -262,6 +290,8 @@ export default function FavoriteGroupManager() {
             </button>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );
