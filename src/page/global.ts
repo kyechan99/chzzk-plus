@@ -1,10 +1,12 @@
 import { previewSetting } from '../feature/preview';
 import { chatSetting } from '../feature/chat';
+import { favoriteSetting } from '../feature/favorite';
 import MessageStorageModal from '../components/modal/messageStorageModal/MessageStorageModal';
 
-import { log } from '../utils/log';
+import { log, logWarning } from '../utils/log';
 import { createReactElement } from '../utils/dom';
 import { SECTION_TOOLBAR } from '../constants/class';
+import { FAVORITE_ENABLE } from '../constants/storage';
 import SettingButton from '../components/button/SettingButton/SettingButton';
 import SettingModal from '../components/modal/settingModal/SettingModal';
 
@@ -34,6 +36,13 @@ export const editGlobalPage = () => {
 
   previewSetting();
   chatSetting();
+
+  // 즐겨찾기 정렬은 previewSetting 이 "더보기" 클릭으로 목록을 펼친 뒤 동작하도록 뒤에 호출.
+  chrome.storage.local.get(FAVORITE_ENABLE, res => {
+    if (res[FAVORITE_ENABLE]) {
+      favoriteSetting().catch(logWarning);
+    }
+  });
 
   log('GLOBAL PAGE 설정');
 };

@@ -1,39 +1,40 @@
+.czp-fav-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .favorite-btn {
   background: #dfe2ea;
   color: #2e3033;
-  padding-left: 12px;
-  padding-right: 16px;
+  padding: 0 12px 0 12px;
   border-radius: 17px;
   height: 34px;
-  -ms-flex-align: center;
-  -ms-flex-pack: center;
   align-items: center;
-  display: -ms-inline-flexbox;
   display: inline-flex;
   font-family:
-    Sandoll Nemony2,
-    Apple SD Gothic NEO,
-    Helvetica Neue,
-    Helvetica,
-    나눔고딕,
-    NanumGothic,
-    Malgun Gothic,
-    맑은 고딕,
-    굴림,
-    gulim,
-    새굴림,
-    noto sans,
-    돋움,
-    Dotum,
-    sans-serif;
-  gap: 0 4px;
+    Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕,
+    NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움,
+    Dotum, sans-serif;
+  gap: 0 6px;
   justify-content: center;
   letter-spacing: -0.3px;
-  line-height: 0;
   outline: none;
   position: relative;
-
+  border: 0;
   cursor: pointer;
+  font-size: 13px;
+  max-width: 220px;
+}
+.favorite-btn > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+.favorite-btn .czp-fav-caret {
+  font-size: 10px;
+  opacity: 0.6;
+  max-width: none;
 }
 .favorite-btn.favorited {
   background-color: #2e3033;
@@ -44,4 +45,218 @@
 }
 .favorite-btn:hover.favorited {
   background-color: #434447;
+}
+
+/* 드롭다운 패널 */
+.czp-fav-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  max-width: 280px;
+  background: var(--color-bg-01);
+  color: var(--color-content-01);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  padding: 6px;
+  font-size: 13px;
+
+}
+
+.czp-fav-group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.czp-fav-group-list li {
+  margin: 0;
+}
+.czp-fav-group-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+  font-size: 13px;
+}
+.czp-fav-group-item:hover {
+  background: var(--color-bg-02);
+}
+.czp-fav-group-item.is-current {
+  background: var(--color-bg-03);
+  font-weight: 600;
+}
+.czp-fav-group-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.czp-fav-check {
+  color: #20c997;
+  font-weight: 700;
+}
+
+.czp-fav-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #e9ecef;
+}
+
+.czp-fav-action-btn {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-content-03);
+}
+.czp-fav-action-btn:hover:not(:disabled) {
+  background: var(--color-bg-02);
+}
+.czp-fav-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.czp-fav-action-danger {
+  color: #e03131;
+}
+.czp-fav-action-primary {
+  color: #ffffff;
+  background: #20c997;
+}
+.czp-fav-action-primary:hover:not(:disabled) {
+  background: #1cb78b;
+}
+
+/* 그룹 생성 폼 */
+.czp-fav-create {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px;
+  margin-top: 4px;
+  border-top: 1px solid #e9ecef;
+}
+.czp-fav-input {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.czp-fav-input:focus {
+  border-color: #20c997;
+}
+.czp-fav-icon-picker {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+.czp-fav-icon-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #f8f9fa;
+  cursor: pointer;
+  color: #495057;
+  padding: 0;
+}
+.czp-fav-icon-option:hover {
+  background: #e9ecef;
+}
+.czp-fav-icon-option.is-selected {
+  border-color: #20c997;
+  color: #20c997;
+  background: #ffffff;
+}
+
+.czp-fav-color-picker {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+.czp-fav-color-option {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+.czp-fav-color-option:hover {
+  transform: scale(1.08);
+}
+.czp-fav-color-option.is-selected {
+  border-color: #2e3033;
+  box-shadow: 0 0 0 2px #ffffff inset;
+}
+
+/* 그룹 색 + 아이콘 통합 칩 (드롭다운, 버튼, 매니저 공용) */
+.czp-fav-icon-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #adb5bd;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+.czp-fav-icon-chip svg {
+  width: 12px;
+  height: 12px;
+}
+.czp-fav-create-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+/* nav 채널 항목 - 즐겨찾기 마커 */
+.czp-fav-item {
+  position: relative;
+}
+/* nav 채널 항목의 그룹 배지 (아바타 우측 상단) */
+.czp-fav-nav-badge {
+  position: absolute;
+  top: 6px;
+  left: 28px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #20c997;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #18181b;
+  pointer-events: none;
+  z-index: 2;
+}
+.czp-fav-nav-badge svg {
+  width: 10px;
+  height: 10px;
 }

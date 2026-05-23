@@ -5,6 +5,7 @@ import Checkbox from './components/input/Checkbox/Checkbox';
 import URLButton from './components/button/URLButton/URLButton';
 import ColorPicker from './components/input/ColorPicker/ColorPicker';
 import List from './components/List/List';
+import FavoriteGroupManager from './components/favoriteGroupManager/FavoriteGroupManager';
 
 import {
   AUDIO_COMPRESSOR,
@@ -22,6 +23,7 @@ import {
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
   FAST_BUTTON,
+  FAVORITE_ENABLE,
   FOLLOWING_REFRESH_ENABLE,
   GUARD_ENALBE,
   MESSAGE_PIN_ENABLE,
@@ -53,15 +55,19 @@ function App() {
             </div>
           </Checkbox>
 
+          <Checkbox id={FAVORITE_ENABLE}>
+            <div className="menu">
+              <p className="menu-title">즐겨찾기 *</p>
+              <p className="menu-desc">새로고침 후 적용</p>
+              <p className="menu-desc">팔로우 채널 목록에서 즐겨찾기 채널을 그룹별로 상단 고정</p>
+              <p className="menu-desc">라이브 페이지의 즐겨찾기 버튼으로 그룹 지정</p>
+            </div>
+          </Checkbox>
+
           <div className="menu">
-            <p className="menu-title">
-              <del>[베타] 즐겨찾기</del>
-            </p>
-            <p className="menu-desc">
-              <del>'팔로우 채널' 중 우선순위 올리기</del>
-            </p>
-            <p className="menu-desc">v1.2.0 부터 기능을 제거하였습니다.</p>
-            <p className="menu-desc">버그 해결 후 돌아오겠습니다.</p>
+            <p className="menu-title">즐겨찾기 그룹 관리</p>
+            <p className="menu-desc">그룹 이름과 아이콘을 변경하거나 새 그룹을 추가합니다</p>
+            <FavoriteGroupManager />
           </div>
 
           <Checkbox id={FOLLOWING_REFRESH_ENABLE}>
