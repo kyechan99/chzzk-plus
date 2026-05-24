@@ -1,9 +1,10 @@
-import { PREVIEW_ENABLE, GUARD_ENALBE, CHAT_STORAGE_ENABLE } from './constants/storage';
+import { PREVIEW_ENABLE, GUARD_ENALBE, CHAT_STORAGE_ENABLE, FAVORITE_ENABLE } from './constants/storage';
 
 const defaultValues: Record<string, unknown> = {
   [PREVIEW_ENABLE]: true,
   [GUARD_ENALBE]: true,
   [CHAT_STORAGE_ENABLE]: true,
+  [FAVORITE_ENABLE]: true,
 };
 
 chrome.runtime.onInstalled.addListener(() => {

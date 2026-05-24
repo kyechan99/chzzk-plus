@@ -1,0 +1,236 @@
+.czp-fav-mgr {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--color-content-03, #c9cedc);
+}
+
+.czp-fav-mgr-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--color-bg-05, #4d4d4d);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: inherit;
+}
+.czp-fav-mgr-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.czp-fav-mgr-toggle-caret {
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+.czp-fav-mgr-toggle-caret.is-open {
+  transform: rotate(180deg);
+}
+
+.czp-fav-mgr-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.czp-fav-mgr-empty {
+  font-size: 12px;
+  color: #868e96;
+  padding: 8px;
+}
+
+.czp-fav-mgr-item {
+  border: 1px solid var(--color-bg-05, #4d4d4d);
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.czp-fav-mgr-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.czp-fav-mgr-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  color: #495057;
+  flex-shrink: 0;
+}
+.czp-fav-mgr-icon:hover {
+  background: #f1f3f5;
+}
+
+.czp-fav-mgr-name {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: inherit;
+}
+.czp-fav-mgr-name:hover {
+  background: var(--color-bg-03, #373a3f);
+}
+
+.czp-fav-mgr-name-input {
+  flex: 1;
+  font-size: 13px;
+  padding: 4px 6px;
+  border: 1px solid #20c997;
+  border-radius: 4px;
+  outline: none;
+  background: #ffffff;
+  color: #2e3033;
+}
+
+.czp-fav-mgr-count {
+  font-size: 11px;
+  color: #868e96;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  background: var(--color-bg-02, #212325);
+}
+
+.czp-fav-mgr-delete {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #868e96;
+  font-size: 14px;
+  padding: 0;
+}
+.czp-fav-mgr-delete:hover {
+  background: #ffe3e3;
+  color: #e03131;
+}
+
+.czp-fav-mgr-color-chip {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.czp-fav-mgr-color-chip:hover {
+  transform: scale(1.1);
+}
+
+.czp-fav-mgr-color-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+.czp-fav-mgr-color-option {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+.czp-fav-mgr-color-option:hover {
+  transform: scale(1.08);
+}
+.czp-fav-mgr-color-option.is-selected {
+  border-color: #2e3033;
+  box-shadow: 0 0 0 2px #ffffff inset;
+}
+
+.czp-fav-mgr-picker {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.czp-fav-mgr-picker-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #f8f9fa;
+  cursor: pointer;
+  color: #495057;
+  padding: 0;
+}
+.czp-fav-mgr-picker-item:hover {
+  background: #e9ecef;
+}
+.czp-fav-mgr-picker-item.is-selected {
+  border-color: #20c997;
+  color: #20c997;
+  background: #ffffff;
+}
+
+.czp-fav-mgr-create {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px dashed #ced4da;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.czp-fav-mgr-create-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.czp-fav-mgr-add-btn {
+  border: 1px solid #ced4da;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #2e3033;
+}
+.czp-fav-mgr-add-btn:hover:not(:disabled) {
+  background: #f1f3f5;
+}
+.czp-fav-mgr-add-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.czp-fav-mgr-add-btn.is-primary {
+  background: #20c997;
+  color: #ffffff;
+  border-color: #20c997;
+}
+.czp-fav-mgr-add-btn.is-primary:hover:not(:disabled) {
+  background: #1cb78b;
+}

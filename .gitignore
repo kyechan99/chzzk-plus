@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 dist.zip
+
+# Local development
+local/
+*.local
+.claude/settings.local.json

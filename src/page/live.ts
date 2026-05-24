@@ -9,7 +9,7 @@ import { createReactElement, waitingElement } from '../utils/dom';
 import {
   VIDEO_BUTTONS,
   PLAYER_LAYOUT_ID,
-  // LIVE_INFORMATION_HEAD,
+  LIVE_INFORMATION_HEAD,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
   VIDEO_VIEW_BTN,
@@ -26,11 +26,13 @@ import {
   AUTO_WIDE_MODE,
   GUARD_ENALBE,
   CHAT_STORAGE_ENABLE,
+  FAVORITE_ENABLE,
 } from '../constants/storage';
 import MessageStorageButton from '../components/button/MessageStorageButton/MessageStorageButton';
 import { traceOpenLive } from '../utils/trace';
 import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
+import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
 
 export const editLivePage = async () => {
   if (!isLivePage()) return;
@@ -113,11 +115,24 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE, FAVORITE_ENABLE],
     res => {
       if (res[CHAT_STORAGE_ENABLE]) {
         ensureMessageStorageButton();
         observeDonationPopupRemoval();
+      }
+
+      // Feat: 즐겨찾기 버튼 (라이브 정보 헤더 옆) ==============================================
+      if (res[FAVORITE_ENABLE] && !document.getElementById('chzzk-plus-favorite-btn')) {
+        const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
+        if ($infoHeads.length > 0) {
+          const $liveTitle = $infoHeads[0] as HTMLElement;
+          $liveTitle.style.justifyContent = 'space-between';
+          const $favRoot = document.createElement('div');
+          $favRoot.id = 'chzzk-plus-favorite-btn';
+          $liveTitle.appendChild($favRoot);
+          createReactElement($favRoot, FavoriteButton);
+        }
       }
 
       const $btn_list = document.querySelector(VIDEO_BUTTONS);

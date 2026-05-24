@@ -9,7 +9,7 @@
 .popup {
   display: flex;
   margin: 0 auto;
-  background-color: var(--color-bg-01, #2e3033);
+  background-color: var(--color-bg-01, #141517);
   flex-direction: column;
   align-items: center;
   gap: 1rem;
