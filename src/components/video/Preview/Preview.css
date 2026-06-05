@@ -1,4 +1,4 @@
-.preview {
+.czp-preview {
   position: fixed;
   box-shadow: 0px 0px 16px #000;
   z-index: 9999;
@@ -8,7 +8,7 @@
   pointer-events: none;
 }
 
-.preview-video {
+.czp-preview-video {
   width: 480px;
   height: 270px;
   display: block;

@@ -1,4 +1,4 @@
-#close-button {
+.czp-close-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,12 +13,11 @@
   width: 24px;
   height: 24px;
 }
-#close-button svg {
+.czp-close-button svg {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
 }
-
-#close-button:hover {
+.czp-close-button:hover {
   background-color: hsla(0, 0%, 100%, 0.1);
 }

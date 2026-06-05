@@ -1,4 +1,4 @@
-.url-btn {
+.czp-url-btn {
   color: #000;
   background: #00ffa3e6;
   border-radius: 0.25rem;
@@ -9,6 +9,6 @@
   text-decoration: auto;
   cursor: pointer;
 }
-.url-btn:hover {
+.czp-url-btn:hover {
   background: #00df8de6;
 }

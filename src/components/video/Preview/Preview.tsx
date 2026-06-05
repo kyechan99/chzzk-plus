@@ -36,7 +36,7 @@ export default function Preview() {
         hls.loadSource(hlsUrl);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play().catch(() => {});
+          video.play().catch(logWarning);
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = hlsUrl;
@@ -107,8 +107,8 @@ export default function Preview() {
   };
 
   return (
-    <div className="preview" ref={containerRef} style={{ display: visible ? 'block' : 'none' }}>
-      <video ref={videoRef} className="preview-video" muted playsInline autoPlay />
+    <div className="czp-preview" ref={containerRef} style={{ display: visible ? 'block' : 'none' }}>
+      <video ref={videoRef} className="czp-preview-video" muted playsInline autoPlay />
     </div>
   );
 }

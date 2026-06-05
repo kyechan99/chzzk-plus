@@ -9,7 +9,7 @@ interface TextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const TextButton = ({ text, isActive = false, className = '', ...props }: TextButtonProps) => {
   return (
-    <button type="button" id="text-button" className={`${className} ${isActive && 'isActive'}`} {...props}>
+    <button type="button" className={`czp-text-button ${className} ${isActive && 'isActive'}`} {...props}>
       {text}
     </button>
   );

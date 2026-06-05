@@ -16,7 +16,7 @@ export default function URLButton(props: URLButtonProps) {
   };
 
   return (
-    <button {...props} className="url-btn" onClick={onClickHandler}>
+    <button {...props} className="czp-url-btn" onClick={onClickHandler}>
       {props.children}
     </button>
   );
