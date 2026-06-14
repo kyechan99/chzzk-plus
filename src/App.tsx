@@ -250,7 +250,7 @@ function App() {
       <hr />
 
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-      <p className="version">v1.8.1</p>
+      <p className="version">v1.8.2</p>
     </div>
   );
 }

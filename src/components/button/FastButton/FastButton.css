@@ -5,3 +5,7 @@
   align-items: center;
   justify-content: center;
 }
+
+.has_shortcut .pzp-pc-viewmode-button .pzp-button__tooltip.czp-pzp-fast-button:after {
+  content: ' (=)'
+}
