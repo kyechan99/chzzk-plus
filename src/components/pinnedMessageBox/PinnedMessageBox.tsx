@@ -47,14 +47,18 @@ export default function PinnedMessageBox() {
   };
 
   return (
-    <div className="live_chatting_list_fixed__Wy3TT" id="chzzk-plus-message-pin" style={{ top: 'unset' }}>
-      <div className="live_chatting_fixed_mission_container__T6EY5">
+    <div
+      className={`_container_dba1a_1 ${isOpen ? '_is_opened_dba1a_7' : ''}`}
+      id="chzzk-plus-message-pin"
+      style={{ top: 'unset' }}
+    >
+      <div className="_wrapper_dba1a_7">
         <div
-          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'isOpen' : ''}`}
+          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'is_open' : ''}`}
           onClick={handleToggleOpen}
         >
           <div id="chzzk-plus-message-pin-title-container">
-            <span id="chzzk-plus-message-pin-title" className="live_chatting_fixed_mission_mission_button__GkYx4">
+            <span id="chzzk-plus-message-pin-title" className="_header_dba1a_30">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -105,7 +109,7 @@ export default function PinnedMessageBox() {
             </svg>
           </div>
         </div>
-        <div ref={pinListRef} className="czp-message-pin-list">
+        <div ref={pinListRef} className="czp-message-pin-list _message_dba1a_47">
           {!hasMessages && <div id="chzzk-plus-message-pin-empty-message">메시지가 없습니다</div>}
         </div>
       </div>

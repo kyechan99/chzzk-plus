@@ -50,13 +50,14 @@ export default function UserPinButton() {
   if (!userName) return <></>;
 
   return (
-    <button onClick={handlerClick} className="live_chatting_popup_profile_item__tOguB">
+    <button onClick={handlerClick} className="_item_1hyev_272">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="25"
+        height="25"
+        viewBox="0 0 20 20"
         fill="none"
-        className="live_chatting_fixed_icon_pin__jecmM"
+        className="_icon_control_1hyev_296"
         aria-hidden="true"
       >
         <path

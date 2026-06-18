@@ -73,7 +73,7 @@ function App() {
           <Checkbox id={FOLLOWING_REFRESH_ENABLE}>
             <div className="menu">
               <p className="menu-title">팔로우 채널 자동 새로고침</p>
-              <p className="menu-desc">20초 간격으로 자동 새로고침합니다.</p>
+              <p className="menu-desc">10초 간격으로 자동 새로고침합니다.</p>
             </div>
           </Checkbox>
         </div>
@@ -250,7 +250,7 @@ function App() {
       <hr />
 
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-      <p className="version">v1.8.2</p>
+      <p className="version">v1.8.3</p>
     </div>
   );
 }

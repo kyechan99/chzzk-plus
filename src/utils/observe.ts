@@ -1,5 +1,5 @@
 import { MESSAGE_PIN_USERS } from '../constants/storage';
-import { CHAT_CONTAINER, CHAT_NAME } from '../constants/class';
+import { CHAT_CONTAINER, CHAT_ITEM, CHAT_NAME } from '../constants/class';
 import { createReactElement, waitingElement } from './dom';
 import { USER_POPUP_CONTENTS } from '../constants/class';
 import UserPinButton from '../components/button/UserPinButton/UserPinButton';
@@ -40,7 +40,7 @@ export const chatObserve = async () => {
   const chatOb = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
       mutation.addedNodes.forEach((node: Node) => {
-        if (!(node instanceof Element) || !node.classList.contains('live_chatting_list_item__0SGhw')) return;
+        if (!(node instanceof Element) || !node.classList.contains(CHAT_ITEM.replace('.', ''))) return;
 
         const nameElement = node.querySelector(CHAT_NAME);
         const pinListElement = document.querySelector('.czp-message-pin-list');
@@ -71,7 +71,7 @@ export const chatObserve = async () => {
     });
   });
 
-  const chatContainer = await waitingElement(CHAT_CONTAINER);
+  const chatContainer = await waitingElement(`${CHAT_CONTAINER} ._wrapper_sg7hy_25`);
   if (chatContainer) {
     chatOb.observe(chatContainer, {
       subtree: true,

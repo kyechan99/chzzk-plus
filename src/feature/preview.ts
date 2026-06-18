@@ -10,36 +10,39 @@ import {
   PREVIEW_ENABLE,
 } from '../constants/storage';
 import { CHAT_NAME_COLOR_DEFAULT, CHAT_TEXT_COLOR_DEFAULT } from '../constants/color';
-import { REFRESH_BUTTON, STREAMER_MENU, STREAMER_MORE_BTN } from '../constants/class';
+import { REFRESH_BUTTON, SIDEBAR, SIDEBAR_MENU, STREAMER_MORE_BTN } from '../constants/class';
 
 let refresher: number | undefined;
 
 export async function previewSetting(): Promise<void> {
-  await waitingElement(STREAMER_MENU);
+  const $sidebar = await waitingElement(SIDEBAR);
 
   // Feat: Preview 썸네일 =====================================================================
   if (!document.getElementById('chzzk-plus-preview')) {
-    const moreChannelBtnList = document.getElementsByClassName(STREAMER_MORE_BTN);
-    if (moreChannelBtnList.length > 0) {
-      // 팔로우 채널 더보기 클릭.  만약 팔로워가 없다면 추천 채널 더보기 클릭
-      const moreChannelBtn = moreChannelBtnList[0] as HTMLElement;
-      moreChannelBtn.click();
+    const $sidebarMenus = $sidebar?.querySelectorAll(SIDEBAR_MENU);
+    if ($sidebarMenus && $sidebarMenus?.length > 1) {
+      const $followingSidebarMenu = $sidebarMenus[1];
+      const moreChannelBtn = $followingSidebarMenu?.querySelector(STREAMER_MORE_BTN) as HTMLButtonElement;
 
-      chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, res => {
-        if (res[FOLLOWING_REFRESH_ENABLE]) {
-          clearInterval(refresher);
-          refresher = setInterval(() => {
-            // REFRESH_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
-            const $refreshBtn = document.querySelector(REFRESH_BUTTON) as HTMLElement;
-            $refreshBtn.click();
-          }, 1000 * 20);
-        }
-      });
+      if (moreChannelBtn) {
+        moreChannelBtn.click();
+
+        chrome.storage.local.get(FOLLOWING_REFRESH_ENABLE, res => {
+          if (res[FOLLOWING_REFRESH_ENABLE]) {
+            clearInterval(refresher);
+            refresher = setInterval(() => {
+              // REFRESH_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
+              const $refreshBtn = document.querySelector(REFRESH_BUTTON) as HTMLElement;
+              $refreshBtn.click();
+            }, 1000 * 10);
+          }
+        });
+      }
     }
 
     const $preview = document.createElement('div');
     $preview.id = 'chzzk-plus-preview';
-    document.querySelector('.aside_content__j2eTE')?.appendChild($preview);
+    $sidebar?.appendChild($preview);
 
     // Feat: 미리보기 설정 ======================================================================
     chrome.storage.local.get(PREVIEW_ENABLE, res => {

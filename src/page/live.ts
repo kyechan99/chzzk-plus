@@ -9,7 +9,7 @@ import { createReactElement, waitingElement } from '../utils/dom';
 import {
   VIDEO_BUTTONS,
   PLAYER_LAYOUT_ID,
-  LIVE_INFORMATION_HEAD,
+  LIVE_CONTROL_MENU,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
   VIDEO_VIEW_BTN,
@@ -48,7 +48,6 @@ export const editLivePage = async () => {
 
     return;
   }
-
   // 영상 Layout이 발견이 되었다면 content를 수정할 준비가 되었음.
   const $playerLayout = document.getElementById(PLAYER_LAYOUT_ID);
   if (!$playerLayout) {
@@ -124,13 +123,11 @@ export const editLivePage = async () => {
 
       // Feat: 즐겨찾기 버튼 (라이브 정보 헤더 옆) ==============================================
       if (res[FAVORITE_ENABLE] && !document.getElementById('chzzk-plus-favorite-btn')) {
-        const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
-        if ($infoHeads.length > 0) {
-          const $liveTitle = $infoHeads[0] as HTMLElement;
-          $liveTitle.style.justifyContent = 'space-between';
+        const $liveControl = document.querySelector(LIVE_CONTROL_MENU);
+        if ($liveControl) {
           const $favRoot = document.createElement('div');
           $favRoot.id = 'chzzk-plus-favorite-btn';
-          $liveTitle.appendChild($favRoot);
+          $liveControl.prepend($favRoot);
           createReactElement($favRoot, FavoriteButton);
         }
       }

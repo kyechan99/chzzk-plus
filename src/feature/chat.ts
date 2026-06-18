@@ -2,7 +2,6 @@ import { createReactElement, waitingElement } from '../utils/dom';
 import {
   BLIND_CHAT,
   CHAT_CONTAINER,
-  CHAT_MESSAGE,
   CHAT_CONTENT,
   CHAT_NAME,
   CHEEZE_CHAT,
@@ -10,7 +9,6 @@ import {
   CHEEZE_RANKING_CHAT,
   CHATTING_PIN,
   CHAT_ITEM,
-  CHAT_BUTTON,
   CHATTING_BADGE,
 } from '../constants/class';
 import {
@@ -86,7 +84,7 @@ export async function chatSetting(): Promise<void> {
 
           // 채팅 크기 설정을 넣고 값이 default 가 아니라면 추가함
           if (res[CHAT_SIZE] && res[CHAT_SIZE] != 14) {
-            innerHtml += `${CHAT_ITEM} ${CHAT_MESSAGE}, ${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_BUTTON} { 
+            innerHtml += `${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_CONTENT} { 
                 --czp-fontSize: ${res[CHAT_SIZE]}px;
                 font-size: var(--czp-fontSize);
                 ${res[CHAT_SIZE] > 14 ? 'line-height: var(--czp-fontSize) !important;' : ''}
@@ -95,12 +93,12 @@ export async function chatSetting(): Promise<void> {
 
           // 채팅 닉네임에 색상 넣기
           if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === '커스텀') {
-            innerHtml += `${CHAT_MESSAGE} ${CHAT_NAME} { color: var(--${CHAT_NAME_COLOR}) !important; }`;
+            innerHtml += `${CHAT_ITEM} ${CHAT_NAME} { color: var(--${CHAT_NAME_COLOR}) !important; }`;
           }
 
           // 채팅 내용에 색상 넣기
           if (res[CHAT_COLOR_THEME] && res[CHAT_COLOR_THEME] === '커스텀') {
-            innerHtml += `${CHAT_MESSAGE} ${CHAT_CONTENT} { color: var(--${CHAT_TEXT_COLOR}) !important; }`;
+            innerHtml += `${CHAT_ITEM} ${CHAT_CONTENT} { color: var(--${CHAT_TEXT_COLOR}) !important; }`;
           }
 
           style.innerHTML = innerHtml;
@@ -112,23 +110,25 @@ export async function chatSetting(): Promise<void> {
           userPopupObserve();
           chatObserve();
 
-          await waitingElement(`.${CHATTING_PIN}`, 2000);
+          await waitingElement(CHAT_CONTAINER, 2000);
 
-          //고정된 메시지 박스 추가
-          const fixedList = document.querySelector(`.${CHATTING_PIN}`);
-          if (fixedList) {
-            const container = document.createElement('div');
-            fixedList.appendChild(container);
-            createReactElement(container, PinnedMessageBox);
-          } else {
-            const wrapper = document.createElement('div');
-            wrapper.className = CHATTING_PIN;
-            const chatListContainer = await waitingElement('.live_chatting_list_container__vwsbZ');
-            if (chatListContainer) {
-              chatListContainer.appendChild(wrapper);
+          if (!document.querySelector('#chzzk-plus-message-pin')) {
+            //고정된 메시지 박스 추가
+            const fixedList = document.querySelector(`.${CHATTING_PIN}`);
+            if (fixedList) {
               const container = document.createElement('div');
-              wrapper.appendChild(container);
+              fixedList.appendChild(container);
               createReactElement(container, PinnedMessageBox);
+            } else {
+              const wrapper = document.createElement('div');
+              wrapper.className = CHATTING_PIN;
+              const chatListContainer = await waitingElement('[role="log"]');
+              if (chatListContainer) {
+                chatListContainer.appendChild(wrapper);
+                const container = document.createElement('div');
+                wrapper.appendChild(container);
+                createReactElement(container, PinnedMessageBox);
+              }
             }
           }
         }

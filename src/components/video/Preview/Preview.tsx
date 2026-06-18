@@ -4,7 +4,7 @@ import Hls from 'hls.js';
 import { logWarning } from '../../../utils/log';
 import { getChannelIDByUrl } from '../../../utils/channel';
 import { getHlsUrl } from '../../../utils/stream';
-import { NAV_LEFT } from '../../../constants/class';
+import { SIDEBAR, SIDEBAR_MENU } from '../../../constants/class';
 
 import './Preview.css';
 
@@ -57,11 +57,16 @@ export default function Preview() {
 
   // 좌측 nav 마우스 이벤트 등록
   useEffect(() => {
-    const $nav_left = document.querySelectorAll(NAV_LEFT);
+    const $sidebar = document.querySelector(SIDEBAR);
+    const $sidebarMenus = $sidebar?.querySelectorAll(SIDEBAR_MENU);
+    if (!($sidebarMenus && $sidebarMenus?.length > 1)) return;
+    const $following_channel_nav = $sidebarMenus[1];
 
-    if (!$nav_left || $nav_left.length < 2) return;
+    // const $nav_left = document.querySelectorAll(NAV_LEFT);
 
-    const $following_channel_nav = $nav_left[1];
+    // if (!$nav_left || $nav_left.length < 2) return;
+
+    // const $following_channel_nav = $nav_left[1];
     const $navigation = $following_channel_nav.querySelector('ul');
 
     if ($navigation) {

@@ -1,12 +1,8 @@
 import { FAVORITE_GROUPS } from '../constants/storage';
-import { NAV_LEFT, STREAMER_MENU } from '../constants/class';
+import { SIDEBAR_MENU, SIDEBAR_MENU_ITEM } from '../constants/class';
 import { waitingElement } from '../utils/dom';
 import { logWarning } from '../utils/log';
-import {
-  FavoriteData,
-  parseFavoriteData,
-  readFavoriteData,
-} from '../utils/favoriteStore';
+import { FavoriteData, parseFavoriteData, readFavoriteData } from '../utils/favoriteStore';
 import { renderFavoriteIconSvg } from '../utils/favoriteIconSvg';
 
 /**
@@ -38,7 +34,7 @@ const extractChannelId = (href: string | null): string => {
 };
 
 const getFollowingNav = (): HTMLElement | null => {
-  const $navs = document.querySelectorAll(NAV_LEFT);
+  const $navs = document.querySelectorAll(SIDEBAR_MENU);
   return $navs.length >= 2 ? ($navs[1] as HTMLElement) : null;
 };
 
@@ -73,7 +69,7 @@ const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
   const items: NavItem[] = [];
   Array.from(ul.children).forEach(child => {
     const el = child as HTMLElement;
-    const isItem = el.matches(STREAMER_MENU) || !!el.querySelector(STREAMER_MENU);
+    const isItem = el.matches(SIDEBAR_MENU_ITEM) || !!el.querySelector(SIDEBAR_MENU_ITEM);
     if (!isItem) return;
     const anchor = el.matches('a') ? (el as HTMLAnchorElement) : (el.querySelector('a') as HTMLAnchorElement | null);
     const id = extractChannelId(anchor?.getAttribute('href') ?? null);
@@ -82,8 +78,8 @@ const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
       el,
       channelId: id,
       groupIndex,
-      iconId: id ? iconById.get(id) ?? null : null,
-      color: id ? colorById.get(id) ?? null : null,
+      iconId: id ? (iconById.get(id) ?? null) : null,
+      color: id ? (colorById.get(id) ?? null) : null,
     });
   });
   return items;
@@ -192,7 +188,7 @@ const scheduleReorder = () => {
 
 export async function favoriteSetting(): Promise<void> {
   // previewSetting 이 "더보기" 클릭으로 목록을 펼친 뒤 호출되는 것이 정상.
-  await waitingElement(STREAMER_MENU);
+  await waitingElement(SIDEBAR_MENU);
 
   cachedData = await readFavoriteData();
   scheduleReorder();
