@@ -16,6 +16,7 @@ export const BARRICADE = 'barricade';
 export const FAST_BUTTON = 'czp-fast-btn';
 export const PIP_BUTTON = 'czp-pip-btn';
 export const AUDIO_COMPRESSOR = 'czp-compressor-btn';
+export const AUDIO_COMPRESSOR_AUTO = 'czp-compressor-auto'; // 라이브 진입 시 컴프레서 자동 ON
 
 // 채팅 색상 옵션
 export const CHAT_COLOR_THEME = 'chat-color-theme';
@@ -85,3 +86,51 @@ export const MESSAGE_PIN_ENABLE = 'czp-message-pin-enable';
 
 // 화면 보호기
 export const GUARD_ENALBE = 'czp-guard-enable';
+
+// 비디오 필터 (SVG 필터로 영상에 적용). 기본값은 "효과 없음".
+export const VIDEO_BRIGHTNESS = 'czp-video-brightness'; // 밝기 0~2 (기본 1)
+export const VIDEO_CONTRAST = 'czp-video-contrast'; // 대비 0~2 (기본 1)
+export const VIDEO_SATURATION = 'czp-video-saturation'; // 채도 0~3 (기본 1)
+export const VIDEO_GAMMA = 'czp-video-gamma'; // 감마 0~3 (기본 1)
+export const VIDEO_SHARPNESS = 'czp-video-sharpness'; // 선명도 0~10 (기본 0)
+
+export const VIDEO_FILTER_KEYS = [VIDEO_BRIGHTNESS, VIDEO_CONTRAST, VIDEO_SATURATION, VIDEO_GAMMA, VIDEO_SHARPNESS];
+export const VIDEO_FILTER_DEFAULTS: Record<string, number> = {
+  [VIDEO_BRIGHTNESS]: 1,
+  [VIDEO_CONTRAST]: 1,
+  [VIDEO_SATURATION]: 1,
+  [VIDEO_GAMMA]: 1,
+  [VIDEO_SHARPNESS]: 0,
+};
+
+// 오디오 컴프레서 세밀 조작 + 게인(볼륨 증폭). AUDIO_COMPRESSOR(on/off)와 함께 사용.
+export const AUDIO_GAIN = 'czp-audio-gain'; // 볼륨 게인 0~3 (기본 1)
+export const COMP_THRESHOLD = 'czp-comp-threshold'; // -100~0 dB (기본 -50)
+export const COMP_KNEE = 'czp-comp-knee'; // 0~40 dB (기본 40)
+export const COMP_RATIO = 'czp-comp-ratio'; // 1~20 (기본 12)
+export const COMP_ATTACK = 'czp-comp-attack'; // 0~1 s (기본 0)
+export const COMP_RELEASE = 'czp-comp-release'; // 0~1 s (기본 0.25)
+
+export const AUDIO_PARAM_KEYS = [AUDIO_GAIN, COMP_THRESHOLD, COMP_KNEE, COMP_RATIO, COMP_ATTACK, COMP_RELEASE];
+export const AUDIO_PARAM_DEFAULTS: Record<string, number> = {
+  [AUDIO_GAIN]: 1,
+  [COMP_THRESHOLD]: -50,
+  [COMP_KNEE]: 40,
+  [COMP_RATIO]: 12,
+  [COMP_ATTACK]: 0,
+  [COMP_RELEASE]: 0.25,
+};
+
+// 비디오 지연(버퍼) 시간을 채팅 입력창 placeholder 에 표시
+export const BUFFER_DISPLAY_ENABLE = 'czp-buffer-display';
+
+// 방송(/live/**) 링크 클릭 시 새 탭으로 열기 + 백그라운드로 열기(하위)
+export const LIVE_NEW_TAB = 'czp-live-new-tab';
+export const LIVE_NEW_TAB_BACKGROUND = 'czp-live-new-tab-bg';
+
+// 팔로잉 채널 변경 알림 (토스트). multiselect: 시작/종료
+export const FOLLOW_NOTIFY_START = 'czp-follow-notify-start';
+export const FOLLOW_NOTIFY_END = 'czp-follow-notify-end';
+
+// 브라우저 탭(title)에 시청자 수 표기
+export const TAB_VIEWER_COUNT = 'czp-tab-viewer-count';

@@ -54,7 +54,7 @@ export default function PinnedMessageBox() {
     >
       <div className="_wrapper_dba1a_7">
         <div
-          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'is_open' : ''}`}
+          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'isOpen' : ''}`}
           onClick={handleToggleOpen}
         >
           <div id="chzzk-plus-message-pin-title-container">

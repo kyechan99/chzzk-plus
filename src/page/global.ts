@@ -19,8 +19,14 @@ export const editGlobalPage = () => {
     const $global = document.createElement('div');
     $global.id = 'czp-global';
     document.body.appendChild($global);
-    createReactElement($global, MessageStorageModal); // 채팅 저장소
-    createReactElement($global, SettingModal); // 세팅
+
+    const $storageModalRoot = document.createElement('div');
+    $global.appendChild($storageModalRoot);
+    createReactElement($storageModalRoot, MessageStorageModal); // 채팅 저장소
+
+    const $settingModalRoot = document.createElement('div');
+    $global.appendChild($settingModalRoot);
+    createReactElement($settingModalRoot, SettingModal); // 세팅
   }
 
   /*

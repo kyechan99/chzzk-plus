@@ -7,6 +7,12 @@ const defaultValues: Record<string, unknown> = {
   [FAVORITE_ENABLE]: true,
 };
 
+chrome.runtime.onMessage.addListener(message => {
+  if (message?.type === 'czp-open-tab' && typeof message.url === 'string') {
+    chrome.tabs.create({ url: message.url, active: message.active !== false });
+  }
+});
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.get(Object.keys(defaultValues), result => {
     const valuesToSet = Object.entries(defaultValues).reduce(

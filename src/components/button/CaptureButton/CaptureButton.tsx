@@ -1,7 +1,8 @@
 import React from 'react';
 import { logWarning } from '../../../utils/log';
 import './CaptureButton.css';
-import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from '../../../constants/class';
+import { WEBPLAYER_VIDEO } from '../../../constants/class';
+import { isTypingTarget } from '../../../utils/dom';
 
 /**
  * @deprecated
@@ -11,7 +12,7 @@ export default function CaptureButton() {
     const captureEvent = (event: KeyboardEvent) => {
       const { target } = event;
       if (target instanceof HTMLElement)
-        if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+        if (!isTypingTarget(target) && !event.ctrlKey) {
           // S: 캡처
           if (event.key === 's' || event.key === 'S') {
             captureVideo();

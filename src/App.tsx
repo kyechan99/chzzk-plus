@@ -2,6 +2,7 @@ import './App.css';
 
 import { Select } from './components/input/Select/Select';
 import Checkbox from './components/input/Checkbox/Checkbox';
+import Range from './components/input/Range/Range';
 import URLButton from './components/button/URLButton/URLButton';
 import ColorPicker from './components/input/ColorPicker/ColorPicker';
 import List from './components/List/List';
@@ -9,9 +10,14 @@ import FavoriteGroupManager from './components/favoriteGroupManager/FavoriteGrou
 
 import {
   AUDIO_COMPRESSOR,
+  AUDIO_COMPRESSOR_AUTO,
+  AUDIO_GAIN,
   AUTO_WIDE_MODE,
   BLIND_REMOVER,
   BLOCKED_STREAMER,
+  BUFFER_DISPLAY_ENABLE,
+  LIVE_NEW_TAB,
+  LIVE_NEW_TAB_BACKGROUND,
   CHAT_BADGE_REMOVER,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
@@ -22,8 +28,15 @@ import {
   CHAT_TEXT_COLOR,
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
+  COMP_ATTACK,
+  COMP_KNEE,
+  COMP_RATIO,
+  COMP_RELEASE,
+  COMP_THRESHOLD,
   FAST_BUTTON,
   FAVORITE_ENABLE,
+  FOLLOW_NOTIFY_END,
+  FOLLOW_NOTIFY_START,
   FOLLOWING_REFRESH_ENABLE,
   GUARD_ENALBE,
   MESSAGE_PIN_ENABLE,
@@ -32,6 +45,12 @@ import {
   PIP_BUTTON,
   PREVIEW_ENABLE,
   SUBSCRIBE_REMOVER,
+  TAB_VIEWER_COUNT,
+  VIDEO_BRIGHTNESS,
+  VIDEO_CONTRAST,
+  VIDEO_GAMMA,
+  VIDEO_SATURATION,
+  VIDEO_SHARPNESS,
 } from './constants/storage';
 
 function App() {
@@ -76,6 +95,21 @@ function App() {
               <p className="menu-desc">10초 간격으로 자동 새로고침합니다.</p>
             </div>
           </Checkbox>
+
+          <div className="menu">
+            <p className="menu-title">팔로잉 채널 변경 알림</p>
+            <p className="menu-desc">우측 상단에 토스트로 표시 (최대 3개)</p>
+          </div>
+          <Checkbox id={FOLLOW_NOTIFY_START}>
+            <div className="menu">
+              <p className="menu-title">방송 시작 알림</p>
+            </div>
+          </Checkbox>
+          <Checkbox id={FOLLOW_NOTIFY_END}>
+            <div className="menu">
+              <p className="menu-title">방송 종료 알림</p>
+            </div>
+          </Checkbox>
         </div>
       </div>
 
@@ -115,12 +149,93 @@ function App() {
             </div>
           </Checkbox>
 
+          <Checkbox id={AUDIO_COMPRESSOR_AUTO}>
+            <div className="menu">
+              <p className="menu-title">사운드 압축 항상 활성화 *</p>
+              <p className="menu-desc">새 라이브 진입 시 자동으로 켜짐</p>
+              <p className="menu-desc">'사운드 압축'이 켜져 있어야 동작</p>
+            </div>
+          </Checkbox>
+
+          <div className="menu">
+            <p className="menu-title">사운드 세밀 조작</p>
+            <p className="menu-desc">사운드 압축 버튼이 켜진 상태에서 실시간 적용</p>
+          </div>
+          <Range id={AUDIO_GAIN} min={0} max={3} step={0.05} digits={2} defaultValue={1}>
+            <div className="menu">
+              <p className="menu-title">볼륨 게인</p>
+              <p className="menu-desc">1보다 크면 볼륨 증폭</p>
+            </div>
+          </Range>
+          <Range id={COMP_THRESHOLD} min={-100} max={0} step={1} digits={0} unit="dB" defaultValue={-50}>
+            <div className="menu">
+              <p className="menu-title">임계값 (Threshold)</p>
+            </div>
+          </Range>
+          <Range id={COMP_KNEE} min={0} max={40} step={1} digits={0} unit="dB" defaultValue={40}>
+            <div className="menu">
+              <p className="menu-title">니 (Knee)</p>
+            </div>
+          </Range>
+          <Range id={COMP_RATIO} min={1} max={20} step={0.5} digits={1} defaultValue={12}>
+            <div className="menu">
+              <p className="menu-title">압축 비율 (Ratio)</p>
+            </div>
+          </Range>
+          <Range id={COMP_ATTACK} min={0} max={1} step={0.01} digits={2} unit="s" defaultValue={0}>
+            <div className="menu">
+              <p className="menu-title">어택 (Attack)</p>
+            </div>
+          </Range>
+          <Range id={COMP_RELEASE} min={0} max={1} step={0.01} digits={2} unit="s" defaultValue={0.25}>
+            <div className="menu">
+              <p className="menu-title">릴리즈 (Release)</p>
+            </div>
+          </Range>
+
           <Checkbox id={AUTO_WIDE_MODE}>
             <div className="menu">
               <p className="menu-title">자동 넓은 화면 *</p>
               <p className="menu-desc">새로고침 후 적용</p>
             </div>
           </Checkbox>
+
+          <Checkbox id={BUFFER_DISPLAY_ENABLE}>
+            <div className="menu">
+              <p className="menu-title">지연 시간(버퍼) 표시 *</p>
+              <p className="menu-desc">채팅 입력창에 라이브 지연 시간을 표시</p>
+            </div>
+          </Checkbox>
+
+          <div className="menu">
+            <p className="menu-title">비디오 필터</p>
+            <p className="menu-desc">영상에 실시간 적용 (기본값이면 효과 없음)</p>
+          </div>
+          <Range id={VIDEO_BRIGHTNESS} min={0} max={2} step={0.05} digits={2} defaultValue={1}>
+            <div className="menu">
+              <p className="menu-title">밝기</p>
+            </div>
+          </Range>
+          <Range id={VIDEO_CONTRAST} min={0} max={2} step={0.05} digits={2} defaultValue={1}>
+            <div className="menu">
+              <p className="menu-title">대비</p>
+            </div>
+          </Range>
+          <Range id={VIDEO_SATURATION} min={0} max={3} step={0.05} digits={2} defaultValue={1}>
+            <div className="menu">
+              <p className="menu-title">채도</p>
+            </div>
+          </Range>
+          <Range id={VIDEO_GAMMA} min={0} max={3} step={0.05} digits={2} defaultValue={1}>
+            <div className="menu">
+              <p className="menu-title">감마</p>
+            </div>
+          </Range>
+          <Range id={VIDEO_SHARPNESS} min={0} max={10} step={0.1} digits={1} defaultValue={0}>
+            <div className="menu">
+              <p className="menu-title">선명도</p>
+            </div>
+          </Range>
         </div>
       </div>
 
@@ -140,6 +255,28 @@ function App() {
             <div className="menu">
               <p className="menu-title">차단한 방송 완전 제거</p>
               <p className="menu-desc">라이브 목록에서 차단한 방송 완전 제거</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={TAB_VIEWER_COUNT}>
+            <div className="menu">
+              <p className="menu-title">브라우저 탭에 시청자 수 표기</p>
+              <p className="menu-desc">탭 제목을 '시청자수 | 원래 제목'으로 표시</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={LIVE_NEW_TAB}>
+            <div className="menu">
+              <p className="menu-title">방송 클릭 시 새 탭으로 열기</p>
+              <p className="menu-desc">/live/ 링크를 새 탭에서 엽니다</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox id={LIVE_NEW_TAB_BACKGROUND}>
+            <div className="menu">
+              <p className="menu-title">└ 백그라운드로 열기</p>
+              <p className="menu-desc">'새 탭으로 열기'가 켜져 있어야 동작</p>
+              <p className="menu-desc">현재 탭을 유지한 채 뒤에서 엽니다</p>
             </div>
           </Checkbox>
 
@@ -250,7 +387,7 @@ function App() {
       <hr />
 
       <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-      <p className="version">v1.8.3</p>
+      <p className="version">v2.0.0</p>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './FastButton.css';
-import { INPUT_UI_LIST, WEBPLAYER_VIDEO } from '../../../constants/class';
+import { WEBPLAYER_VIDEO } from '../../../constants/class';
+import { isTypingTarget } from '../../../utils/dom';
 
 const NORMAL_SPEED = 1;
 const FASTER_SPEED = 2.0;
@@ -43,7 +44,7 @@ export default function FastButton() {
     const captureEvent = (event: KeyboardEvent) => {
       const { target } = event;
       if (target instanceof HTMLElement) {
-        if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+        if (!isTypingTarget(target) && !event.ctrlKey) {
           // ]: 빨리 감기 / 배속 토글
           if (event.key === ']' || event.key === '}') {
             toggleFast();

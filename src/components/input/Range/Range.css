@@ -1,0 +1,41 @@
+.czp-range-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.czp-range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.czp-range-input {
+  flex: 1;
+  accent-color: var(--color-primary, #00ffa3);
+  cursor: pointer;
+}
+
+.czp-range-value {
+  min-width: 52px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--color-text-02, #c5c8ce);
+}
+
+.czp-range-reset {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-size: 12px;
+  border: 1px solid var(--color-border-01, #44464d);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text-03, #9ea0a6);
+  cursor: pointer;
+}
+
+.czp-range-reset:hover {
+  color: var(--color-text-01, #fff);
+  border-color: var(--color-text-03, #9ea0a6);
+}

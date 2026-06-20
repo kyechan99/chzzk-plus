@@ -1,7 +1,8 @@
 // import "./PipButton.css";
 
 import React from 'react';
-import { INPUT_UI_LIST, VIDEO_PIP_BTN } from '../../../constants/class';
+import { VIDEO_PIP_BTN } from '../../../constants/class';
+import { isTypingTarget } from '../../../utils/dom';
 
 export default function PipButton() {
   const getVideo = () => document.getElementsByTagName('video')[0];
@@ -18,7 +19,7 @@ export default function PipButton() {
     const captureEvent = (event: KeyboardEvent) => {
       const { target } = event;
       if (target instanceof HTMLElement)
-        if (!INPUT_UI_LIST.includes(target.className) && !event.ctrlKey) {
+        if (!isTypingTarget(target) && !event.ctrlKey) {
           // ]: 빨리 감기
           if (event.key === 'q' || event.key === 'Q') {
             operatePIP();

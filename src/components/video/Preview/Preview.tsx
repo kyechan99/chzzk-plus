@@ -4,7 +4,7 @@ import Hls from 'hls.js';
 import { logWarning } from '../../../utils/log';
 import { getChannelIDByUrl } from '../../../utils/channel';
 import { getHlsUrl } from '../../../utils/stream';
-import { SIDEBAR, SIDEBAR_MENU } from '../../../constants/class';
+import { SIDEBAR } from '../../../constants/class';
 
 import './Preview.css';
 
@@ -55,61 +55,52 @@ export default function Preview() {
     };
   }, [channelId, visible]);
 
-  // 좌측 nav 마우스 이벤트 등록
+  // 좌측 사이드바 마우스 이벤트 등록.
+  // 특정 ul 에 직접 바인딩하면 사이드바가 리빌드될 때 리스너가 버려진 노드에 남아 동작하지
+  // 않는다. 대신 영속적인 #sidebar 에 이벤트 위임(delegation)하여 내부 리스트가 다시
+  // 그려져도 새 채널 링크에 그대로 반응하게 한다.
   useEffect(() => {
     const $sidebar = document.querySelector(SIDEBAR);
-    const $sidebarMenus = $sidebar?.querySelectorAll(SIDEBAR_MENU);
-    if (!($sidebarMenus && $sidebarMenus?.length > 1)) return;
-    const $following_channel_nav = $sidebarMenus[1];
+    if (!$sidebar) return;
 
-    // const $nav_left = document.querySelectorAll(NAV_LEFT);
-
-    // if (!$nav_left || $nav_left.length < 2) return;
-
-    // const $following_channel_nav = $nav_left[1];
-    const $navigation = $following_channel_nav.querySelector('ul');
-
-    if ($navigation) {
-      $navigation.addEventListener('mouseover', navHoverListener);
-      $navigation.addEventListener('mouseleave', navLeaveListener);
-    }
-
-    return () => {
-      if ($navigation) {
-        $navigation.removeEventListener('mouseover', navHoverListener);
-        $navigation.removeEventListener('mouseleave', navLeaveListener);
-      }
+    const hide = () => {
+      setVisible(false);
+      setChannelId('');
     };
-  }, [containerRef]);
 
-  const navHoverListener = (event: Event) => {
-    const eventTarget = event.target as HTMLElement;
-    if (eventTarget.tagName === 'A') {
+    const navHoverListener = (event: Event) => {
       try {
-        const rect = eventTarget.getBoundingClientRect();
+        const anchor = (event.target as HTMLElement)?.closest?.('a');
+        const href = anchor?.getAttribute('href');
+        const channelID = href ? getChannelIDByUrl(href) : null;
+
+        // 채널 링크가 아니면 숨김
+        if (!anchor || !channelID) {
+          hide();
+          return;
+        }
+
+        const rect = anchor.getBoundingClientRect();
         if (containerRef.current) {
           containerRef.current.style.left = 8 + rect.right + 'px';
           containerRef.current.style.top = rect.top + 'px';
         }
 
-        const href = eventTarget.getAttribute('href');
-        if (href) {
-          const channelID = getChannelIDByUrl(href);
-          if (channelID) {
-            setChannelId(channelID);
-            setVisible(true);
-          }
-        }
+        setChannelId(channelID);
+        setVisible(true);
       } catch (err) {
         logWarning(err);
       }
-    }
-  };
+    };
 
-  const navLeaveListener = () => {
-    setVisible(false);
-    setChannelId('');
-  };
+    $sidebar.addEventListener('mouseover', navHoverListener);
+    $sidebar.addEventListener('mouseleave', hide);
+
+    return () => {
+      $sidebar.removeEventListener('mouseover', navHoverListener);
+      $sidebar.removeEventListener('mouseleave', hide);
+    };
+  }, []);
 
   return (
     <div className="czp-preview" ref={containerRef} style={{ display: visible ? 'block' : 'none' }}>

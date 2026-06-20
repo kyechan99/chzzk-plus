@@ -7,3 +7,7 @@
 .has_shortcut .pzp-pc-viewmode-button .pzp-button__tooltip.czp-pzp-ac-button:after {
   content: ''
 }
+
+.czp-compressor-active svg {
+  color: #00e693;
+}
