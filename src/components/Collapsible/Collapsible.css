@@ -1,0 +1,31 @@
+.czp-collapsible {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.czp-collapsible-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--color-bg-05, #4d4d4d);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--Content-Neutral-Primary, white);
+}
+.czp-collapsible-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.czp-collapsible-caret {
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+.czp-collapsible-caret.is-open {
+  transform: rotate(180deg);
+}

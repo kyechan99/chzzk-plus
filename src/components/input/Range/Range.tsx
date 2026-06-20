@@ -10,9 +10,20 @@ interface RangeProps extends React.PropsWithChildren {
   defaultValue: number;
   unit?: string;
   digits?: number;
+  className?: string;
 }
 
-export default function Range({ id, min, max, step, defaultValue, unit = '', digits = 2, children }: RangeProps) {
+export default function Range({
+  id,
+  min,
+  max,
+  step,
+  defaultValue,
+  unit = '',
+  digits = 2,
+  children,
+  className,
+}: RangeProps) {
   const [value, setValue] = useState<number>(defaultValue);
 
   useEffect(() => {
@@ -34,7 +45,7 @@ export default function Range({ id, min, max, step, defaultValue, unit = '', dig
   };
 
   return (
-    <div className="form-group czp-range-group">
+    <div className={`form-group czp-range-group ${className}`}>
       {children}
       <div className="czp-range-row">
         <input

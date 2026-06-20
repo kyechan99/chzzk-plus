@@ -1,64 +1,185 @@
-/* body {
-  margin: 0px;
-  background-color: var(--color-bg-01, #2e3033);
-}
-#root {
-  padding: 2rem;
-  min-width: 18rem;
-} */
 .popup {
   display: flex;
+  flex-direction: row;
+  align-items: stretch;
   margin: 0 auto;
   background-color: var(--color-bg-01, #141517);
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  min-width: 18rem;
-  padding: 2rem;
+  width: 50rem;
+  height: 35rem;
+  overflow: hidden;
 }
+
 .popup hr {
   opacity: 0.5;
   width: 100%;
 }
+
 .form-group {
   display: flex;
-  width: 100%;
+  /* width: 100%; */
   color: var(--Content-Neutral-Primary, white);
   align-items: flex-start;
   justify-content: space-between;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+}
+.form-group:hover {
+  background: var(--Surface-Interaction-Lighten-Hovered, #ffffff0d);
+}
+
+.depth-2 {
+  margin-left: 1.5rem;
+}
+.depth-3 {
+  margin-left: 3rem;
+}
+
+.depth-2,
+.depth-3 {
+  position: relative;
+}
+
+/* 가로 연결선 (모든 항목 공통) */
+.depth-2::before,
+.depth-3::before {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: 50%;
+  width: 0.75rem;
+  height: 1px;
+  background: rgba(var(--color-border-01-rgb, #FFF), .1);
+}
+
+/* 세로선: 일반 항목은 위아래 끝까지 */
+.depth-2:not(.depth-last)::after,
+.depth-3:not(.depth-last)::after {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: rgba(var(--color-border-01-rgb, #FFF), .1);
+}
+
+/* 세로선: 마지막 항목은 가로선 위치까지만 (└ 모양) */
+.depth-2.depth-last::after,
+.depth-3.depth-last::after {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: -2px;
+  height: calc(50% + 2px);
+  width: 1px;
+  background: rgba(var(--color-border-01-rgb, #FFF), .1);
+}
+
+.form-select {
+  border: none;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* 우측 스크롤 콘텐츠 영역 */
+.settings-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem 5rem 2rem;
+  overflow-y: auto;
+  scroll-behavior: auto;
+  scrollbar-color: transparent;
+}
+.settings-content::-webkit-scrollbar {
+    width: 8px; 
+    border-radius: 4px;
+}
+.settings-content::-webkit-scrollbar-thumb {
+    background-color: var(--Surface-Neutral-Base, #2e3033);
+    border-radius: 4px;
+}
+.settings-content::-webkit-scrollbar-track {
+    background-color: var(--Surface-Neutral-Weakest, #f0f1f2);
+    border-radius: 4px;
+    background-clip: padding-box; 
+} 
+
+.settings-content-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.settings-content-header img {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.settings-content-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--Content-Neutral-Primary, white);
+}
+.settings-content-title img {
+  border-radius: 0.25rem;
 }
 
 .setting-group {
   width: 100%;
+  /* sticky 헤더가 있을 경우를 대비해 스크롤 타겟 위치를 살짝 보정 */
+  scroll-margin-top: 0.5rem;
 }
+
 .setting-label {
   color: var(--Content-Neutral-Primary, white);
   width: 100%;
   margin-top: 0px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
+  position: relative;
 }
+.setting-label::before {  
+  content: '';
+  background-color: var(--Surface-Brand-Base);
+  width: 2px;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: -12px;
+}
+
 .menus {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.5rem;
 }
+
 .menus .menu {
   display: flex;
   flex-direction: column;
 }
-.menus .menu .menu-title {
+
+.menu .menu-title {
   font-size: 14px;
   color: var(--Content-Neutral-Primary, white);
   margin: 0px;
 }
-.menus .menu .menu-desc {
+
+.menu .menu-desc {
   margin: 0px;
   color: var(--Content-Neutral-Cool-Base, #afafaf);
 }
+
 .description {
   color: #6fec9f;
 }
+
 .version {
   color: var(--Content-Neutral-Primary, white);
 }

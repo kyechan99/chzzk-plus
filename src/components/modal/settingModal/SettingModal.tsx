@@ -27,16 +27,19 @@ export default function SettingModal() {
     <>
       {open && (
         <div className="czp-setting-modal">
-          <button
-            className="czp-setting-modal-close-btn button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
-            onClick={() => {
-              chrome.storage.local.set({
-                [SETTING_MODAL]: false,
-              });
-            }}
-          >
-            X
-          </button>
+          <div className="czp-setting-modal-head">
+            <h3>치즈 플러스</h3>
+            <button
+              className="czp-setting-modal-close-btn button_only_icon__kahz5 button_large__oOJou popup_close_button__Gwi1s"
+              onClick={() => {
+                chrome.storage.local.set({
+                  [SETTING_MODAL]: false,
+                });
+              }}
+            >
+              X
+            </button>
+          </div>
           <App />
         </div>
       )}

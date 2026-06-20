@@ -1,6 +1,5 @@
 .czp-range-group {
   display: flex;
-  flex-direction: column;
   gap: 6px;
 }
 
@@ -22,20 +21,22 @@
   font-variant-numeric: tabular-nums;
   font-size: 13px;
   color: var(--color-text-02, #c5c8ce);
+  padding-right: 0.5rem;
 }
 
 .czp-range-reset {
   flex-shrink: 0;
   padding: 2px 8px;
   font-size: 12px;
-  border: 1px solid var(--color-border-01, #44464d);
+  border: none;
+  background: var(--Surface-Neutral-Base, #2e3033);
+  padding: 0.365rem 0.75rem;
   border-radius: 4px;
-  background: transparent;
   color: var(--color-text-03, #9ea0a6);
   cursor: pointer;
 }
 
 .czp-range-reset:hover {
   color: var(--color-text-01, #fff);
-  border-color: var(--color-text-03, #9ea0a6);
+  opacity: 0.8;
 }

@@ -3,6 +3,7 @@ import './List.css';
 import TextInput from '../input/TextInput/TextInput';
 import TextButton from '../button/TextButton/TextButton';
 import CloseButton from '../button/CloseButton/CloseButton';
+import Collapsible from '../Collapsible/Collapsible';
 
 interface ListProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
@@ -40,17 +41,25 @@ const List = ({ children, id, inputPlaceholder = '입력해주세요', saveButto
   return (
     <div id="czp-list" {...props}>
       {children}
-      <div id="czp-list-input-wrapper">
-        <TextInput value={newItem} onChange={e => setNewItem(e.target.value)} placeholder={inputPlaceholder}>
-          <TextButton text={saveButtonText} onClick={handleAddItem} isActive={newItem.trim() !== ''} />
-        </TextInput>
-      </div>
-      {listItems.map((item, index) => (
-        <div key={index} id="czp-list-item">
-          <span>{item}</span>
-          <CloseButton onClick={() => handleRemoveItem(index)} />
+
+      <div className="czp-list-body depth-2 depth-last">
+        <div id="czp-list-input-wrapper">
+          <TextInput value={newItem} onChange={e => setNewItem(e.target.value)} placeholder={inputPlaceholder}>
+            <TextButton text={saveButtonText} onClick={handleAddItem} isActive={newItem.trim() !== ''} />
+          </TextInput>
         </div>
-      ))}
+
+        <Collapsible label={`등록된 유저 ${listItems.length}명`}>
+          <ul className="czp-fav-mgr-list">
+            {listItems.map((item, index) => (
+              <div key={index} className="czp-list-item">
+                <span>{item}</span>
+                <CloseButton onClick={() => handleRemoveItem(index)} />
+              </div>
+            ))}
+          </ul>
+        </Collapsible>
+      </div>
     </div>
   );
 };

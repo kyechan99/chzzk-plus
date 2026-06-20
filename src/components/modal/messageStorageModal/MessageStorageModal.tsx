@@ -61,7 +61,7 @@ const MessageStorage = () => {
   return (
     <>
       <h2 className="czp-storage-heading">채팅 저장소</h2>
-      <div className="live_chatting_input_container__qA0ad czp-storage-form">
+      <div className="czp-storage-form">
         <input
           type="text"
           className="czp-storage-form-input"
@@ -71,19 +71,7 @@ const MessageStorage = () => {
             setText(e.target.value);
           }}
         ></input>
-        <button
-          type="button"
-          className={`live_chatting_input_send_button__8KBrn ${text && 'live_chatting_input_is_active__WeOjk'}`}
-          style={{
-            background: 'var(--color-bg-layer-02)',
-            padding: '8px',
-            fontSize: '12px',
-            borderRadius: '4px',
-            fontFamily:
-              'Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif',
-          }}
-          onClick={addMessage}
-        >
+        <button type="button" className={`czp-storage-form-submit`} onClick={addMessage}>
           저장
         </button>
       </div>
@@ -91,7 +79,7 @@ const MessageStorage = () => {
       <div className="czp-storage">
         {storage.map((data, idx) => (
           <div
-            className="component_box__ah2Dn component_default__AJk9D component_is_medium__-6eb7 czp-select-none czp-chat-st-btn"
+            className="czp-storage-chat-menu"
             key={`${data}-${idx}`}
             onClick={() => {
               copyMessage(data);

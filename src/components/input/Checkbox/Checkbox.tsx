@@ -4,9 +4,10 @@ import './Checkbox.css';
 
 interface CheckboxProps extends React.PropsWithChildren {
   id: string;
+  className?: string;
 }
 
-export default function Checkbox({ id, children }: CheckboxProps) {
+export default function Checkbox({ id, children, className }: CheckboxProps) {
   const [checked, setChecked] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function Checkbox({ id, children }: CheckboxProps) {
   };
 
   return (
-    <div className="form-group">
+    <div className={`form-group ${className}`}>
       {children}
       <input checked={checked} onChange={onChangeHandler} className="form-switch-input" type="checkbox" id={id} />
       <label className="form-switch-label" htmlFor={id}>

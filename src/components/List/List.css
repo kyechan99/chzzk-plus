@@ -4,7 +4,7 @@
   gap: 0.25rem;
 }
 
-#czp-list-item {
+.czp-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,15 +18,16 @@
   height: fit-content;
   padding-block: 5px;
   font-weight: 600;
+  border: 1px solid var(--color-bg-05, #4d4d4d);
 }
-#czp-list-item span {
+.czp-list-item span {
   margin-left: 0.5rem;
 }
-#czp-list-item button {
+.czp-list-item button {
   margin-right: 0.5rem;
 }
 
-#czp-list-item:hover {
+.czp-list-item:hover {
   text-decoration: none;
   background-color: hsla(0, 0%, 100%, 0.1);
 }
@@ -39,4 +40,10 @@
 
 #czp-list-input-wrapper input {
   flex: 1;
+}
+
+#czp-list .czp-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

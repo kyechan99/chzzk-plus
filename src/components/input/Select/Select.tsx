@@ -28,7 +28,7 @@ export const Select = ({ id, options, children }: SelectProps) => {
     <>
       <div className="form-group">
         {children}
-        <select value={selectValue} onChange={onChangeHandler}>
+        <select value={selectValue} onChange={onChangeHandler} className="form-select">
           {options.map(option => (
             <option key={option.name} value={option.value}>
               {option.name}

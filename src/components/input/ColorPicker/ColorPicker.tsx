@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 interface CheckboxProps extends React.PropsWithChildren {
   id: string;
+  className?: string;
 }
-const ColorPicker = ({ id, children }: CheckboxProps) => {
+const ColorPicker = ({ id, children, className }: CheckboxProps) => {
   const [selectedColor, setSelectedColor] = useState<string>('#000000');
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const ColorPicker = ({ id, children }: CheckboxProps) => {
   };
 
   return (
-    <div className="form-group">
+    <div className={`form-group ${className}`}>
       <label htmlFor={id}>{children}</label>
       <div>
         <input type="color" id={id} value={selectedColor} onChange={handleColorChange} />

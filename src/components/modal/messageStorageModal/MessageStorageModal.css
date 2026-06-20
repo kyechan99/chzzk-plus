@@ -62,11 +62,24 @@
   margin-bottom: 0.5rem;
 }
 .czp-storage-form {
+  display: flex;
   margin-block: 1rem;
 }
 .czp-storage-form-input {
   padding: 0.5rem;
   flex: 1;
+  background: var(--Surface-Neutral-Base);
+  border-radius: 0.5rem;
+}
+
+.czp-storage-form-submit {
+  margin-left: 0.5rem;
+  background: var(--color-bg-layer-02);
+  padding: 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  font-family:
+    'Sandoll Nemony2, Apple SD Gothic NEO, Helvetica Neue, Helvetica, 나눔고딕, NanumGothic, Malgun Gothic, 맑은 고딕, 굴림, gulim, 새굴림, noto sans, 돋움, Dotum, sans-serif';
 }
 
 .czp-storage-form-btn {
@@ -81,7 +94,7 @@
   background: var(--color-bg-02);
 }
 
-.czp-chat-st-btn {
+.czp-storage-chat-menu {
   display: flex;
   flex-direction: row !important;
   justify-content: space-between !important;
@@ -92,9 +105,11 @@
   padding: 1rem;
   cursor: pointer;
   flex-shrink: 0;
+  background: var(--Surface-Neutral-Base);
+  border-radius: 1rem;
 }
 
-.czp-chat-st-btn span {
+.czp-storage-chat-menu span {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -106,7 +121,7 @@
   user-select: none;
 }
 
-.czp-chat-st-btn:hover {
+.czp-storage-chat-menu:hover {
   background-color: var(--color-bg-03) !important;
 }
 .czp-chat-st-remove-btn {
