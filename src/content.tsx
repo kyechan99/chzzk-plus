@@ -10,6 +10,7 @@ import { initVideoFilter } from './feature/videoFilter';
 import { initLiveNewTab } from './feature/liveNewTab';
 import { initFollowNotify } from './feature/followNotify';
 import { initTabViewerCount } from './feature/tabViewerCount';
+import { initPowerCollect } from './feature/powerCollect';
 
 /**
  * MAIN world(페이지 컨텍스트)에서 동작하는 inject.js 를 주입한다.
@@ -143,6 +144,7 @@ function installChildStyleObserver($layout: HTMLElement) {
   initLiveNewTab();
   initFollowNotify();
   initTabViewerCount();
+  initPowerCollect();
 
   const $layout = await waitingElement(`#${LAYOUT_WRAP}`, 30000);
   if (!$layout) return;

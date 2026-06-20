@@ -64,7 +64,7 @@ export const userPopupObserve = async () => {
 };
 
 export const chatObserve = async () => {
-  // 관찰 대상을 난독화된 내부 wrapper(_wrapper_sg7hy_25) 대신 안정적인 #aside-chatting 으로.
+  // 관찰 대상을 난독화된 내부 wrapper(_wrapper_sg7hy_25) 대신 안정적인 CHAT_CONTAINER 으로.
   // subtree:true 라 깊숙이 추가되는 채팅 아이템도 모두 포착되고, isChatItem 으로 필터링한다.
   const chatContainer = await waitingElement(CHAT_CONTAINER);
   if (!chatContainer) return;
@@ -78,7 +78,7 @@ export const chatObserve = async () => {
         if (!isChatItem(node)) return;
 
         // 우리 핀 박스 안에 복제되어 들어간 노드(복제본)는 무시한다.
-        // (관찰 대상 #aside-chatting 안에 핀 박스가 있어, 막지 않으면 복제→감지→재복제 무한 루프)
+        // (관찰 대상 CHAT_CONTAINER 안에 핀 박스가 있어, 막지 않으면 복제→감지→재복제 무한 루프)
         if (node.closest('#chzzk-plus-message-pin')) return;
 
         const nickname = getChatNickname(node);

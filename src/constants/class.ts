@@ -73,6 +73,7 @@ export const CHATTING_AREA = byClass('live_chatting_area__');
 export const CHATTING_BADGE = '._wrapper_o04z9_23';
 // 채팅 입력창 (버퍼/지연 시간을 placeholder 로 표시). css-module + webpack 폴백 union.
 export const CHAT_INPUT = '._input_1xxwu_59._default_1xxwu_77, [class*="live_chatting_input_input__"]';
+export const CHAT_USER_AREA = '.area_1qgfi_49';
 
 // 동영상 Card UI
 export const VIDEO_CARD_LIST = '.component_list__DNd2B'; // 라이브 페이지의 비디오 ul

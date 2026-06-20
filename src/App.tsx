@@ -46,6 +46,7 @@ import {
   MESSAGE_PIN_USERS,
   ONLIVE_REFRESH,
   PIP_BUTTON,
+  POWER_COLLECT_ENABLE,
   PREVIEW_ENABLE,
   SUBSCRIBE_REMOVER,
   TAB_VIEWER_COUNT,
@@ -360,6 +361,13 @@ function App() {
               <div className="menu">
                 <p className="menu-title">브라우저 탭에 시청자 수 표기</p>
                 <p className="menu-desc">탭 제목에 시청자수 추가</p>
+              </div>
+            </Checkbox>
+
+            <Checkbox id={POWER_COLLECT_ENABLE}>
+              <div className="menu">
+                <p className="menu-title">통나무 자동 수집</p>
+                <p className="menu-desc">시청 중인 채널의 통나무(파워) 자동 수령</p>
               </div>
             </Checkbox>
 

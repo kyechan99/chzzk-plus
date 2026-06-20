@@ -134,3 +134,6 @@ export const FOLLOW_NOTIFY_END = 'czp-follow-notify-end';
 
 // 브라우저 탭(title)에 시청자 수 표기
 export const TAB_VIEWER_COUNT = 'czp-tab-viewer-count';
+
+// 통나무(파워) 자동 수집
+export const POWER_COLLECT_ENABLE = 'czp-power-collect';
