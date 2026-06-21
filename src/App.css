@@ -89,7 +89,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1.5rem 2rem 5rem 2rem;
+  padding: 1.5rem 2rem 25rem 2rem;
   overflow-y: auto;
   scroll-behavior: auto;
   scrollbar-color: transparent;
@@ -119,6 +119,11 @@
   width: 1.75rem;
   height: 1.75rem;
 }
+
+.settings-content-body {
+  display: flex;
+  gap: 1rem;
+} 
 
 .settings-content-title {
   margin: 0;
@@ -182,4 +187,14 @@
 
 .version {
   color: var(--Content-Neutral-Primary, white);
+}
+
+.settings-disclaimer {
+  color: var(--Content-Neutral-Cool-Base, #afafaf);
+  opacity: 0.9;
+  width: 100%;
+}
+.settings-disclaimer li {
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
 }

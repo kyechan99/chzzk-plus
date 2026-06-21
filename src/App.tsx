@@ -110,7 +110,15 @@ function App() {
           <h2 className="settings-content-title">확장 프로그램 설정</h2>
         </div>
 
-        <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
+        <div className="settings-content-body">
+          <URLButton href="https://chzzk.naver.com/">Chzzk 이동하기</URLButton>
+
+          <URLButton variant="secondary" href="https://github.com/kyechan99/chzzk-plus/issues">
+            버그 및 기능 제보
+          </URLButton>
+        </div>
+
+        <p className="version">v2.0.2</p>
 
         <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
 
@@ -508,8 +516,28 @@ function App() {
 
         <hr />
 
-        <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-        <p className="version">v2.0.2</p>
+        <div className="settings-disclaimer">
+          <ul>
+            <li>치즈 플러스는 스트리밍 서비스 치지직(Chzzk)을 위한 비공식 오픈소스 확장 프로그램입니다.</li>
+            <li>본 확장 프로그램은 치지직 및 네이버와 어떠한 공식적인 연관이나 제휴 관계가 없습니다.</li>
+            <li>
+              서비스 정책 및 플랫폼 구조를 준수하며, 저작권 및 비즈니스 모델(BM)을 침해할 수 있는 기능(예: 캡처, 녹화
+              등)은 제공하지 않습니다.
+            </li>
+            <li>치지직 또는 네이버의 정책 변경이나 요청에 따라 일부 기능은 사전 고지 없이 제거될 수 있습니다.</li>
+            <li>확장 프로그램 사용으로 인해 발생하는 문제에 대해서는 개발자가 책임을 보장하지 않습니다.</li>
+            <li>
+              치지직 서비스 자체의 업데이트로 인해 특정 기능이 일시적으로 동작하지 않을 수 있습니다.
+              <br />
+              해당 기능이 복구되기 전까지 비활성화하여 기다려주시면 감사드리겠습니다.
+            </li>
+            <li>
+              Cheese-Plus는 오픈소스로 개발되고 있습니다.
+              <br />
+              기능 제안 및 개발 기여 모두 적극적으로 받고있습니다.
+            </li>
+          </ul>
+        </div>
       </div>
 
       <ReloadBanner watchKeys={NEEDS_RELOAD_KEYS} />

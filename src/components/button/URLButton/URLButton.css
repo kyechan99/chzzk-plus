@@ -12,3 +12,10 @@
 .czp-url-btn:hover {
   background: #00df8de6;
 }
+.czp-url-btn.secondary:hover {
+  background-color: var(--Surface-Neutral-Strongest, #dfe2ea);
+} 
+.czp-url-btn.secondary:hover {
+  opacity: 0.9;
+}
+
