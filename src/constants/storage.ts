@@ -137,3 +137,9 @@ export const TAB_VIEWER_COUNT = 'czp-tab-viewer-count';
 
 // 통나무(파워) 자동 수집
 export const POWER_COLLECT_ENABLE = 'czp-power-collect';
+
+// 레이아웃 커스텀 (사이드바/채팅 너비 드래그 조절)
+export const LAYOUT_CUSTOM_ENABLE = 'czp-layout-custom'; // 기능 on/off (드래그 핸들)
+export const LAYOUT_CUSTOM_PERSIST = 'czp-layout-custom-persist'; // 항상 적용(페이지 이동/새로고침에도 저장값 반영)
+export const LAYOUT_SIDEBAR_WIDTH = 'czp-layout-sidebar-width'; // px (기본 240)
+export const LAYOUT_CHAT_WIDTH = 'czp-layout-chat-width'; // px (기본 353)

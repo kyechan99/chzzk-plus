@@ -61,6 +61,9 @@ export const USER_POPUP_CONTENTS =
 export const USER_POPUP_NAME =
   'span._wrapper_1hyev_87 > strong > span > span, [class*="live_chatting_popup_profile_name__"]';
 
+// VOD(다시보기) 페이지의 우측 채팅/정보 패널 (#aside-chatting 의 video 버전)
+export const VOD_ASIDE = '#vod-aside';
+
 // 채팅
 export const CHATTING_TOOLS = '#aside-chatting';
 export const CHATTING_ACTIONS = byClass('_donation_');

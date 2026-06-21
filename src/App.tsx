@@ -19,6 +19,10 @@ import {
   BLIND_REMOVER,
   BLOCKED_STREAMER,
   BUFFER_DISPLAY_ENABLE,
+  LAYOUT_CHAT_WIDTH,
+  LAYOUT_CUSTOM_ENABLE,
+  LAYOUT_CUSTOM_PERSIST,
+  LAYOUT_SIDEBAR_WIDTH,
   LIVE_NEW_TAB,
   LIVE_NEW_TAB_BACKGROUND,
   CHAT_BADGE_REMOVER,
@@ -63,6 +67,7 @@ const NAV_ITEMS: SettingsNavItem[] = [
   { id: 'section-player', label: '플레이어' },
   { id: 'section-live', label: '생방송' },
   { id: 'section-chat', label: '채팅' },
+  { id: 'section-etc', label: '기타' },
 ];
 
 // '*' 표시되어 새로고침 후 적용되는 설정들의 storage key 목록
@@ -89,6 +94,11 @@ const NEEDS_RELOAD_KEYS: string[] = [
 
 function App() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const resetLayoutCustom = () => {
+    // 저장값 삭제 → 우리 CSS 미주입 → 사이트 기본값 그대로 복원
+    chrome.storage.local.remove([LAYOUT_SIDEBAR_WIDTH, LAYOUT_CHAT_WIDTH]);
+  };
 
   return (
     <div className="popup">
@@ -468,8 +478,38 @@ function App() {
 
         <hr />
 
+        <div className="setting-group" id="section-etc">
+          <h2 className="setting-label">기타</h2>
+          <div className="menus">
+            <Checkbox id={LAYOUT_CUSTOM_ENABLE}>
+              <div className="menu">
+                <p className="menu-title">레이아웃 커스텀</p>
+                <p className="menu-desc">사이드바/채팅 모서리를 드래그해 너비 조절</p>
+              </div>
+            </Checkbox>
+
+            <Checkbox id={LAYOUT_CUSTOM_PERSIST} className="depth-2">
+              <div className="menu">
+                <p className="menu-title">항상 적용</p>
+                <p className="menu-desc">페이지를 이동/새로고침해도 저장된 너비 유지</p>
+              </div>
+            </Checkbox>
+
+            <div className="form-group depth-2 depth-last">
+              <div className="menu">
+                <p className="menu-title">커스텀한 레이아웃 값 초기화</p>
+              </div>
+              <button type="button" className="czp-range-reset" onClick={resetLayoutCustom}>
+                레이아웃 초기화
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+
         <URLButton href="https://github.com/kyechan99/chzzk-plus/issues">버그 및 기능 제보</URLButton>
-        <p className="version">v2.0.1</p>
+        <p className="version">v2.0.2</p>
       </div>
 
       <ReloadBanner watchKeys={NEEDS_RELOAD_KEYS} />
