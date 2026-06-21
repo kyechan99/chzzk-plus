@@ -47,11 +47,11 @@ export default function FastButton() {
         if (!isTypingTarget(target) && !event.ctrlKey) {
           // ]: 빨리 감기 / 배속 토글
           if (event.key === ']' || event.key === '}') {
-            toggleFast();
+            faster();
           } else if (event.key === '[' || event.key === '{') {
             slower();
           } else if (event.key === '=' || event.key === '+') {
-            toggleFast();
+            normal();
           }
         }
       }
@@ -62,7 +62,7 @@ export default function FastButton() {
     return () => {
       document.removeEventListener('keydown', captureEvent);
     };
-  }, [currentRate, slower, normal, toggleFast]); // currentRate가 바뀔 때 이벤트 리스너가 최신 상태를 참조하도록 설정
+  }, [currentRate, slower, normal, faster]); // currentRate가 바뀔 때 이벤트 리스너가 최신 상태를 참조하도록 설정
 
   // 비디오 배속을 실제로 변경하고 상태를 업데이트하는 공통 함수
   const changePlaybackRate = (rate: number) => {
