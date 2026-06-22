@@ -31,6 +31,7 @@ import {
 import MessageStorageButton from '../components/button/MessageStorageButton/MessageStorageButton';
 import { traceOpenLive } from '../utils/trace';
 import { bufferDisplaySetting } from '../feature/bufferDisplay';
+import { chatTimestampSetting } from '../feature/chatTimestamp';
 import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
@@ -70,6 +71,8 @@ export const editLivePage = async () => {
 
   // 비디오 지연(버퍼) 시간 표시 (활성화 시 채팅 입력창 placeholder 에 표기)
   bufferDisplaySetting();
+  // 채팅 타임스탬프 (채팅 재구성 시 재관찰)
+  chatTimestampSetting();
 
   const $chatToolsList = await waitingElement(CHATTING_TOOLS);
   if (!$chatToolsList) return;

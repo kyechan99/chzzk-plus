@@ -12,6 +12,7 @@ import { initFollowNotify } from './feature/followNotify';
 import { initTabViewerCount } from './feature/tabViewerCount';
 import { initPowerCollect } from './feature/powerCollect';
 import { initLayoutCustom } from './feature/layoutCustom';
+import { initChatTimestamp } from './feature/chatTimestamp';
 
 /**
  * MAIN world(페이지 컨텍스트)에서 동작하는 inject.js 를 주입한다.
@@ -147,6 +148,7 @@ function installChildStyleObserver($layout: HTMLElement) {
   initTabViewerCount();
   initPowerCollect();
   initLayoutCustom();
+  initChatTimestamp();
 
   const $layout = await waitingElement(`#${LAYOUT_WRAP}`, 30000);
   if (!$layout) return;

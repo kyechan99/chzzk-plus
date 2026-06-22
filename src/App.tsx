@@ -33,6 +33,7 @@ import {
   CHAT_SIZE_OPTIONS,
   CHAT_STORAGE_ENABLE,
   CHAT_TEXT_COLOR,
+  CHAT_TIMESTAMP_ENABLE,
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
   COMP_ATTACK,
@@ -406,6 +407,13 @@ function App() {
             <Checkbox id={CHAT_STORAGE_ENABLE}>
               <div className="menu">
                 <p className="menu-title">채팅 저장소 *</p>
+              </div>
+            </Checkbox>
+
+            <Checkbox id={CHAT_TIMESTAMP_ENABLE}>
+              <div className="menu">
+                <p className="menu-title">채팅 타임스탬프</p>
+                <p className="menu-desc">채팅 옆에 도착 시각 표시</p>
               </div>
             </Checkbox>
 
