@@ -1,10 +1,25 @@
-import { PREVIEW_ENABLE, GUARD_ENALBE, CHAT_STORAGE_ENABLE, FAVORITE_ENABLE } from './constants/storage';
+import {
+  PREVIEW_ENABLE,
+  GUARD_ENALBE,
+  CHAT_STORAGE_ENABLE,
+  FAVORITE_ENABLE,
+  LAYOUT_CUSTOM_ENABLE,
+  BUFFER_DISPLAY_ENABLE,
+  AUDIO_COMPRESSOR,
+  AUDIO_COMPRESSOR_AUTO,
+  FAST_BUTTON,
+} from './constants/storage';
 
 const defaultValues: Record<string, unknown> = {
   [PREVIEW_ENABLE]: true,
   [GUARD_ENALBE]: true,
   [CHAT_STORAGE_ENABLE]: true,
   [FAVORITE_ENABLE]: true,
+  [LAYOUT_CUSTOM_ENABLE]: true,
+  [BUFFER_DISPLAY_ENABLE]: true,
+  [AUDIO_COMPRESSOR]: true,
+  [AUDIO_COMPRESSOR_AUTO]: true,
+  [FAST_BUTTON]: true,
 };
 
 chrome.runtime.onMessage.addListener(message => {

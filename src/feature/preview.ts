@@ -59,7 +59,7 @@ export async function previewSetting(): Promise<void> {
   if (!document.getElementById('chzzk-plus-preview')) {
     const $preview = document.createElement('div');
     $preview.id = 'chzzk-plus-preview';
-    $sidebar.appendChild($preview);
+    document.body.appendChild($preview);
 
     chrome.storage.local.get(PREVIEW_ENABLE, res => {
       if (res[PREVIEW_ENABLE]) createReactElement($preview, Preview);

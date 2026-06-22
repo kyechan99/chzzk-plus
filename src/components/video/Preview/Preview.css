@@ -5,7 +5,65 @@
   border-radius: 8px;
   overflow: hidden;
   background: #18181b;
-  pointer-events: none;
+  /* 볼륨 조절 등 상호작용을 위해 포인터 이벤트 허용 */
+  pointer-events: auto;
+}
+
+.czp-preview-header {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: move;
+  user-select: none;
+}
+
+.czp-preview-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0 8px;
+  color: #dfe2ea;
+  font-size: 12px;
+  line-height: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.czp-preview-move {
+  display: inline-flex;
+  align-items: center;
+  color: #9ea0a6;
+  flex-shrink: 0;
+}
+.czp-preview-move svg {
+  width: 16px;
+  height: 16px;
+}
+
+.czp-preview-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  color: #c5c8ce;
+  opacity: 0.75;
+  cursor: pointer;
+}
+.czp-preview-pin svg {
+  width: 15px;
+  height: 15px;
+}
+.czp-preview-pin:hover {
+  opacity: 1;
+}
+.czp-preview-pin[data-pinned='true'] {
+  color: #00ffa3;
+  opacity: 1;
 }
 
 .czp-preview-video {
@@ -13,4 +71,58 @@
   height: 270px;
   display: block;
   background: #000;
+}
+
+.czp-preview-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  /* 평소엔 숨기고 호버 시 노출 */
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.czp-preview:hover .czp-preview-controls {
+  opacity: 1;
+}
+
+.czp-preview-mute {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.czp-preview-mute svg {
+  width: 18px;
+  height: 18px;
+}
+
+.czp-preview-volume {
+  flex: 1;
+  accent-color: #00ffa3;
+  cursor: pointer;
+  height: 4px;
+}
+
+.czp-preview-volume-label {
+  flex-shrink: 0;
+  min-width: 26px;
+  text-align: right;
+  color: #fff;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }
