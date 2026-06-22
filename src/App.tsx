@@ -119,7 +119,7 @@ function App() {
           </URLButton>
         </div>
 
-        <p className="version">v2.0.2</p>
+        <p className="version">v2.0.3</p>
 
         <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
 

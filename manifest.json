@@ -1,7 +1,7 @@
 {
   "name": "치즈 플러스 (Cheese Plus)",
   "description": "치지직 올인원 확장 기능 도우미",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "manifest_version": 3,
   "icons": {
     "16": "icon16.png",
