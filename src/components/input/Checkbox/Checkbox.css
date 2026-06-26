@@ -31,3 +31,11 @@
   left: calc(100% - 0.125rem);
   transform: translateX(-100%);
 }
+
+/* 비활성화 상태 */
+.form-group.is-disabled {
+  opacity: 0.45;
+}
+.form-group.is-disabled .form-switch-label {
+  cursor: not-allowed;
+}

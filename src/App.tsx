@@ -217,9 +217,10 @@ function App() {
               </div>
             </Checkbox>
 
-            <Checkbox id={AUTO_WIDE_MODE}>
+            <Checkbox id={AUTO_WIDE_MODE} disabled>
               <div className="menu">
                 <p className="menu-title">자동 넓은 화면 *</p>
+                <p className="menu-desc">(현재 비활성화된 기능입니다.)</p>
               </div>
             </Checkbox>
 

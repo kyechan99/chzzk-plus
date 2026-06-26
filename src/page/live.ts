@@ -12,7 +12,6 @@ import {
   LIVE_CONTROL_MENU,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
-  VIDEO_VIEW_BTN,
   CHATTING_ACTIONS,
   CHATTING_DONATION_POPUP,
   SECTION_TOOLBAR,
@@ -179,12 +178,13 @@ export const editLivePage = async () => {
       //   createReactElement($RecordButton, RecordButton);
       // }
       // Feat: 자동 넓은 화면 활성화 =========================================================
-      if (res[AUTO_WIDE_MODE]) {
-        const wideScreenButton = document.querySelector(VIDEO_VIEW_BTN);
-        if (wideScreenButton) {
-          (wideScreenButton as HTMLButtonElement).click();
-        }
-      }
+      // 임시 비활성화 (설정에서도 disabled 처리)
+      // if (res[AUTO_WIDE_MODE]) {
+      //   const wideScreenButton = document.querySelector(VIDEO_VIEW_BTN);
+      //   if (wideScreenButton) {
+      //     (wideScreenButton as HTMLButtonElement).click();
+      //   }
+      // }
       if (res[GUARD_ENALBE]) {
         const $sectionToolbar = document.querySelector(SECTION_TOOLBAR);
         if ($sectionToolbar && !document.getElementById('chzzk-plus-screen-guard')) {
