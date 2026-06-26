@@ -1,13 +1,6 @@
 /**
  * 팔로잉 채널 변경 알림.
  *
- * 좌측 팔로잉 사이드바에 보이는 채널 = 현재 라이브 채널로 보고, 채널 집합의 변화를 추적한다.
- *  - 새로 등장한 채널 → "OOO 방송 시작"
- *  - 사라진 채널     → "OOO 방송 종료"
- * 화면 우측 상단에 토스트로 2초간, 최대 3개까지 표시한다.
- *
- * 즐겨찾기 기능이 켜져 있고 해당 채널이 즐겨찾기 그룹에 속하면 "[그룹명] OOO 방송 시작" 으로.
- *
  * 자동 새로고침 등으로 목록이 통째로 재구성될 때의 깜빡임을 흡수하기 위해 디바운스 후 비교한다.
  * 첫 스냅샷은 기준선으로만 쓰고 토스트를 띄우지 않는다(진입 시 폭주 방지).
  */
@@ -27,10 +20,10 @@ interface ToastOptions {
 }
 
 const CHANNEL_ID_REGEX = /[0-9a-f]{32}/;
-const TOAST_DURATION_LIVE = 4000;
-const TOAST_DURATION_DISLIVE = 2000;
-const TOAST_DURATION = 3000;
-const MAX_TOASTS = 3;
+const TOAST_DURATION_LIVE = 5000;
+const TOAST_DURATION_DISLIVE = 2500;
+const TOAST_DURATION_DEFAULT = 3000;
+const MAX_TOASTS = 4;
 const DEBOUNCE = 1500;
 
 let initialized = false;
@@ -195,7 +188,7 @@ const showToast = (options: ToastOptions): void => {
   window.setTimeout(() => {
     toast.classList.add('czp-toast-out');
     window.setTimeout(() => toast.remove(), 300);
-  }, options.duration || TOAST_DURATION);
+  }, options.duration || TOAST_DURATION_DEFAULT);
 };
 
 const notify = (channelId: string, channel: ChannelSnapshot, kind: 'start' | 'end'): void => {

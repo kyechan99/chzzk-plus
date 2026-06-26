@@ -174,7 +174,7 @@ function App() {
             <div className="menus">
               <div className="menu">
                 <p className="menu-title">팔로잉 채널 변경 알림</p>
-                <p className="menu-desc">우측 상단에 토스트로 표시 (최대 3개)</p>
+                <p className="menu-desc">우측 상단에 토스트로 표시 (최대 4개)</p>
               </div>
             </div>
           </div>
@@ -182,11 +182,13 @@ function App() {
           <Checkbox id={FOLLOW_NOTIFY_START} className="depth-2">
             <div className="menu">
               <p className="menu-title">방송 시작 알림</p>
+              <p className="menu-desc">(팔로잉 채널이 열려있어야 동작)</p>
             </div>
           </Checkbox>
           <Checkbox id={FOLLOW_NOTIFY_END} className="depth-2 depth-last">
             <div className="menu">
               <p className="menu-title">방송 종료 알림</p>
+              <p className="menu-desc">(팔로잉 채널이 열려있어야 동작)</p>
             </div>
           </Checkbox>
 
@@ -372,8 +374,8 @@ function App() {
 
             <Checkbox id={ONLIVE_REFRESH}>
               <div className="menu">
-                <p className="menu-title">방송 새로고침</p>
-                <p className="menu-desc">방송 시작시 자동 새로고침</p>
+                <p className="menu-title">방송 시작시 자동 새로고침</p>
+                <p className="menu-desc">스트리머의 /live/*** 주소 상태에서 동작</p>
               </div>
             </Checkbox>
 
