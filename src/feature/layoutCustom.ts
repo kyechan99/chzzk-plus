@@ -55,9 +55,13 @@ const buildCss = (): string => {
     }`;
   }
   if (chatWidth != null) {
+    // aspect-ratio <= 1/1 (세로/정사각)에서는 chzzk 가 채팅을 세로 배치(column)로 바꾸므로,
+    // 그때는 고정 너비를 주지 않는다. 가로형(aspect-ratio > 1/1)에서만 적용.
     css += `
-      ${CHAT_CONTAINER}:not([class*="_is_popup_chat_"]) { width: ${chatWidth}px !important; flex: none !important; }
-      ${VOD_ASIDE} { width: ${chatWidth}px !important; flex: none !important; }`;
+      @media (aspect-ratio > 1/1) {
+        ${CHAT_CONTAINER}:not([class*="_is_popup_chat_"]) { width: ${chatWidth}px !important; flex: none !important; }
+        ${VOD_ASIDE} { width: ${chatWidth}px !important; flex: none !important; }
+      }`;
   }
   return css;
 };
