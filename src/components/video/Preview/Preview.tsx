@@ -3,7 +3,7 @@ import Hls from 'hls.js';
 
 import { logWarning } from '../../../utils/log';
 import { getChannelIDByUrl } from '../../../utils/channel';
-import { getHlsUrl } from '../../../utils/stream';
+import { getLiveDetail } from '../../../utils/stream';
 import { SIDEBAR } from '../../../constants/class';
 import { PREVIEW_VOLUME } from '../../../constants/storage';
 
@@ -67,6 +67,7 @@ export default function Preview() {
     cancelHide();
     hideTimer.current = window.setTimeout(() => {
       setVisible(false);
+      setTitle('');
       setChannelId('');
     }, 300);
   }, [cancelHide]);
@@ -116,7 +117,15 @@ export default function Preview() {
     };
 
     const startStream = async () => {
-      const hlsUrl = await getHlsUrl(channelId);
+      video.poster = ''; // 이전 채널 썸네일 잔상 제거
+
+      const detail = await getLiveDetail(channelId);
+      // API 로 가져온 실제 방송 제목으로 헤더 갱신 (호버 툴팁은 즉시 표시되는 임시값)
+      if (detail.title) setTitle(detail.title);
+      // 영상 첫 프레임이 그려지기 전까지 썸네일을 poster 로 보여준다 (재생되면 자동으로 덮임)
+      if (detail.thumbnail) video.poster = detail.thumbnail;
+
+      const hlsUrl = detail.hlsUrl;
       if (!hlsUrl || !videoRef.current) return;
 
       if (hlsRef.current) {
@@ -179,13 +188,13 @@ export default function Preview() {
           return;
         }
 
-        const itemEl = (event.target as HTMLElement).closest('li');
-        const tip =
-          itemEl?.querySelector('[class*="_tooltip_"] [class*="_text_"]')?.textContent?.trim() ||
-          itemEl?.querySelector('[class*="_tooltip_"]')?.textContent?.trim() ||
-          itemEl?.querySelector('[class*="_name_"] [class*="_text_"]')?.textContent?.trim() ||
-          '';
-        setTitle(tip);
+        // const itemEl = (event.target as HTMLElement).closest('li');
+        // const tip =
+        //   itemEl?.querySelector('[class*="_tooltip_"] [class*="_text_"]')?.textContent?.trim() ||
+        //   itemEl?.querySelector('[class*="_tooltip_"]')?.textContent?.trim() ||
+        //   itemEl?.querySelector('[class*="_name_"] [class*="_text_"]')?.textContent?.trim() ||
+        //   '';
+        // setTitle(tip);
 
         // 핀/이동 중이어도 다른 채널 호버 시에는 원래 위치(링크 옆)로 되돌리고 채널을 전환한다.
         cancelHide();

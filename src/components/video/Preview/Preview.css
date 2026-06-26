@@ -10,11 +10,11 @@
 }
 
 .czp-preview-header {
-  height: 1.5rem;
+  height: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 6px;
+  padding: 0 8px;
   background: rgba(0, 0, 0, 0.85);
   cursor: move;
   user-select: none;
@@ -23,10 +23,10 @@
 .czp-preview-title {
   flex: 1;
   min-width: 0;
-  margin: 0 8px;
+  margin: 0 10px;
   color: #dfe2ea;
-  font-size: 12px;
-  line-height: 1.5rem;
+  font-size: 14px;
+  line-height: 1.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,8 +39,8 @@
   flex-shrink: 0;
 }
 .czp-preview-move svg {
-  width: 16px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
 }
 
 .czp-preview-pin {
@@ -55,8 +55,8 @@
   cursor: pointer;
 }
 .czp-preview-pin svg {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
 }
 .czp-preview-pin:hover {
   opacity: 1;
