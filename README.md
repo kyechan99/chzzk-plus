@@ -10,11 +10,15 @@
     <img src="https://img.shields.io/github/package-json/v/kyechan99/chzzk-plus?style=for-the-badge"/>
     <img src="https://img.shields.io/github/license/kyechan99/chzzk-plus?style=for-the-badge"/>
     <a href="https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia">
- 	    <img src="https://img.shields.io/badge/DOWNLOAD-ME-%2320c997?style=for-the-badge"/>
+ 	    <img src="https://img.shields.io/badge/DOWNLOAD-CHROME-%23f7bb39?style=for-the-badge"/>
+    </a>
+    <a href="https://store.whale.naver.com/detail/ambghcabmakjdnbffolllmfkbenhgalp">
+ 	    <img src="https://img.shields.io/badge/DOWNLOAD-WHALE-%2320c997?style=for-the-badge"/>
     </a>
 </p>
 
-[크롬 확장프로그램 설치](https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia)
+- [크롬 확장프로그램 설치](https://chromewebstore.google.com/detail/chzzk-plus/miampiopgfpnimmggagljgbpmjmjdjia)
+- [웨일 확장프로그램 설치](https://store.whale.naver.com/detail/ambghcabmakjdnbffolllmfkbenhgalp)
 
 ## Feature
 
