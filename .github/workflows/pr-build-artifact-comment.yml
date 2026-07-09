@@ -1,0 +1,73 @@
+name: PR Build Artifact Comment
+
+on:
+  workflow_run:
+    workflows:
+      - PR Build Artifact
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  comment:
+    name: Comment artifact link
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.pull_requests[0].number
+
+    steps:
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_NAME: ${{ github.event.workflow_run.name }}
+          RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          set -euo pipefail
+
+          marker='<!-- pr-build-artifact-comment -->'
+          artifact_name="dist-pr-${PR_NUMBER}"
+          artifact_id="$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}/artifacts" \
+            --paginate \
+            --jq ".artifacts[] | select(.name == \"${artifact_name}\") | .id" \
+            | head -n 1)"
+
+          if [ -z "${artifact_id}" ]; then
+            echo "Could not find artifact: ${artifact_name}"
+            exit 1
+          fi
+
+          artifact_url="https://github.com/${REPOSITORY}/actions/runs/${RUN_ID}/artifacts/${artifact_id}"
+          body="$(printf '%s\n%s\n\n%s\n%s\n\n%s' \
+            "${marker}" \
+            "PR 빌드가 완료되었습니다." \
+            "- 다운로드: [${artifact_name}.zip](${artifact_url})" \
+            "- 빌드 로그: [${RUN_NAME} #${RUN_NUMBER}](${RUN_URL})" \
+            "아티팩트는 7일 후 만료됩니다.")"
+
+          existing_comment_id="$(gh api "repos/${REPOSITORY}/issues/${PR_NUMBER}/comments" \
+            --paginate \
+            --jq ".[] | select(.user.type == \"Bot\" and (.body | contains(\"${marker}\"))) | .id" \
+            | head -n 1)"
+
+          if [ -n "${existing_comment_id}" ]; then
+            gh api \
+              --method PATCH \
+              "repos/${REPOSITORY}/issues/comments/${existing_comment_id}" \
+              -f body="${body}"
+          else
+            gh api \
+              --method POST \
+              "repos/${REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              -f body="${body}"
+          fi

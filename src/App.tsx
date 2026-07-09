@@ -1,5 +1,6 @@
 import './App.css';
 import { useRef } from 'react';
+import packageJson from '../package.json';
 
 import { Select } from './components/input/Select/Select';
 import Checkbox from './components/input/Checkbox/Checkbox';
@@ -93,6 +94,8 @@ const NEEDS_RELOAD_KEYS: string[] = [
   MESSAGE_PIN_ENABLE,
 ];
 
+const APP_VERSION = packageJson.version;
+
 function App() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -119,7 +122,7 @@ function App() {
           </URLButton>
         </div>
 
-        <p className="version">v2.0.4</p>
+        <p className="version">v{APP_VERSION}</p>
 
         <p className="description">* 표시된 설정은 새로고침 후 적용됩니다</p>
 

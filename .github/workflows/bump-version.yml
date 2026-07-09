@@ -1,0 +1,118 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump type
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      version:
+        description: Exact version to set. If provided, this overrides bump type.
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    name: Bump project version
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Bump version files
+        id: bump
+        env:
+          BUMP_TYPE: ${{ inputs.bump }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const packagePath = 'package.json';
+          const manifestPath = 'manifest.json';
+          const bumpType = process.env.BUMP_TYPE;
+          const requestedVersion = (process.env.VERSION || '').trim();
+
+          const readJson = (path) => JSON.parse(fs.readFileSync(path, 'utf8'));
+          const writeJson = (path, data) => {
+            fs.writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`);
+          };
+
+          const packageJson = readJson(packagePath);
+          const manifestJson = readJson(manifestPath);
+
+          const semverPattern = /^(\d+)\.(\d+)\.(\d+)$/;
+          const currentMatch = semverPattern.exec(packageJson.version);
+
+          if (!currentMatch) {
+            throw new Error(`Unsupported package.json version: ${packageJson.version}`);
+          }
+
+          const bumpVersion = (version, type) => {
+            const match = semverPattern.exec(version);
+            if (!match) {
+              throw new Error(`Unsupported version: ${version}`);
+            }
+
+            const parts = match.slice(1).map(Number);
+
+            if (type === 'major') {
+              return `${parts[0] + 1}.0.0`;
+            }
+
+            if (type === 'minor') {
+              return `${parts[0]}.${parts[1] + 1}.0`;
+            }
+
+            if (type === 'patch') {
+              return `${parts[0]}.${parts[1]}.${parts[2] + 1}`;
+            }
+
+            throw new Error(`Unsupported bump type: ${type}`);
+          };
+
+          const nextVersion = requestedVersion || bumpVersion(packageJson.version, bumpType);
+
+          if (!semverPattern.test(nextVersion)) {
+            throw new Error(`Version must use x.y.z format: ${nextVersion}`);
+          }
+
+          packageJson.version = nextVersion;
+          manifestJson.version = nextVersion;
+
+          writeJson(packagePath, packageJson);
+          writeJson(manifestPath, manifestJson);
+
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${nextVersion}\n`);
+          NODE
+
+      - name: Commit version bump
+        run: |
+          if git diff --quiet -- package.json manifest.json; then
+            echo "No version changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json manifest.json
+          git commit -m "chore(release): v${{ steps.bump.outputs.version }}"
+          git push origin "HEAD:${{ github.ref_name }}"
