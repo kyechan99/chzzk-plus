@@ -9,7 +9,9 @@ on:
 
 permissions:
   actions: read
+  contents: read
   issues: write
+  pull-requests: write
 
 jobs:
   comment:
@@ -22,67 +24,50 @@ jobs:
 
     steps:
       - name: Comment on PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const marker = '<!-- pr-build-artifact-comment -->';
-            const run = context.payload.workflow_run;
-            const pr = run.pull_requests?.[0];
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_NAME: ${{ github.event.workflow_run.name }}
+          RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          set -euo pipefail
 
-            if (!pr) {
-              core.info('No pull request was associated with this workflow run.');
-              return;
-            }
+          marker='<!-- pr-build-artifact-comment -->'
+          artifact_name="dist-pr-${PR_NUMBER}"
+          artifact_id="$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}/artifacts" \
+            --paginate \
+            --jq ".artifacts[] | select(.name == \"${artifact_name}\") | .id" \
+            | head -n 1)"
 
-            const { owner, repo } = context.repo;
-            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
-              owner,
-              repo,
-              run_id: run.id,
-              per_page: 100,
-            });
+          if [ -z "${artifact_id}" ]; then
+            echo "Could not find artifact: ${artifact_name}"
+            exit 1
+          fi
 
-            const artifact = artifacts.find((item) => item.name === `dist-pr-${pr.number}`);
+          artifact_url="https://github.com/${REPOSITORY}/actions/runs/${RUN_ID}/artifacts/${artifact_id}"
+          body="$(printf '%s\n%s\n\n%s\n%s\n\n%s' \
+            "${marker}" \
+            "PR 빌드가 완료되었습니다." \
+            "- 다운로드: [${artifact_name}.zip](${artifact_url})" \
+            "- 빌드 로그: [${RUN_NAME} #${RUN_NUMBER}](${RUN_URL})" \
+            "아티팩트는 7일 후 만료됩니다.")"
 
-            if (!artifact) {
-              core.setFailed(`Could not find dist artifact for PR #${pr.number}.`);
-              return;
-            }
+          existing_comment_id="$(gh api "repos/${REPOSITORY}/issues/${PR_NUMBER}/comments" \
+            --paginate \
+            --jq ".[] | select(.user.type == \"Bot\" and (.body | contains(\"${marker}\"))) | .id" \
+            | head -n 1)"
 
-            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${run.id}/artifacts/${artifact.id}`;
-            const body = [
-              marker,
-              'PR 빌드가 완료되었습니다.',
-              '',
-              `- 다운로드: [${artifact.name}.zip](${artifactUrl})`,
-              `- 빌드 로그: [${run.name} #${run.run_number}](${run.html_url})`,
-              '',
-              '아티팩트는 7일 후 만료됩니다.',
-            ].join('\n');
-
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner,
-              repo,
-              issue_number: pr.number,
-              per_page: 100,
-            });
-
-            const existingComment = comments.find((comment) => {
-              return comment.user?.type === 'Bot' && comment.body?.includes(marker);
-            });
-
-            if (existingComment) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existingComment.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number: pr.number,
-                body,
-              });
-            }
+          if [ -n "${existing_comment_id}" ]; then
+            gh api \
+              --method PATCH \
+              "repos/${REPOSITORY}/issues/comments/${existing_comment_id}" \
+              -f body="${body}"
+          else
+            gh api \
+              --method POST \
+              "repos/${REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              -f body="${body}"
+          fi
