@@ -1,0 +1,150 @@
+.czp-emoji-tag-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: 26rem;
+  max-height: 32rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 30px 0 var(--color-shadow-layer03-02),
+    0 0 6px 0 var(--color-shadow-layer03-01);
+  background: var(--color-bg-layer-02);
+}
+
+.czp-emoji-tag-modal-close {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--color-content-02);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.czp-emoji-tag-heading {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.czp-emoji-tag-all {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.czp-emoji-tag-chip {
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.czp-emoji-tag-chip:hover {
+  border-color: #2cbf8a;
+  color: #2cbf8a;
+}
+
+.czp-emoji-tag-desc {
+  margin: 0 0 0.5rem;
+  color: rgba(160, 160, 160, 0.9);
+  font-size: 12px;
+}
+
+.czp-emoji-tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  gap: 4px;
+  flex: 1;
+  min-height: 8rem;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.czp-emoji-tag-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.czp-emoji-tag-grid-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.czp-emoji-tag-grid-item--tagged {
+  border-color: rgba(44, 191, 138, 0.5); /* 태그가 있는 이모티콘 표시 */
+}
+
+.czp-emoji-tag-grid-item--selected {
+  border-color: #2cbf8a;
+  background: rgba(44, 191, 138, 0.15);
+}
+
+.czp-emoji-tag-grid-item img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.czp-emoji-tag-editor {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.czp-emoji-tag-editor > img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.czp-emoji-tag-editor-body {
+  flex: 1;
+}
+
+.czp-emoji-tag-editor-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.czp-emoji-tag-editor-chips:empty {
+  display: none;
+}
+
+.czp-emoji-tag-editor-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.czp-emoji-tag-editor-input:focus {
+  border-color: #2cbf8a;
+}

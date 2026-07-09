@@ -69,6 +69,12 @@ export const CHAT_STORAGE_ENABLE = 'czp-chat-storage-enable';
 
 // 채팅 이모티콘
 export const CHAT_EMOJI_SEARCH_ENABLE = 'czp-chat-emoji-search-enable';
+// 이모티콘별 사용자 태그: Record<emojiId, string[]>
+export const CHAT_EMOJI_TAGS = 'czp-chat-emoji-tags';
+// 태그 편집 모달 열림 플래그 (MESSAGE_STORAGE_MODAL 패턴)
+export const CHAT_EMOJI_TAG_MODAL = 'czp-chat-emoji-tag-modal';
+// 태그 chip 클릭 → 검색창에 적용할 태그 검색어 전달용 (일회성, 수신 후 삭제)
+export const CHAT_EMOJI_TAG_QUERY = 'czp-chat-emoji-tag-query';
 
 // 생방송 새로고침
 export const ONLIVE_REFRESH = 'czp-live-refresh';

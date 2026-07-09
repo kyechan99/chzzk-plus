@@ -1,69 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CHAT_EMOJI_AREA, CHAT_EMOJI_SEARCH_ROOT_CLASS, EMOJI_PACK_TAB_ID_PREFIX } from '../../constants/class';
+import { CHAT_EMOJI_TAG_MODAL, CHAT_EMOJI_TAG_QUERY, CHAT_EMOJI_TAGS } from '../../constants/storage';
 import { getChannelIDByUrl } from '../../utils/channel';
 import { dispatchMouseClickSequence } from '../../utils/dom';
+import { getEmojiIndex, loadEmojiTags, type EmojiIndexItem, type EmojiTags } from '../../utils/emoji';
 import './ChatEmojiSearch.css';
 
-// === emoji-packs API 응답 타입 (사용하는 필드만 선언) ===
-// API 를 사용한 fetch 는 EmojiSearch 에서만 사용되므로, 별도 api 모듈로 분리하지 않음
-type Emoji = {
-  emojiId: string;
-  imageUrl: string;
-};
-
-type EmojiPack = {
-  emojiPackId: string;
-  emojiPackName: string;
-  emojiPackLocked: boolean;
-  emojiTier2Locked?: boolean;
-  emojis: Emoji[];
-  tier2Emojis?: Emoji[] | null;
-};
-
-type EmojiPacksContent = {
-  emojiPacks: EmojiPack[];
-  cheatKeyEmojiPacks: EmojiPack[];
-  subscriptionEmojiPacks: EmojiPack[];
-};
-
-type EmojiIndexItem = {
-  emojiId: string;
-  imageUrl: string;
-  packId: string;
-  packName: string;
-};
-
 const MAX_RESULTS = 60;
-
-/**
- * emoji-packs API 로 검색 인덱스를 만든다.
- * - 3개 팩 배열(기본/치트키/구독)을 병합
- * - 잠긴 팩(미구독), tier2 잠금 이모티콘은 사용할 수 없으므로 제외
- */
-const fetchEmojiIndex = async (channelId: string): Promise<EmojiIndexItem[]> => {
-  const res = await fetch(`https://api.chzzk.naver.com/service/v1/channels/${channelId}/emoji-packs`, {
-    credentials: 'include',
-  });
-  if (!res.ok) throw new Error(`emoji-packs HTTP ${res.status}`);
-
-  const { content } = (await res.json()) as { content: EmojiPacksContent };
-  const packs = [...content.emojiPacks, ...content.cheatKeyEmojiPacks, ...content.subscriptionEmojiPacks];
-
-  return packs.flatMap(pack => {
-    if (pack.emojiPackLocked) return [];
-
-    const lockedTier2 = new Set((pack.emojiTier2Locked ? (pack.tier2Emojis ?? []) : []).map(e => e.emojiId));
-
-    return pack.emojis
-      .filter(e => !lockedTier2.has(e.emojiId))
-      .map(e => ({
-        emojiId: e.emojiId,
-        imageUrl: e.imageUrl,
-        packId: pack.emojiPackId,
-        packName: pack.emojiPackName,
-      }));
-  });
-};
 
 // 팝업(#emoji_area) 안에서 해당 이모티콘의 네이티브 버튼을 찾는다.
 // 우리 검색 UI 도 #emoji_area 안에 마운트되고 결과 img 의 alt 포맷이 동일하므로,
@@ -109,6 +52,7 @@ const insertEmoji = async ({ emojiId, packId }: EmojiIndexItem): Promise<void> =
 
 export default function ChatEmojiSearch() {
   const [index, setIndex] = useState<EmojiIndexItem[]>([]);
+  const [tags, setTags] = useState<EmojiTags>({});
   const [query, setQuery] = useState('');
   const [failed, setFailed] = useState(false);
   // 키보드(Tab/방향키)로 선택된 결과 인덱스. -1 = 선택 없음
@@ -128,20 +72,51 @@ export default function ChatEmojiSearch() {
       return;
     }
 
-    fetchEmojiIndex(channelId)
+    getEmojiIndex(channelId)
       .then(setIndex)
       .catch(() => setFailed(true));
   }, []);
 
-  // TODO: 태그 검색 - 현재는 치지직 API 에서 제공하는 emojiId, packName 으로만(휴먼리더블x) 검색 가능.
+  // 사용자 태그 로드 + 변경(태그 모달에서 편집) 실시간 반영,
+  // 태그 chip 클릭(태그 모달) → 검색어로 적용 (일회성 키, 수신 후 삭제)
+  useEffect(() => {
+    loadEmojiTags().then(setTags); // 최초 실행이면 기본 태그 시드
+
+    chrome.storage.local.get([CHAT_EMOJI_TAG_QUERY], res => {
+      if (res[CHAT_EMOJI_TAG_QUERY]) {
+        setQuery(res[CHAT_EMOJI_TAG_QUERY]);
+        chrome.storage.local.remove(CHAT_EMOJI_TAG_QUERY);
+        inputRef.current?.focus();
+      }
+    });
+
+    const onStorageChanged = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (CHAT_EMOJI_TAGS in changes) {
+        setTags(changes[CHAT_EMOJI_TAGS].newValue ?? {});
+      }
+      if (CHAT_EMOJI_TAG_QUERY in changes && changes[CHAT_EMOJI_TAG_QUERY].newValue) {
+        setQuery(changes[CHAT_EMOJI_TAG_QUERY].newValue);
+        chrome.storage.local.remove(CHAT_EMOJI_TAG_QUERY);
+        inputRef.current?.focus();
+      }
+    };
+    chrome.storage.onChanged.addListener(onStorageChanged);
+    return () => chrome.storage.onChanged.removeListener(onStorageChanged);
+  }, []);
+
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
 
     return index
-      .filter(e => e.emojiId.toLowerCase().includes(q) || e.packName.toLowerCase().includes(q))
+      .filter(
+        e =>
+          e.emojiId.toLowerCase().includes(q) ||
+          e.packName.toLowerCase().includes(q) ||
+          (tags[e.emojiId]?.some(tag => tag.toLowerCase().includes(q)) ?? false),
+      )
       .slice(0, MAX_RESULTS);
-  }, [query, index]);
+  }, [query, index, tags]);
 
   // 검색어가 바뀌면 선택 초기화
   useEffect(() => {
@@ -204,19 +179,48 @@ export default function ChatEmojiSearch() {
     }
   };
 
+  const openTagModal = (): void => {
+    chrome.storage.local.set({ [CHAT_EMOJI_TAG_MODAL]: true });
+  };
+
   return (
     <div>
       <strong className="czp-emoji-search-header">이모티콘 검색</strong>
-      <input
-        ref={inputRef}
-        className="czp-emoji-search-input"
-        type="text"
-        placeholder={failed ? '이모티콘 목록을 불러오지 못했어요' : '이모티콘 검색'}
-        disabled={failed}
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        onKeyDown={onKeyDown}
-      />
+      <div className="czp-emoji-search-input-wrap">
+        <input
+          ref={inputRef}
+          className="czp-emoji-search-input"
+          type="text"
+          placeholder={failed ? '이모티콘 목록을 불러오지 못했어요' : '이모티콘 검색'}
+          disabled={failed}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          onKeyDown={onKeyDown}
+        />
+        <button
+          type="button"
+          className="czp-emoji-search-tag-btn"
+          title="이모티콘 태그"
+          onClick={openTagModal}
+          // 검색창 포커스를 뺏지 않게
+          onMouseDown={e => e.preventDefault()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+            <circle cx="7.5" cy="7.5" r="0.5" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
       {query.trim() !== '' && (
         <ul ref={gridRef} className="czp-emoji-search-results">
           {results.length === 0 ? (
@@ -227,7 +231,7 @@ export default function ChatEmojiSearch() {
                 <button
                   type="button"
                   className={`czp-emoji-search-item${i === selected ? ' czp-emoji-search-item--selected' : ''}`}
-                  title={`${e.emojiId} · ${e.packName}`}
+                  title={`${e.emojiId} · ${e.packName}${tags[e.emojiId]?.length ? ` · ${tags[e.emojiId].join(', ')}` : ''}`}
                   onClick={() => insertEmoji(e)}
                   // 버튼이 포커스를 뺏지 않게 → 검색창 포커스 유지, 클릭 후 Enter 재입력 방지
                   onMouseDown={e => e.preventDefault()}
