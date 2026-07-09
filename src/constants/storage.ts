@@ -67,6 +67,9 @@ export const FAVORITE_GROUPS = 'czp-favorite-groups';
 export const CHAT_STORAGE = 'czp-chat-storage';
 export const CHAT_STORAGE_ENABLE = 'czp-chat-storage-enable';
 
+// 채팅 이모티콘
+export const CHAT_EMOJI_SEARCH_ENABLE = 'czp-chat-emoji-search-enable';
+
 // 생방송 새로고침
 export const ONLIVE_REFRESH = 'czp-live-refresh';
 
