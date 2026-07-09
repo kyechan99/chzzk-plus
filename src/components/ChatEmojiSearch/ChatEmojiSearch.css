@@ -72,7 +72,8 @@
   cursor: pointer; */
 }
 
-.czp-emoji-search-item:hover {
+.czp-emoji-search-item:hover,
+.czp-emoji-search-item--selected {
   background: rgba(255, 255, 255, 0.12);
 }
 

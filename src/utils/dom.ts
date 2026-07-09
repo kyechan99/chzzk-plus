@@ -60,3 +60,15 @@ export const isTypingTarget = (target: EventTarget | null): boolean => {
   const tag = target.tagName;
   return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
 };
+
+/**
+ * 실제 마우스 조작과 동일한 mousedown → mouseup(→ click) 시퀀스를 디스패치한다.
+ * 치지직 UI 중 일부(이모티콘 팩 탭, 채팅 입력창 포커스 등)는 click 이 아니라
+ * mousedown/mouseup 에 핸들러가 걸려 있어 el.click() 만으로는 동작하지 않는다.
+ */
+export const dispatchMouseClickSequence = ($el: HTMLElement, withClick: boolean = false): void => {
+  const base = { bubbles: true, cancelable: true, view: window, button: 0 };
+  $el.dispatchEvent(new MouseEvent('mousedown', { ...base, buttons: 1 }));
+  $el.dispatchEvent(new MouseEvent('mouseup', { ...base, buttons: 0 }));
+  if (withClick) $el.dispatchEvent(new MouseEvent('click', { ...base, buttons: 0 }));
+};

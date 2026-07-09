@@ -85,6 +85,9 @@ export const CHATTING_AREA = byClass('live_chatting_area__');
 export const CHATTING_BADGE = '._wrapper_o04z9_23';
 // 채팅 입력창 (버퍼/지연 시간을 placeholder 로 표시). css-module + webpack 폴백 union.
 export const CHAT_INPUT = '._input_1xxwu_59._default_1xxwu_77, [class*="live_chatting_input_input__"]';
+// 채팅 입력창의 contenteditable 요소. CHAT_INPUT 은 _default_ 클래스를 요구해 내용이 있으면 매칭 실패하므로,
+// 포커스 용도로는 해시에 의존하지 않는 이 셀렉터를 사용한다.
+export const CHAT_INPUT_EDITABLE = '#aside-chatting pre[contenteditable="true"]';
 export const CHAT_USER_AREA = '._area_1qgfi_49';
 
 // 동영상 Card UI

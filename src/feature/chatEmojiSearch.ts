@@ -12,18 +12,76 @@
 import { isLivePage } from '../utils/page';
 import {
   CHAT_CONTAINER,
+  CHAT_INPUT_EDITABLE,
   CHAT_USER_AREA,
   CHAT_EMOJI_AREA,
   ASIDE_POPUP_CONTENTS,
   CHAT_EMOJI_SEARCH_ROOT_CLASS,
 } from '../constants/class';
 import { CHAT_EMOJI_SEARCH_ENABLE } from '../constants/storage';
-import { createReactElement } from '../utils/dom';
+import { createReactElement, dispatchMouseClickSequence } from '../utils/dom';
 import ChatEmojiSearch from '../components/ChatEmojiSearch/ChatEmojiSearch';
 
 const MARKER_CLASS = CHAT_EMOJI_SEARCH_ROOT_CLASS;
 
 let enabled = false;
+
+// 이모티콘 팝업을 닫는다 — 팝업을 연 토글 버튼(aria-expanded)을 다시 눌러 치지직 자체 닫기 경로를 재사용.
+// 토글 버튼은 해시 클래스뿐이라, 네이버 a11y 클래스(.blind)의 텍스트 "이모티콘" 으로 특정한다.
+const closeEmojiPopup = (): void => {
+  const $toggles = document.querySelectorAll<HTMLButtonElement>(`${CHAT_CONTAINER} button[aria-expanded="true"]`);
+  const $emojiToggle = [...$toggles].find($btn => $btn.querySelector('.blind')?.textContent === '이모티콘');
+
+  $emojiToggle?.click();
+};
+
+// contenteditable 요소의 캐럿을 내용 맨 끝으로 이동시킨다. (포커스 직후 기본 위치는 맨 앞)
+const moveCaretToEnd = ($el: HTMLElement): void => {
+  const range = document.createRange();
+  range.selectNodeContents($el);
+  range.collapse(false); // false = 끝으로 접기
+
+  const selection = window.getSelection();
+  selection?.removeAllRanges();
+  selection?.addRange(range);
+};
+
+// 채팅 입력창(contenteditable pre)에 포커스를 준다.
+// CHAT_INPUT(_default_ 클래스 요구)은 입력창에 내용이 있으면 매칭되지 않으므로 CHAT_INPUT_EDITABLE 을 사용.
+//
+// 팝업이 닫힐 때 치지직이 입력 영역을 리렌더하면서 포커스했던 노드가 교체될 수 있으므로,
+// 리렌더가 가라앉을 때까지 재조회 + 재시도한다 (50ms × 10회).
+const focusChatInput = async (): Promise<void> => {
+  for (let i = 0; i < 10; i++) {
+    const $input = document.querySelector<HTMLElement>(CHAT_INPUT_EDITABLE);
+
+    if ($input) {
+      $input.focus();
+      if (document.activeElement === $input) {
+        moveCaretToEnd($input);
+        return;
+      }
+
+      // focus() 가 무시되는 상태면 실제 클릭과 동일한 시퀀스로 치지직 포커스 로직을 태운다
+      dispatchMouseClickSequence($input, true);
+      if (document.activeElement === $input) {
+        moveCaretToEnd($input);
+        return;
+      }
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+};
+
+// 팝업이 열려 있을 때 Esc 로 닫기 (포커스 위치 무관).
+// capture 단계라 다른 핸들러의 stopPropagation 에 막히지 않는다.
+// 같은 함수 참조로 add/remove 하므로 중복 등록되지 않는다.
+const onDocumentKeyDown = (e: KeyboardEvent): void => {
+  if (e.key !== 'Escape') return;
+  if (!document.querySelector(CHAT_EMOJI_AREA)) return; // 팝업 닫혀 있으면 무시
+  closeEmojiPopup();
+};
 
 // === 채팅 이모티콘 팝업 컨테이너 ===
 // CHAT_EMOJI_AREA 와 ASIDE_POPUP_CONTENTS 가 존재하면, 이모티콘 컨테이너가 존재하는 것으로 간주한다.
@@ -52,6 +110,7 @@ const findChatEmojiPopUpContainer = (): ChatEmojiPopUpContainer | null => {
 // === 옵저버 ===
 let rootObserver: MutationObserver | null = null;
 let $observedTarget: Element | null = null;
+let popupWasOpen = false;
 
 // 영속 앵커에 상주 — 팝업의 등장 자체를 감지
 const startObserver = () => {
@@ -80,14 +139,25 @@ const startObserver = () => {
         createReactElement($root, ChatEmojiSearch);
       }
     }
+
+    // 팝업 열림 → 닫힘 전이 감지 시 채팅 입력창으로 포커스 복귀
+    // (열림 시 검색창 포커스는 컴포넌트 마운트 effect 가 담당)
+    const isOpen = !!document.querySelector(CHAT_EMOJI_AREA);
+    if (popupWasOpen && !isOpen) {
+      focusChatInput();
+    }
+    popupWasOpen = isOpen;
   });
   rootObserver.observe($chatUserArea, { childList: true, subtree: true });
+  document.addEventListener('keydown', onDocumentKeyDown, true);
 };
 
 const stopObserver = (): void => {
   rootObserver?.disconnect();
   rootObserver = null;
   $observedTarget = null;
+  popupWasOpen = false;
+  document.removeEventListener('keydown', onDocumentKeyDown, true);
   document.querySelectorAll(`.${MARKER_CLASS}`).forEach(el => el.remove());
 };
 // === 옵저버 END ===
