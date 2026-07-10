@@ -62,7 +62,8 @@ export const isTypingTarget = (target: EventTarget | null): boolean => {
 };
 
 /**
- * 실제 마우스 조작과 동일한 mousedown → mouseup(→ click) 시퀀스를 디스패치한다.
+ * 실제 마우스 조작과 동일한 mousedown → mouseup 시퀀스를 디스패치한다.
+ * (withClick=true 를 넘기면 click 이벤트까지 함께 디스패치)
  * 치지직 UI 중 일부(이모티콘 팩 탭, 채팅 입력창 포커스 등)는 click 이 아니라
  * mousedown/mouseup 에 핸들러가 걸려 있어 el.click() 만으로는 동작하지 않는다.
  */

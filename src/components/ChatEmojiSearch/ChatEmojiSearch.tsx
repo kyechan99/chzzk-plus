@@ -143,39 +143,39 @@ export default function ChatEmojiSearch() {
     });
   };
 
+  // 키 → 선택 이동량.
+  const deltaByKey: Record<string, (e: React.KeyboardEvent) => number> = {
+    Tab: e => (e.shiftKey ? -1 : 1), // 포커스는 검색창에 유지한 채 선택만 이동
+    ArrowLeft: () => -1,
+    ArrowRight: () => 1,
+    ArrowUp: () => -getColumnCount(), // ↑↓ 이동량 = 현재 열 수
+    ArrowDown: () => getColumnCount(),
+  };
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // 치지직 전역 단축키(채팅 포커스 등)와 충돌 방지
-    e.stopPropagation();
 
     if (results.length === 0) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return; // OS 단축키 조합은 건드리지 않음
 
-    if (e.key === 'Tab') {
-      // 포커스는 검색창에 유지한 채 선택만 순환 (Shift+Tab 역방향)
-      e.preventDefault();
-      const delta = e.shiftKey ? -1 : 1;
-      setSelected(prev => (prev + delta + results.length) % results.length);
-      return;
-    }
+    // 선택 없이 엔터 시 기본 동작 허용
+    if (e.key === 'Enter' && (selected < 0 || !results[selected])) return;
 
     // ←→ 는 선택이 활성화된 뒤에만 그리드 이동 (그 전에는 검색어 캐럿 이동에 양보)
-    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && selected >= 0) {
-      e.preventDefault();
-      moveSelection(e.key === 'ArrowRight' ? 1 : -1);
-      return;
-    }
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && selected < 0) return;
 
-    // ↑↓ 는 항상 그리드 이동 (한 줄 input 이라 캐럿 용도 없음). 이동량 = 현재 열 수
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      const columns = getColumnCount();
-      moveSelection(e.key === 'ArrowDown' ? columns : -columns);
-      return;
-    }
+    const isEnter = e.key === 'Enter';
+    const getDelta = deltaByKey[e.key];
+    // 처리 대상이 아닌 키는 기본 동작(문자 입력, Backspace 등)에 양보 — preventDefault 전에 판정해야 함
+    if (!isEnter && !getDelta) return;
 
-    if (e.key === 'Enter' && selected >= 0 && results[selected]) {
-      e.preventDefault();
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (isEnter) {
       insertEmoji(results[selected]);
+    } else {
+      moveSelection(getDelta(e));
     }
   };
 
@@ -184,7 +184,7 @@ export default function ChatEmojiSearch() {
   };
 
   return (
-    <div>
+    <div className="czp-emoji-search">
       <strong className="czp-emoji-search-header">이모티콘 검색</strong>
       <div className="czp-emoji-search-input-wrap">
         <input

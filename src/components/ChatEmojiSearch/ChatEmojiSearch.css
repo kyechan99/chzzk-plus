@@ -84,17 +84,16 @@
 
 /* _item_2zr6f_167 */
 .czp-emoji-search-item {
-  width: 40px;
-  height: 40px;
-  /* display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 40px;
+  height: 40px;
   padding: 2px;
   border: none;
   border-radius: 6px;
   background: transparent;
-  cursor: pointer; */
+  cursor: pointer;
 }
 
 .czp-emoji-search-item:hover,
