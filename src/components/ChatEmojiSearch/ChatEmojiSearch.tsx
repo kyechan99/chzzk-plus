@@ -157,6 +157,7 @@ export default function ChatEmojiSearch() {
 
     if (results.length === 0) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return; // OS 단축키 조합은 건드리지 않음
+    if (e.nativeEvent.isComposing) return; // 한글 IME 조합 중 키는 조합 로직에 양보 (Enter 이중 발화 방지)
 
     // 선택 없이 엔터 시 기본 동작 허용
     if (e.key === 'Enter' && (selected < 0 || !results[selected])) return;

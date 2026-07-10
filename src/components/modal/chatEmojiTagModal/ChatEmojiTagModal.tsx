@@ -67,6 +67,18 @@ const TagEditor = () => {
     });
   };
 
+  // 해당 태그를 모든 이모티콘에서 일괄 삭제
+  const removeTagEverywhere = (tag: string): void => {
+    if (!confirm(`'#${tag}' 태그를 모든 이모티콘에서 삭제할까요?`)) return;
+
+    const next: EmojiTags = {};
+    for (const [emojiId, emojiTags] of Object.entries(tags)) {
+      const remain = emojiTags.filter(t => t !== tag);
+      if (remain.length > 0) next[emojiId] = remain;
+    }
+    updateTags(next);
+  };
+
   return (
     <>
       <h2 className="czp-emoji-tag-heading">이모티콘 태그</h2>
@@ -74,9 +86,24 @@ const TagEditor = () => {
       {allTags.length > 0 && (
         <div className="czp-emoji-tag-all">
           {allTags.map(tag => (
-            <button key={tag} type="button" className="czp-emoji-tag-chip" onClick={() => applyTagFilter(tag)}>
-              #{tag}
-            </button>
+            <span key={tag} className="czp-emoji-tag-chip czp-emoji-tag-chip--split">
+              <button
+                type="button"
+                className="czp-emoji-tag-chip-label"
+                title="이 태그로 검색"
+                onClick={() => applyTagFilter(tag)}
+              >
+                #{tag}
+              </button>
+              <button
+                type="button"
+                className="czp-emoji-tag-chip-remove"
+                title="이 태그를 모든 이모티콘에서 삭제"
+                onClick={() => removeTagEverywhere(tag)}
+              >
+                ×
+              </button>
+            </span>
           ))}
         </div>
       )}
@@ -123,6 +150,9 @@ const TagEditor = () => {
               onChange={e => setTagInput(e.target.value)}
               onKeyDown={e => {
                 e.stopPropagation();
+                // 한글 IME 조합 중 Enter 는 keydown 이 2회(조합 확정 + 실제) 발화 → 조합 확정분은 무시
+                // (미처리 시 마지막 글자가 별도 태그로 한 번 더 추가됨)
+                if (e.nativeEvent.isComposing) return;
                 if (e.key === 'Enter') addTag();
               }}
             />

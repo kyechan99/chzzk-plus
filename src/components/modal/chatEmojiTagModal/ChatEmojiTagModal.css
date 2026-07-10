@@ -54,6 +54,43 @@
   color: #2cbf8a;
 }
 
+/* 상단 전체 태그 chip: 라벨(필터) + ×(일괄 삭제) 분리형 */
+.czp-emoji-tag-chip--split {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px 2px 8px;
+  cursor: default;
+}
+
+.czp-emoji-tag-chip--split:hover {
+  border-color: rgba(255, 255, 255, 0.15); /* 컨테이너는 hover 반응 없음 (내부 버튼이 각자 반응) */
+  color: inherit;
+}
+
+.czp-emoji-tag-chip-label,
+.czp-emoji-tag-chip-remove {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.czp-emoji-tag-chip-label:hover {
+  color: #2cbf8a;
+}
+
+.czp-emoji-tag-chip-remove {
+  padding: 0 3px;
+  color: rgba(160, 160, 160, 0.9);
+}
+
+.czp-emoji-tag-chip-remove:hover {
+  color: #ff6b6b;
+}
+
 .czp-emoji-tag-desc {
   margin: 0 0 0.5rem;
   color: rgba(160, 160, 160, 0.9);

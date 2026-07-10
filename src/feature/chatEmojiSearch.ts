@@ -18,7 +18,7 @@ import {
   ASIDE_POPUP_CONTENTS,
   CHAT_EMOJI_SEARCH_ROOT_CLASS,
 } from '../constants/class';
-import { CHAT_EMOJI_SEARCH_ENABLE } from '../constants/storage';
+import { CHAT_EMOJI_SEARCH_ENABLE, CHAT_EMOJI_TAG_MODAL } from '../constants/storage';
 import { createReactElement, dispatchMouseClickSequence } from '../utils/dom';
 import ChatEmojiSearch from '../components/ChatEmojiSearch/ChatEmojiSearch';
 
@@ -74,13 +74,29 @@ const focusChatInput = async (): Promise<void> => {
   }
 };
 
-// 팝업이 열려 있을 때 Esc 로 닫기 (포커스 위치 무관).
-// capture 단계라 다른 핸들러의 stopPropagation 에 막히지 않는다.
-// 같은 함수 참조로 add/remove 하므로 중복 등록되지 않는다.
+// Esc 우선순위 체인 (포커스 위치 무관):
+// 1) 태그 모달이 열려 있으면 모달만 닫는다 (이모티콘 팝업은 유지)
+// 2) 이모티콘 팝업이 열려 있으면 팝업을 닫는다
+// 처리한 경우 이벤트를 소비해 치지직 자체 Esc 핸들러(전체화면 해제 등)까지 내려가지 않게 한다.
+// capture 단계라 다른 핸들러의 stopPropagation 에 막히지 않고, 같은 함수 참조로 add/remove 하므로 중복 등록되지 않는다.
 const onDocumentKeyDown = (e: KeyboardEvent): void => {
   if (e.key !== 'Escape') return;
-  if (!document.querySelector(CHAT_EMOJI_AREA)) return; // 팝업 닫혀 있으면 무시
-  closeEmojiPopup();
+
+  const consume = () => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  if (document.querySelector('.czp-emoji-tag-modal')) {
+    consume();
+    chrome.storage.local.set({ [CHAT_EMOJI_TAG_MODAL]: false });
+    return;
+  }
+
+  if (document.querySelector(CHAT_EMOJI_AREA)) {
+    consume();
+    closeEmojiPopup();
+  }
 };
 
 // === 채팅 이모티콘 팝업 컨테이너 ===
