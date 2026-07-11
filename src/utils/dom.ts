@@ -73,3 +73,39 @@ export const dispatchMouseClickSequence = ($el: HTMLElement, withClick: boolean 
   $el.dispatchEvent(new MouseEvent('mouseup', { ...base, buttons: 0 }));
   if (withClick) $el.dispatchEvent(new MouseEvent('click', { ...base, buttons: 0 }));
 };
+
+export const getElementText = (element: Element): string => {
+  return element.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+};
+
+export const hasClassPrefix = (element: Element, classPrefix: string): boolean => {
+  return Array.from(element.classList).some(className => className.startsWith(classPrefix));
+};
+
+export const findClosestByClassPrefixWithChildTexts = ({
+  childSelector,
+  classPrefix,
+  texts,
+}: {
+  childSelector: string;
+  classPrefix: string;
+  texts: string[];
+}): Element | null => {
+  const matchingChildren = Array.from(document.querySelectorAll(childSelector)).filter(child => {
+    const childText = getElementText(child);
+    return texts.some(text => childText.includes(text));
+  });
+
+  for (const child of matchingChildren) {
+    const parent = child.closest(`[class*="${classPrefix}"]`);
+    if (!parent || !hasClassPrefix(parent, classPrefix)) continue;
+
+    const hasAllTexts = texts.every(text => {
+      return Array.from(parent.querySelectorAll(childSelector)).some(child => getElementText(child).includes(text));
+    });
+
+    if (hasAllTexts) return parent;
+  }
+
+  return null;
+};

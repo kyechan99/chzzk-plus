@@ -4,12 +4,11 @@ import AudioCompressorButton from '../components/button/AudioCompressorButton/Au
 
 import { log } from '../utils/log';
 import { isLivePage } from '../utils/page';
-import { createReactElement, waitingElement } from '../utils/dom';
+import { createReactElement, findClosestByClassPrefixWithChildTexts, waitingElement } from '../utils/dom';
 
 import {
   VIDEO_BUTTONS,
   PLAYER_LAYOUT_ID,
-  LIVE_CONTROL_MENU,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
   CHATTING_ACTIONS,
@@ -35,6 +34,17 @@ import { chatEmojiSearchSetting } from '../feature/chatEmojiSearch';
 import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
+
+const LIVE_CONTROL_MENU_CLASS_PREFIX = '_control_';
+const LIVE_CONTROL_MENU_BUTTON_LABELS = ['팔로잉', '구독 선물'];
+
+const findLiveControlMenu = (): Element | null => {
+  return findClosestByClassPrefixWithChildTexts({
+    childSelector: 'button',
+    classPrefix: LIVE_CONTROL_MENU_CLASS_PREFIX,
+    texts: LIVE_CONTROL_MENU_BUTTON_LABELS,
+  });
+};
 
 export const editLivePage = async () => {
   if (!isLivePage()) return;
@@ -132,7 +142,7 @@ export const editLivePage = async () => {
 
       // Feat: 즐겨찾기 버튼 (라이브 정보 헤더 옆) ==============================================
       if (res[FAVORITE_ENABLE] && !document.getElementById('chzzk-plus-favorite-btn')) {
-        const $liveControl = document.querySelector(LIVE_CONTROL_MENU);
+        const $liveControl = findLiveControlMenu();
         if ($liveControl) {
           const $favRoot = document.createElement('div');
           $favRoot.id = 'chzzk-plus-favorite-btn';
