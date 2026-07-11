@@ -152,7 +152,6 @@ const startObserver = () => {
 
         const $root = document.createElement('div');
         $root.className = MARKER_CLASS;
-        
 
         $area.prepend($root);
         createReactElement($root, ChatEmojiSearch);
