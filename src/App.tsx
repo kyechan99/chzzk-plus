@@ -29,6 +29,7 @@ import {
   CHAT_BADGE_REMOVER,
   CHAT_COLOR_OPTIONS,
   CHAT_COLOR_THEME,
+  CHAT_EMOJI_SEARCH_ENABLE,
   CHAT_NAME_COLOR,
   CHAT_SIZE,
   CHAT_SIZE_OPTIONS,
@@ -420,6 +421,13 @@ function App() {
               <div className="menu">
                 <p className="menu-title">채팅 타임스탬프</p>
                 <p className="menu-desc">채팅 옆에 도착 시각 표시</p>
+              </div>
+            </Checkbox>
+
+            <Checkbox id={CHAT_EMOJI_SEARCH_ENABLE}>
+              <div className="menu">
+                <p className="menu-title">이모티콘 검색</p>
+                <p className="menu-desc">이모티콘 팝업 상단에 검색창 표시</p>
               </div>
             </Checkbox>
 

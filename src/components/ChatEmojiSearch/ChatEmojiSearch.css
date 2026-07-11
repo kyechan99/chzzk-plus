@@ -1,0 +1,117 @@
+/* 팝업 다이얼로그 */
+.czp-emoji-search-popup-expanded {
+  height: 500px !important;
+}
+
+/* _subtitle_2zr6f_124 */
+.czp-emoji-search-header {
+  word-break: break-all;
+  word-wrap: break-word;
+  z-index: 10;
+  background-color: var(--Surface-Neutral-Subtle);
+  color: var(--Content-Neutral-Cool-Strong);
+  border-radius: 6px;
+  align-items: center;
+  padding: 3px 3px 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  display: flex;
+  position: sticky;
+  top: -1px;
+  left: 12px;
+  right: 12px;
+}
+
+.czp-emoji-search-input-wrap {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.czp-emoji-search-tag-btn {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-content-02);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.czp-emoji-search-tag-btn:hover {
+  color: #2cbf8a;
+  background: rgba(var(--color-border-01-rgb), 0.08);
+}
+
+.czp-emoji-search-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 6px 30px 6px 10px; /* 우측은 태그 버튼 자리 */
+  border: 1px solid rgba(var(--color-border-01-rgb), 0.2);
+  border-radius: 6px;
+  background: var(--color-bg-03, rgba(255, 255, 255, 0.06));
+  color: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.czp-emoji-search-input:focus {
+  border-color: #2cbf8a;
+}
+
+.czp-emoji-search-input::placeholder {
+  color: var(--color-content-02);
+}
+
+/* _list_2zr6f_152 */
+.czp-emoji-search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  column-gap: 5px;
+  gap: 6px 0;
+  max-height: 160px;
+  margin: 8px 0;
+  padding: 0 5px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+/* _item_2zr6f_167 */
+.czp-emoji-search-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 2px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.czp-emoji-search-item:hover,
+.czp-emoji-search-item--selected {
+  background: rgba(var(--color-border-01-rgb), 0.12);
+}
+
+.czp-emoji-search-item img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.czp-emoji-search-empty {
+  grid-column: 1 / -1;
+  padding: 8px 0;
+  color: var(--color-content-02);
+  font-size: 12px;
+  text-align: center;
+}
