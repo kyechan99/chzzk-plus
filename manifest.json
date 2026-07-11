@@ -1,7 +1,7 @@
 {
   "name": "치즈 플러스 (Cheese Plus)",
   "description": "치지직 올인원 확장 기능 도우미",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "manifest_version": 3,
   "icons": {
     "16": "icon16.png",
@@ -9,28 +9,49 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://chzzk.naver.com/*"],
-      "js": ["src/earlyStyle.ts"],
+      "matches": [
+        "*://chzzk.naver.com/*"
+      ],
+      "js": [
+        "src/earlyStyle.ts"
+      ],
       "run_at": "document_start",
-      "exclude_globs": ["*://api.chzzk.naver.com/*"]
+      "exclude_globs": [
+        "*://api.chzzk.naver.com/*"
+      ]
     },
     {
-      "matches": ["*://chzzk.naver.com/*"],
-      "js": ["src/content.tsx"],
-      "exclude_globs": ["*://api.chzzk.naver.com/*"]
+      "matches": [
+        "*://chzzk.naver.com/*"
+      ],
+      "js": [
+        "src/content.tsx"
+      ],
+      "exclude_globs": [
+        "*://api.chzzk.naver.com/*"
+      ]
     }
   ],
-  "host_permissions": ["http://www.google.com/", "https://www.google.com/"],
+  "host_permissions": [
+    "http://www.google.com/",
+    "https://www.google.com/"
+  ],
   "background": {
     "service_worker": "src/background.ts"
   },
   "web_accessible_resources": [
     {
-      "resources": ["inject.js"],
-      "matches": ["*://chzzk.naver.com/*"]
+      "resources": [
+        "inject.js"
+      ],
+      "matches": [
+        "*://chzzk.naver.com/*"
+      ]
     }
   ],
   "action": {
