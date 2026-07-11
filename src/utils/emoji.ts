@@ -100,6 +100,8 @@ const fetchEmojiIndex = async (channelId: string): Promise<EmojiIndexItem[]> => 
 };
 
 // 채널별 인덱스 캐시 — 검색 UI 와 태그 모달이 각자 마운트될 때마다 재요청하지 않도록 Promise 자체를 캐시.
+// 채널당 수백 KB 수준이지만 SPA 로 채널을 옮겨 다니면 누적되므로 상한을 둔다 (초과 시 가장 오래된 채널 제거).
+const MAX_INDEX_CACHE_SIZE = 5;
 const indexCache = new Map<string, Promise<EmojiIndexItem[]>>();
 
 export const getEmojiIndex = (channelId: string): Promise<EmojiIndexItem[]> => {
@@ -110,6 +112,11 @@ export const getEmojiIndex = (channelId: string): Promise<EmojiIndexItem[]> => {
     indexCache.delete(channelId); // 실패는 캐시하지 않음 → 다음 시도에서 재요청
     throw err;
   });
+
+  if (indexCache.size >= MAX_INDEX_CACHE_SIZE) {
+    const oldest = indexCache.keys().next().value; // Map 은 삽입 순서를 보존
+    if (oldest !== undefined) indexCache.delete(oldest);
+  }
   indexCache.set(channelId, fresh);
   return fresh;
 };
