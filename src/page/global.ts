@@ -2,6 +2,7 @@ import { previewSetting } from '../feature/preview';
 import { chatSetting } from '../feature/chat';
 import { favoriteSetting } from '../feature/favorite';
 import MessageStorageModal from '../components/modal/messageStorageModal/MessageStorageModal';
+import ChatEmojiTagModal from '../components/modal/chatEmojiTagModal/ChatEmojiTagModal';
 
 import { log, logWarning } from '../utils/log';
 import { createReactElement } from '../utils/dom';
@@ -23,6 +24,10 @@ export const editGlobalPage = () => {
     const $storageModalRoot = document.createElement('div');
     $global.appendChild($storageModalRoot);
     createReactElement($storageModalRoot, MessageStorageModal); // 채팅 저장소
+
+    const $emojiTagModalRoot = document.createElement('div');
+    $global.appendChild($emojiTagModalRoot);
+    createReactElement($emojiTagModalRoot, ChatEmojiTagModal); // 이모티콘 태그
 
     const $settingModalRoot = document.createElement('div');
     $global.appendChild($settingModalRoot);

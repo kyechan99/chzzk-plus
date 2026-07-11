@@ -31,6 +31,7 @@ import MessageStorageButton from '../components/button/MessageStorageButton/Mess
 import { traceOpenLive } from '../utils/trace';
 import { bufferDisplaySetting } from '../feature/bufferDisplay';
 import { chatTimestampSetting } from '../feature/chatTimestamp';
+import { chatEmojiSearchSetting } from '../feature/chatEmojiSearch';
 import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
@@ -72,6 +73,7 @@ export const editLivePage = async () => {
   bufferDisplaySetting();
   // 채팅 타임스탬프 (채팅 재구성 시 재관찰)
   chatTimestampSetting();
+  chatEmojiSearchSetting();
 
   const $chatToolsList = await waitingElement(CHATTING_TOOLS);
   if (!$chatToolsList) return;
