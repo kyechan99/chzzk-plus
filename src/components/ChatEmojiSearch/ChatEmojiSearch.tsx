@@ -185,7 +185,7 @@ export default function ChatEmojiSearch() {
   };
 
   return (
-    <div className="czp-emoji-search">
+    <div className={CHAT_EMOJI_SEARCH_ROOT_CLASS}>
       <strong className="czp-emoji-search-header">이모티콘 검색</strong>
       <div className="czp-emoji-search-input-wrap">
         <input

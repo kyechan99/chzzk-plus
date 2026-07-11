@@ -1,5 +1,6 @@
-.czp-emoji-search {
-  padding: 8px 10px 4px;
+/* 팝업 다이얼로그 */
+.czp-emoji-search-popup-expanded {
+  height: 500px !important;
 }
 
 /* _subtitle_2zr6f_124 */

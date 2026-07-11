@@ -148,8 +148,11 @@ const startObserver = () => {
       const $area = $container.$area;
 
       if (!$area.querySelector(`.${MARKER_CLASS}`)) {
+        $container.$container.classList.add('czp-emoji-search-popup-expanded');
+
         const $root = document.createElement('div');
         $root.className = MARKER_CLASS;
+        
 
         $area.prepend($root);
         createReactElement($root, ChatEmojiSearch);
