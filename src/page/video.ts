@@ -1,8 +1,8 @@
-import { VIDEO_LAYOUT_ID } from '../constants/class';
+import { VIDEO_LAYOUT_ID, WEBPLAYER_VIDEO } from '../constants/class';
 
 import { log } from '../utils/log';
 import { isVideoPage } from '../utils/page';
-import { createReactElement } from '../utils/dom';
+import { createReactElement, waitingElement } from '../utils/dom';
 
 import AudioCompressorButton from '../components/button/AudioCompressorButton/AudioCompressorButton';
 // import RecordButton from "../components/button/RecordButton/RecordButton";
@@ -11,12 +11,42 @@ import AudioCompressorButton from '../components/button/AudioCompressorButton/Au
 import { AUDIO_COMPRESSOR } from '../constants/storage';
 import { findPlayerButtonList } from '../utils/playerDom';
 
+const COMPRESSOR_ROOT_ID = 'chzzk-plus-compr-btns';
+let mountingCompressor = false;
+
+const ensureAudioCompressorButton = async (): Promise<void> => {
+  if (mountingCompressor || document.getElementById(COMPRESSOR_ROOT_ID)) return;
+  mountingCompressor = true;
+
+  try {
+    const video = await waitingElement(WEBPLAYER_VIDEO, 10000);
+    if (!video || !isVideoPage()) return;
+
+    for (let i = 0; i < 20; i++) {
+      const $btnList = findPlayerButtonList();
+      if ($btnList) {
+        if (document.getElementById(COMPRESSOR_ROOT_ID)) return;
+
+        const $AudioCompressorButton = document.createElement('div');
+        $AudioCompressorButton.id = COMPRESSOR_ROOT_ID;
+        $btnList.prepend($AudioCompressorButton);
+        createReactElement($AudioCompressorButton, AudioCompressorButton);
+        return;
+      }
+
+      await new Promise(resolve => window.setTimeout(resolve, 250));
+    }
+  } finally {
+    mountingCompressor = false;
+  }
+};
+
 export const editVideoPage = () => {
   if (!isVideoPage()) return;
 
   // 영상 Layout이 발견이 되었다면 content를 수정할 준비가 되었음.
   const $playerLayout = document.getElementById(VIDEO_LAYOUT_ID);
-  if (!$playerLayout) {
+  if (!$playerLayout && !document.querySelector(WEBPLAYER_VIDEO)) {
     return;
   }
 
@@ -49,6 +79,10 @@ export const editVideoPage = () => {
     // }
   */
   chrome.storage.local.get([AUDIO_COMPRESSOR], res => {
+    if (res[AUDIO_COMPRESSOR]) {
+      ensureAudioCompressorButton().catch(() => {});
+    }
+
     const $btn_list = findPlayerButtonList();
 
     // Feat: 오디오 압축 버튼 활성화 =======================================================
