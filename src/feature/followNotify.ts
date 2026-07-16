@@ -4,10 +4,11 @@
  * 자동 새로고침 등으로 목록이 통째로 재구성될 때의 깜빡임을 흡수하기 위해 디바운스 후 비교한다.
  * 첫 스냅샷은 기준선으로만 쓰고 토스트를 띄우지 않는다(진입 시 폭주 방지).
  */
-import { SIDEBAR, SIDEBAR_MENU } from '../constants/class';
+import { SIDEBAR } from '../constants/class';
 import { FAVORITE_ENABLE, FAVORITE_GROUPS, FOLLOW_NOTIFY_END, FOLLOW_NOTIFY_START } from '../constants/storage';
 import { waitingElement } from '../utils/dom';
 import { FavoriteData, findGroupOfChannel, parseFavoriteData, readFavoriteData } from '../utils/favoriteStore';
+import { findFollowingNav } from '../utils/sidebar';
 
 // 새로운 토스트 인터페이스 정의
 interface ToastOptions {
@@ -42,19 +43,34 @@ const extractChannelId = (href: string | null | undefined): string => {
 
 const isItemLive = (li: Element, href: string): boolean => {
   if (li.querySelector('[class*="_is_live_"]')) return true;
+  const text = li.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+  if (/\bLIVE\b/i.test(text)) return true;
   return href.includes('/live/');
 };
 
 const getChannelName = (li: Element): string => {
   const nameText = li.querySelector('[class*="_name_"] [class*="_text_"]')?.textContent?.trim();
   if (nameText) return nameText;
-  return li.querySelector('[class*="_name_"]')?.textContent?.trim() || '';
+  const name = li.querySelector('[class*="_name_"]')?.textContent?.trim();
+  if (name) return name;
+
+  const anchor = li.querySelector<HTMLAnchorElement>('a[href]');
+  const img = li.querySelector<HTMLImageElement>('img[alt]');
+  return (
+    anchor?.getAttribute('aria-label')?.trim() ||
+    anchor?.getAttribute('title')?.trim() ||
+    img?.alt?.trim() ||
+    anchor?.textContent
+      ?.replace(/\bLIVE\b/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim() ||
+    ''
+  );
 };
 
 // 프로필 이미지 스냅샷 추출용 (토스트 썸네일로 활용하기 위함)
 const getChannelThumbnail = (li: Element): string => {
-  // _profile_ 클래스를 가진 요소 내부의 img를 찾음
-  const img = li.querySelector('[class*="_profile_"] img');
+  const img = li.querySelector('[class*="_profile_"] img') ?? li.querySelector('img');
   return img?.getAttribute('src') || '';
 };
 
@@ -73,12 +89,12 @@ let prevSnapshotSet: Map<string, ChannelSnapshot> | null = null;
  */
 const buildSnapshot = (): Map<string, ChannelSnapshot> => {
   const map = new Map<string, ChannelSnapshot>();
-  const navs = document.querySelectorAll(SIDEBAR_MENU);
-  if (navs.length < 2) return map;
+  const followingNav = findFollowingNav();
+  if (!followingNav) return map;
 
-  navs[1].querySelectorAll('li').forEach(li => {
-    // 실제 구조에 맞게 명확한 링크 클래스(_item_link_)로 매칭 보완
-    const anchor = li.querySelector('a[class*="_item_link_"]');
+  followingNav.querySelectorAll('li').forEach(li => {
+    const anchor =
+      li.querySelector<HTMLAnchorElement>('a[class*="_item_link_"]') ?? li.querySelector<HTMLAnchorElement>('a[href]');
     const href = anchor?.getAttribute('href') ?? '';
     const id = extractChannelId(href);
 
@@ -118,7 +134,7 @@ const ensureToastContainer = (): HTMLElement => {
       
       /* 클래스 분기별 배경색 설정 */
       .czp-toast.czp-toast-primary { background: var(--Content-Brand-Base, #00e693); color: #000; border-left: 4px solid #000; }
-      .czp-toast.czp-toast-neutral { background: var(--Surface-Neutral-Base, #2e3033); color: #fff; border-left: 4px solid #6c757d; }
+      .czp-toast.czp-toast-neutral { background: var(--sem-color-surface-neutral-base, #2e3033); color: #fff; border-left: 4px solid #6c757d; }
       
       /* 애니메이션 상태 */
       .czp-toast.czp-toast-in { opacity: 1; transform: translateX(0); }

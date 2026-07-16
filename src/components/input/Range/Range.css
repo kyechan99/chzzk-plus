@@ -29,7 +29,7 @@
   padding: 2px 8px;
   font-size: 12px;
   border: none;
-  background: var(--Surface-Neutral-Base, #2e3033);
+  background: var(--sem-color-surface-neutral-base, #2e3033);
   padding: 0.365rem 0.75rem;
   border-radius: 4px;
   color: var(--color-text-03, #9ea0a6);

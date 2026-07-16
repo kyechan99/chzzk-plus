@@ -1,8 +1,14 @@
 import { MESSAGE_PIN_USERS } from '../constants/storage';
-import { CHAT_CONTAINER, CHAT_ITEM, CHAT_NAME, DATA_CHAT_ITEM, DATA_CHAT_NICK } from '../constants/class';
+import { CHAT_CONTAINER, CHAT_ITEM, CHAT_NAME, DATA_CHAT_NICK } from '../constants/class';
 import { createReactElement, waitingElement } from './dom';
-import { USER_POPUP_CONTENTS } from '../constants/class';
 import UserPinButton from '../components/button/UserPinButton/UserPinButton';
+import {
+  findUserPopupContents,
+  findUserPopupNickname,
+  getChatNickname as getStableChatNickname,
+  isChatMessageItem,
+  isUserPopupFromChatItem,
+} from './chatDom';
 
 const CHAT_ITEM_FALLBACK = `${CHAT_ITEM}, [class*="live_chatting_list_item__"]`;
 const CHAT_NAME_FALLBACK = [CHAT_NAME, '[class*="live_chatting_message_nickname__"]', '[class*="_nickname_"]'];
@@ -10,12 +16,15 @@ const CHAT_NAME_FALLBACK = [CHAT_NAME, '[class*="live_chatting_message_nickname_
 // inject.js(MAIN world)가 fiber 로 찍은 data-czp-* 속성을 우선 사용하고,
 // 속성이 없으면(주입 실패/타이밍) 클래스 폴백으로 자동 degrade
 const isChatItem = (node: Node): node is HTMLElement => {
+  if (isChatMessageItem(node)) return true;
   if (!(node instanceof HTMLElement)) return false;
-  if (node.hasAttribute(DATA_CHAT_ITEM)) return true;
   return node.matches(CHAT_ITEM_FALLBACK);
 };
 
 const getChatNickname = (el: HTMLElement): string | null => {
+  const stableNickname = getStableChatNickname(el);
+  if (stableNickname) return stableNickname;
+
   for (const selector of CHAT_NAME_FALLBACK) {
     const text = el.querySelector(selector)?.textContent;
     if (text) return text;
@@ -32,35 +41,48 @@ let userPopupTarget: Element | null = null;
 let chatOb: MutationObserver | null = null;
 let chatTarget: Element | null = null;
 
+const getPopupMenuSiblingClassName = (popupContents: Element): string => {
+  const sibling = Array.from(popupContents.children).find(child => {
+    return child instanceof HTMLElement && child.id !== 'chzzk-plus-user-pin-btn' && child.className;
+  });
+
+  return sibling instanceof HTMLElement ? sibling.className : '';
+};
+
+const ensureUserPinButton = (root: Element) => {
+  if (!isUserPopupFromChatItem(root)) return;
+
+  const popupContents = findUserPopupContents(root);
+  if (!popupContents || !findUserPopupNickname(popupContents)) return;
+  if (popupContents.querySelector('#chzzk-plus-user-pin-btn')) return;
+
+  const container = document.createElement('div');
+  container.id = 'chzzk-plus-user-pin-btn';
+  container.className = getPopupMenuSiblingClassName(popupContents);
+  popupContents.appendChild(container);
+  createReactElement(container, UserPinButton);
+};
+
 export const userPopupObserve = async () => {
   const chatContainer = await waitingElement(CHAT_CONTAINER);
   if (!chatContainer) return;
-  if (userPopupTarget === chatContainer && userPopupOb) return;
+
+  const target = document.body;
+  if (userPopupTarget === target && userPopupOb) return;
 
   userPopupOb?.disconnect();
-  userPopupTarget = chatContainer;
+  userPopupTarget = target;
+  document.querySelectorAll('[role="alertdialog"], [role="dialog"], [role="menu"]').forEach(ensureUserPinButton);
+
   userPopupOb = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
       mutation.addedNodes.forEach((node: Node) => {
-        if (node.nodeName === '#text') return;
-
-        let popupContents: Element | null;
-        if ((node as Element).matches?.(USER_POPUP_CONTENTS)) {
-          popupContents = node as Element;
-        } else {
-          popupContents = (node as Element).querySelector?.(USER_POPUP_CONTENTS);
-        }
-
-        if (popupContents && !popupContents.querySelector('#chzzk-plus-user-pin-btn')) {
-          const container = document.createElement('div');
-          container.id = 'chzzk-plus-user-pin-btn';
-          popupContents.appendChild(container);
-          createReactElement(container, UserPinButton);
-        }
+        if (!(node instanceof Element)) return;
+        ensureUserPinButton(node);
       });
     });
   });
-  userPopupOb.observe(chatContainer, { subtree: true, childList: true });
+  userPopupOb.observe(target, { subtree: true, childList: true });
 };
 
 export const chatObserve = async () => {

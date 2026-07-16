@@ -1,7 +1,7 @@
 import { log } from './log';
 
 export const getChannelIDByUrl = (url: string) => {
-  const regex = /\/live\/([^/?]+)/;
+  const regex = /\/(?:live\/|channel\/)?([0-9a-f]{32})(?:[/?#]|$)/i;
   const match = url.match(regex);
 
   if (match && match.length >= 2) {

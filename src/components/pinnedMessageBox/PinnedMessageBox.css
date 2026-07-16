@@ -7,6 +7,15 @@
   }
 }
 
+.czp-message-pin-fixed-root {
+  z-index: 100;
+  background-color: var(--sem-color-background-neutral-base);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 #chzzk-plus-message-pin {
   /* 메시지 핀 리스트 스타일 */
   .czp-message-pin-list {
@@ -21,12 +30,20 @@
       0 0 1px 0 var(--color-shadow-layer04-01);
     position: relative;
     height: fit-content;
-    max-height: 40vh;
+    max-height: 20vh;
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 1000;
     top: unset;
     display: none;
+  }
+  .czp-message-pin-list.isOpen {
+    display: flex;
+    flex-direction: column;
+  }
+  .czp-message-pin-list > div:last-child::before {
+    margin-top: 0px;
+    height: 0px;
   }
 
   .live_chatting_fixed_mission_header__EvP2K.isOpen + .czp-message-pin-list {
@@ -113,5 +130,29 @@
     display: block;
     height: 0px !important;
     margin-top: 0px !important;
+  }
+
+  &:not(._is_opened_) .czp-message-pin-wrapper{
+    padding: 6px 15px;
+  }
+
+  .czp-message-pin-wrapper { 
+    background-color: var(--sem-color-surface-neutral-weaker);
+    box-shadow: 0 4px 4px 0 var(--sem-color-shadow-strong), 0 4px 12px 4px var(--sem-color-shadow-base);
+    border-radius: 8px;
+    flex-direction: column;
+    row-gap: 5px;
+    display: flex;
+    position: relative;
+  }
+
+  .czp-live_chatting_fixed_mission_header {
+    display: flex;
+  }
+  .czp-live_chatting_fixed_mission_header.isOpen {
+    padding: 6px;
+  }
+  .czp-live_chatting_fixed_mission_folded_button {
+    margin-left: auto;
   }
 }

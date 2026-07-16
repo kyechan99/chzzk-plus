@@ -1,11 +1,10 @@
-import { BLOCKED_VIDEO_CARD } from '../constants/class';
 import { logWarning } from '../utils/log';
+import { hasBlockedMarker } from '../utils/videoList';
 
 export const blockSetting = (cardList: Element) => {
   Array.from(cardList.children).forEach(node => {
-    const blockedCard = node.querySelector(BLOCKED_VIDEO_CARD) as HTMLElement;
-    if (blockedCard) {
-      blockedCard.parentElement?.remove();
+    if (hasBlockedMarker(node)) {
+      node.remove();
     }
   });
 
@@ -15,10 +14,8 @@ export const blockSetting = (cardList: Element) => {
       (mutationList, _observer) => {
         for (const mutation of mutationList) {
           for (const addedNode of mutation.addedNodes as NodeListOf<HTMLElement>) {
-            const blockedCard = addedNode.querySelector(BLOCKED_VIDEO_CARD) as HTMLElement;
-
-            if (blockedCard) {
-              blockedCard.parentElement?.remove();
+            if (hasBlockedMarker(addedNode)) {
+              addedNode.remove();
             }
           }
         }

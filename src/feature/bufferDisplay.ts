@@ -6,6 +6,7 @@
  */
 import { CHAT_INPUT, WEBPLAYER_VIDEO } from '../constants/class';
 import { BUFFER_DISPLAY_ENABLE } from '../constants/storage';
+import { getChatInputEditable } from '../utils/chatDom';
 
 let timer: number | undefined;
 let started = false;
@@ -26,7 +27,7 @@ const computeLatency = (video: HTMLVideoElement): number | null => {
 
 const tick = (): void => {
   const video = document.querySelector<HTMLVideoElement>(WEBPLAYER_VIDEO);
-  const input = document.querySelector<HTMLElement>(CHAT_INPUT);
+  const input = getChatInputEditable() ?? document.querySelector<HTMLElement>(CHAT_INPUT);
   if (!video || !input) return;
 
   const latency = computeLatency(video);

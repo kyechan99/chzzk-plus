@@ -52,7 +52,12 @@ const clickPowerButton = (): void => {
   const aside = document.querySelector(CHAT_CONTAINER);
   if (!aside) return;
 
-  const btn = Array.from(aside.querySelectorAll('button')).find(b => b.className.includes('power_button'));
+  const btn = Array.from(aside.querySelectorAll('button')).find(button => {
+    if (button.className.includes('power_button')) return true;
+    const text = button.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    const label = button.getAttribute('aria-label') ?? '';
+    return text.includes('파워') || label.includes('파워');
+  });
   btn?.click();
 };
 

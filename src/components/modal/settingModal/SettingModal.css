@@ -9,7 +9,7 @@
     z-index: 9999;
     scrollbar-width: none;
     border-radius: 0.5rem;
-    background: var(--color-bg-01);
+    background: var(--color-bg-02);
 }
 .czp-setting-modal .popup {
     padding: 0rem;
@@ -23,11 +23,11 @@
     border-radius: 4px;
 }
 .czp-setting-modal .popup::-webkit-scrollbar-thumb {
-    background-color: var(--Surface-Neutral-Base, #2e3033);
+    background-color: var(--sem-color-surface-neutral-base, #2e3033);
     border-radius: 4px;
 } 
 .czp-setting-modal .popup::-webkit-scrollbar-track {
-    background-color: var(--Surface-Neutral-Weakest, #f0f1f2);
+    background-color: var(--ref-color-neutral-3, #f0f1f2);
     border-radius: 4px;
     background-clip: padding-box; 
 }  */

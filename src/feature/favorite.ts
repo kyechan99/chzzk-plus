@@ -4,6 +4,7 @@ import { waitingElement } from '../utils/dom';
 import { logWarning } from '../utils/log';
 import { FavoriteData, parseFavoriteData, readFavoriteData } from '../utils/favoriteStore';
 import { renderFavoriteIconSvg } from '../utils/favoriteIconSvg';
+import { findFollowingNav } from '../utils/sidebar';
 
 /**
  * 즐겨찾기 그룹을 nav 에 반영한다.
@@ -21,7 +22,7 @@ const FAV_ITEM_CLASS = 'czp-fav-item';
 const FAV_BADGE_CLASS = 'czp-fav-nav-badge';
 const BADGE_ICON_ATTR = 'data-czp-icon';
 const BADGE_COLOR_ATTR = 'data-czp-color';
-const CHANNEL_ID_REGEX = /\/(?:live|channel)\/([^/?#]+)/;
+const CHANNEL_ID_REGEX = /\/(?:live\/|channel\/)?([0-9a-f]{32})(?:[/?#]|$)/i;
 
 let initialized = false;
 let scheduled = false;
@@ -34,8 +35,7 @@ const extractChannelId = (href: string | null): string => {
 };
 
 const getFollowingNav = (): HTMLElement | null => {
-  const $navs = document.querySelectorAll(SIDEBAR_MENU);
-  return $navs.length >= 2 ? ($navs[1] as HTMLElement) : null;
+  return findFollowingNav();
 };
 
 const getFollowingNavList = (): HTMLUListElement | null => {
@@ -45,10 +45,17 @@ const getFollowingNavList = (): HTMLUListElement | null => {
 interface NavItem {
   el: HTMLElement;
   channelId: string;
+  isLive: boolean;
   groupIndex: number; // 비-즐겨찾기는 Infinity
   iconId: string | null;
   color: string | null;
 }
+
+const isLiveItem = (el: Element, href: string): boolean => {
+  if (href.includes('/live/')) return true;
+  if (el.querySelector('[class*="_is_live_"]')) return true;
+  return /\bLIVE\b/i.test(el.textContent ?? '');
+};
 
 const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
   // channelId → groupIndex / icon / color 매핑 사전 구축
@@ -72,11 +79,15 @@ const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
     const isItem = el.matches(SIDEBAR_MENU_ITEM) || !!el.querySelector(SIDEBAR_MENU_ITEM);
     if (!isItem) return;
     const anchor = el.matches('a') ? (el as HTMLAnchorElement) : (el.querySelector('a') as HTMLAnchorElement | null);
-    const id = extractChannelId(anchor?.getAttribute('href') ?? null);
-    const groupIndex = id && groupIndexById.has(id) ? (groupIndexById.get(id) as number) : Number.POSITIVE_INFINITY;
+    const href = anchor?.getAttribute('href') ?? '';
+    const id = extractChannelId(href);
+    const isLive = isLiveItem(el, href);
+    const groupIndex =
+      id && isLive && groupIndexById.has(id) ? (groupIndexById.get(id) as number) : Number.POSITIVE_INFINITY;
     items.push({
       el,
       channelId: id,
+      isLive,
       groupIndex,
       iconId: id ? (iconById.get(id) ?? null) : null,
       color: id ? (colorById.get(id) ?? null) : null,
@@ -173,7 +184,7 @@ const scheduleReorder = () => {
       syncMarkersAndBadges(items);
 
       // 2) 정렬: 그룹 가진 아이템이 하나도 없으면 스킵
-      const hasAnyFavorite = items.some(i => i.iconId !== null);
+      const hasAnyFavorite = items.some(i => i.iconId !== null && i.isLive);
       if (!hasAnyFavorite) return;
 
       const desired = computeDesiredOrder(items);

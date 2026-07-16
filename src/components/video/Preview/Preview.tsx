@@ -69,7 +69,7 @@ export default function Preview() {
       setVisible(false);
       setTitle('');
       setChannelId('');
-    }, 300);
+    }, 100);
   }, [cancelHide]);
 
   const togglePin = () => {

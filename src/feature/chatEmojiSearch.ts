@@ -13,7 +13,6 @@ import { isLivePage } from '../utils/page';
 import {
   CHAT_CONTAINER,
   CHAT_INPUT_EDITABLE,
-  CHAT_USER_AREA,
   CHAT_EMOJI_AREA,
   ASIDE_POPUP_CONTENTS,
   CHAT_EMOJI_SEARCH_ROOT_CLASS,
@@ -21,6 +20,7 @@ import {
 import { CHAT_EMOJI_SEARCH_ENABLE, CHAT_EMOJI_TAG_MODAL } from '../constants/storage';
 import { createReactElement, dispatchMouseClickSequence } from '../utils/dom';
 import ChatEmojiSearch from '../components/ChatEmojiSearch/ChatEmojiSearch';
+import { getChatContainer, getChatInputEditable } from '../utils/chatDom';
 
 const MARKER_CLASS = CHAT_EMOJI_SEARCH_ROOT_CLASS;
 
@@ -30,7 +30,11 @@ let enabled = false;
 // 토글 버튼은 해시 클래스뿐이라, 네이버 a11y 클래스(.blind)의 텍스트 "이모티콘" 으로 특정한다.
 const closeEmojiPopup = (): void => {
   const $toggles = document.querySelectorAll<HTMLButtonElement>(`${CHAT_CONTAINER} button[aria-expanded="true"]`);
-  const $emojiToggle = [...$toggles].find($btn => $btn.querySelector('.blind')?.textContent === '이모티콘');
+  const $emojiToggle = [...$toggles].find($btn => {
+    const text = $btn.textContent ?? '';
+    const label = $btn.getAttribute('aria-label') ?? '';
+    return text.includes('이모티콘') || label.includes('이모티콘');
+  });
 
   $emojiToggle?.click();
 };
@@ -53,7 +57,7 @@ const moveCaretToEnd = ($el: HTMLElement): void => {
 // 리렌더가 가라앉을 때까지 재조회 + 재시도한다 (50ms × 10회).
 const focusChatInput = async (): Promise<void> => {
   for (let i = 0; i < 10; i++) {
-    const $input = document.querySelector<HTMLElement>(CHAT_INPUT_EDITABLE);
+    const $input = getChatInputEditable() ?? document.querySelector<HTMLElement>(CHAT_INPUT_EDITABLE);
 
     if ($input) {
       $input.focus();
@@ -130,17 +134,14 @@ let popupWasOpen = false;
 
 // 영속 앵커에 상주 — 팝업의 등장 자체를 감지
 const startObserver = () => {
-  const $aside = document.querySelector(CHAT_CONTAINER);
+  const $aside = getChatContainer();
   if (!$aside) return;
-
-  const $chatUserArea = $aside.querySelector(CHAT_USER_AREA);
-  if (!$chatUserArea) return;
 
   // 살아있는 옵저버가 있으면 유지, 죽었으면(관찰 대상이 DOM 재구성으로 제거) 정리 후 재부착
   if (rootObserver && $observedTarget && document.contains($observedTarget)) return;
   stopObserver();
 
-  $observedTarget = $chatUserArea;
+  $observedTarget = $aside;
   rootObserver = new MutationObserver(() => {
     const $container = findChatEmojiPopUpContainer();
 
@@ -166,7 +167,7 @@ const startObserver = () => {
     }
     popupWasOpen = isOpen;
   });
-  rootObserver.observe($chatUserArea, { childList: true, subtree: true });
+  rootObserver.observe($aside, { childList: true, subtree: true });
   document.addEventListener('keydown', onDocumentKeyDown, true);
 };
 

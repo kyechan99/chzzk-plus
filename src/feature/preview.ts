@@ -4,7 +4,8 @@ import { createReactElement, waitingElement } from '../utils/dom';
 
 import { CHAT_NAME_COLOR, CHAT_TEXT_COLOR, FOLLOWING_REFRESH_ENABLE, PREVIEW_ENABLE } from '../constants/storage';
 import { CHAT_NAME_COLOR_DEFAULT, CHAT_TEXT_COLOR_DEFAULT } from '../constants/color';
-import { REFRESH_BUTTON, SIDEBAR, SIDEBAR_MENU, STREAMER_MORE_BTN } from '../constants/class';
+import { SIDEBAR } from '../constants/class';
+import { findFollowingMoreButton, findFollowingRefreshButton } from '../utils/sidebar';
 
 let refresher: number | undefined;
 let refresherInitialized = false;
@@ -18,12 +19,8 @@ const expandedMoreButtons = new WeakSet<Element>();
  * preview div 생성 여부와 무관하게 매번 호출되어, 사이드바가 다시 그려져 목록이 접히면
  * 새 '더보기' 버튼을 한 번 눌러 다시 펼친다.
  */
-const autoExpandFollowing = ($sidebar: HTMLElement): void => {
-  const $sidebarMenus = $sidebar.querySelectorAll(SIDEBAR_MENU);
-  if ($sidebarMenus.length <= 1) return;
-
-  const $followingSidebarMenu = $sidebarMenus[1];
-  const moreChannelBtn = $followingSidebarMenu?.querySelector(STREAMER_MORE_BTN) as HTMLButtonElement | null;
+const autoExpandFollowing = (): void => {
+  const moreChannelBtn = findFollowingMoreButton();
   if (!moreChannelBtn || expandedMoreButtons.has(moreChannelBtn)) return;
 
   expandedMoreButtons.add(moreChannelBtn);
@@ -39,9 +36,7 @@ const setupFollowingRefresher = (): void => {
     refresherInitialized = true;
     clearInterval(refresher);
     refresher = setInterval(() => {
-      // REFRESH_BUTTON 은 총 4개지만, 첫번째가 새로고침 버튼임
-      // (버튼이 사라진 순간 클릭하면 throw 되어 interval 이 깨지므로 null 가드)
-      const $refreshBtn = document.querySelector(REFRESH_BUTTON) as HTMLElement | null;
+      const $refreshBtn = findFollowingRefreshButton();
       $refreshBtn?.click();
     }, 1000 * 10);
   });
@@ -52,7 +47,7 @@ export async function previewSetting(): Promise<void> {
   if (!$sidebar) return;
 
   // 사이드바 리빌드에도 매번 자가복구되어야 하는 기능들 (가드 밖)
-  autoExpandFollowing($sidebar);
+  autoExpandFollowing();
   setupFollowingRefresher();
 
   // Feat: Preview 썸네일 (Preview 컴포넌트는 #sidebar 이벤트 위임이라 리빌드에 견딘다) =========

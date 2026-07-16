@@ -6,10 +6,10 @@ import ChatEmojiTagModal from '../components/modal/chatEmojiTagModal/ChatEmojiTa
 
 import { log, logWarning } from '../utils/log';
 import { createReactElement } from '../utils/dom';
-import { SECTION_TOOLBAR } from '../constants/class';
 import { FAVORITE_ENABLE } from '../constants/storage';
 import SettingButton from '../components/button/SettingButton/SettingButton';
 import SettingModal from '../components/modal/settingModal/SettingModal';
+import { findHeaderToolbar } from '../utils/header';
 
 export const editGlobalPage = () => {
   /**
@@ -37,7 +37,7 @@ export const editGlobalPage = () => {
   /*
    * 세팅 버튼
    */
-  const $globalToolbar = document.querySelector(SECTION_TOOLBAR);
+  const $globalToolbar = findHeaderToolbar();
   if ($globalToolbar && !document.getElementById('czp-golbal-toolbar')) {
     const $tools = document.createElement('div');
     $tools.id = 'czp-golbal-toolbar';

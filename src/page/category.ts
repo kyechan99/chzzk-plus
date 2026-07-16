@@ -1,8 +1,8 @@
 import { log } from '../utils/log';
 import { BLOCKED_STREAMER } from '../constants/storage';
-import { VIDEO_CARD_LIST_CT } from '../constants/class';
 import { isCategoryPage } from '../utils/page';
 import { blockSetting } from '../feature/block';
+import { findVideoCardList } from '../utils/videoList';
 
 export const editCategoryPage = () => {
   if (!isCategoryPage()) return;
@@ -10,7 +10,7 @@ export const editCategoryPage = () => {
   // 차단한 방송 완전 숨기기
   chrome.storage.local.get([BLOCKED_STREAMER], res => {
     if (res[BLOCKED_STREAMER]) {
-      const cardList = document.querySelector(VIDEO_CARD_LIST_CT);
+      const cardList = findVideoCardList();
 
       if (cardList && cardList.id !== 'chzzk-plus-card-list') {
         cardList.id = 'chzzk-plus-card-list';

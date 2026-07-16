@@ -31,13 +31,13 @@ export const VIDEO_PIP_BTN = '.pzp-pip-button';
 // 툴바 (상단 헤더 우측 영역). 치지직이 css-module 단축형으로 바꾸기 전 webpack 클래스는
 // toolbar_section__ 였다. querySelector 는 union(콤마) 셀렉터의 첫 매치를 반환하므로
 // 두 스킴을 모두 넣어 리빌드/롤백에 견디게 한다.
-export const SECTION_TOOLBAR = '._section_sp9wj_8, [class*="toolbar_section__"]';
+export const SECTION_TOOLBAR = '#header > *:has(button), header > *:has(button), [class*="toolbar_section__"]';
 
 // 좌측 스트리머 목록을 나타내는 아이템의 부모 클래스 및 그 자식 클래스명
 export const SIDEBAR = '#sidebar';
-export const SIDEBAR_MENU = 'nav._section_q99ll_26'; // 좌측 사이드바 채널별 섹션들 // [1] 이 팔로잉 채널
-export const SIDEBAR_MENU_ITEM = 'li._item_q99ll_63';
-export const STREAMER_MORE_BTN = 'button[aria-label="더보기"]';
+export const SIDEBAR_MENU = '#sidebar nav'; // 좌측 사이드바 섹션
+export const SIDEBAR_MENU_ITEM = 'li, a[href^="/live/"], a[href^="/channel/"], a[href^="/"][href$="/"]';
+export const STREAMER_MORE_BTN = 'button[aria-label="더보기"], button[aria-expanded]';
 
 // 채팅 부모
 export const CHAT_CONTAINER = '#aside-chatting';
@@ -77,9 +77,8 @@ export const ASIDE_POPUP_CONTENTS = '#popup_contents';
 export const CHATTING_TOOLS = '#aside-chatting';
 export const CHATTING_ACTIONS = byClass('_donation_');
 // 우리 고정 박스를 "같은 레벨"로 붙일 네이티브 고정 메시지 컨테이너 찾기 (resilient union).
-export const CHATTING_FIXED_AREA = '._fixed_sg7hy_16, [class*="live_chatting_list_fixed__"]';
+export const CHATTING_FIXED_AREA = '[class*="_fixed_"], [class*="live_chatting_list_fixed__"]';
 // 고정 영역이 없는 채팅창에서 새로 만들 때 부여할 클래스명 (네이티브 고정 영역 스타일 차용).
-export const CHATTING_PIN = '_fixed_sg7hy_16';
 export const CHATTING_DONATION_POPUP = byClass('live_chatting_popup_donation_layer__'); // 채팅창 후원하기 창
 export const CHATTING_AREA = byClass('live_chatting_area__');
 export const CHATTING_BADGE = '._wrapper_o04z9_23';
@@ -87,7 +86,8 @@ export const CHATTING_BADGE = '._wrapper_o04z9_23';
 export const CHAT_INPUT = '._input_1xxwu_59._default_1xxwu_77, [class*="live_chatting_input_input__"]';
 // 채팅 입력창의 contenteditable 요소. CHAT_INPUT 은 _default_ 클래스를 요구해 내용이 있으면 매칭 실패하므로,
 // 포커스 용도로는 해시에 의존하지 않는 이 셀렉터를 사용한다.
-export const CHAT_INPUT_EDITABLE = '#aside-chatting pre[contenteditable="true"]';
+export const CHAT_INPUT_EDITABLE =
+  '#aside-chatting pre[contenteditable="true"], #aside-chatting [contenteditable="true"], #aside-chatting textarea, #aside-chatting input';
 export const CHAT_USER_AREA = '._area_1qgfi_49';
 
 // 동영상 Card UI

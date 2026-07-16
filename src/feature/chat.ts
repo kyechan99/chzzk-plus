@@ -1,9 +1,16 @@
 import { createReactElement, waitingElement } from '../utils/dom';
-import { CHAT_CONTAINER, CHAT_WRAPPER, CHATTING_PIN } from '../constants/class';
+import { CHAT_CONTAINER } from '../constants/class';
 import { MESSAGE_PIN_ENABLE } from '../constants/storage';
 import PinnedMessageBox from '../components/pinnedMessageBox/PinnedMessageBox';
 import { chatObserve, userPopupObserve } from '../utils/observe';
 import { delay } from '../utils/time';
+import {
+  getChatFixedClassName,
+  getChatFixedContentClassName,
+  getChatMessageList,
+  getChatPinnedArea,
+  getNativeChatFixedArea,
+} from '../utils/chatDom';
 
 let pinBoxMounting = false;
 
@@ -31,22 +38,23 @@ export async function chatSetting(): Promise<void> {
     pinBoxMounting = true;
 
     try {
-      const chatPinned = chatContainer.querySelector(`.${CHATTING_PIN}`);
-      if (chatPinned) {
-        chatPinned.className = `${chatPinned.classList} czp-message-pin-root`;
+      if (getChatPinnedArea(chatContainer)) return;
 
-        const container = document.createElement('div');
-        chatPinned.appendChild(container);
-        createReactElement(container, PinnedMessageBox);
-      } else {
-        const chatWrapper = chatContainer.querySelector(CHAT_WRAPPER);
-        if (chatWrapper && !chatWrapper.previousElementSibling?.classList.contains('czp-message-pin-root')) {
-          const pinRoot = document.createElement('div');
-          pinRoot.className = `czp-message-pin-root ${CHATTING_PIN}`;
+      let nativeFixed = getNativeChatFixedArea(chatContainer);
+      const chatWrapper = getChatMessageList(chatContainer);
+      if (!nativeFixed && chatWrapper) {
+        nativeFixed = document.createElement('div');
+        nativeFixed.className = getChatFixedClassName(chatContainer);
+        chatWrapper.insertAdjacentElement('beforebegin', nativeFixed);
+      }
 
-          createReactElement(pinRoot, PinnedMessageBox);
-          chatWrapper.insertAdjacentElement('beforebegin', pinRoot);
-        }
+      if (nativeFixed) {
+        const contentClassName = getChatFixedContentClassName(chatContainer);
+        const pinRoot = document.createElement('div');
+        pinRoot.className = ['czp-message-pin-root', contentClassName].filter(Boolean).join(' ');
+
+        createReactElement(pinRoot, PinnedMessageBox);
+        nativeFixed.appendChild(pinRoot);
       }
     } finally {
       pinBoxMounting = false;

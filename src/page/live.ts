@@ -4,16 +4,14 @@ import AudioCompressorButton from '../components/button/AudioCompressorButton/Au
 
 import { log } from '../utils/log';
 import { isLivePage } from '../utils/page';
-import { createReactElement, findClosestByClassPrefixWithChildTexts, waitingElement } from '../utils/dom';
+import { createReactElement, waitingElement } from '../utils/dom';
+import { findHeaderToolbar } from '../utils/header';
 
 import {
-  VIDEO_BUTTONS,
   PLAYER_LAYOUT_ID,
   CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
-  CHATTING_ACTIONS,
   CHATTING_DONATION_POPUP,
-  SECTION_TOOLBAR,
   CHATTING_AREA,
 } from '../constants/class';
 import {
@@ -34,16 +32,70 @@ import { chatEmojiSearchSetting } from '../feature/chatEmojiSearch';
 import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
+import { findPlayerButtonList } from '../utils/playerDom';
+import { getChatActionArea, getChatContainer } from '../utils/chatDom';
 
-const LIVE_CONTROL_MENU_CLASS_PREFIX = '_control_';
-const LIVE_CONTROL_MENU_BUTTON_LABELS = ['팔로잉', '구독 선물'];
+const FAVORITE_ROOT_ID = 'chzzk-plus-favorite-btn';
+
+const getButtonText = (button: HTMLButtonElement): string => {
+  return [
+    button.textContent,
+    button.getAttribute('aria-label'),
+    button.getAttribute('title'),
+    button.getAttribute('data-tooltip'),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
 
 const findLiveControlMenu = (): Element | null => {
-  return findClosestByClassPrefixWithChildTexts({
-    childSelector: 'button',
-    classPrefix: LIVE_CONTROL_MENU_CLASS_PREFIX,
-    texts: LIVE_CONTROL_MENU_BUTTON_LABELS,
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('button'));
+  const semanticButton = buttons.find(button => {
+    const text = button.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    const label = button.getAttribute('aria-label') ?? '';
+    return text.includes('구독') || text.includes('팔로우') || label.includes('구독') || label.includes('팔로우');
   });
+  if (semanticButton?.parentElement) return semanticButton.parentElement;
+
+  return (
+    Array.from(document.querySelectorAll<HTMLElement>('main div, main section')).find(element => {
+      const text = element.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+      return element.querySelectorAll('button').length >= 2 && (text.includes('구독') || text.includes('팔로우'));
+    }) ?? null
+  );
+};
+
+const findFollowButton = (): HTMLButtonElement | null => {
+  return (
+    Array.from(document.querySelectorAll<HTMLButtonElement>('main button')).find(button => {
+      const text = getButtonText(button);
+      return text.includes('팔로우') || text.includes('팔로잉') || /\bFollow(?:ing)?\b/i.test(text);
+    }) ?? null
+  );
+};
+
+const findFavoriteMountTarget = (): Element | null => {
+  return findFollowButton()?.parentElement ?? findLiveControlMenu();
+};
+
+const findFollowStateScope = (mountTarget: Element): Element => {
+  return mountTarget.closest('section, article, [class*="_profile_"], [class*="_information_"]') ?? mountTarget;
+};
+
+const isFollowingChannel = (mountTarget: Element): boolean => {
+  const scope = findFollowStateScope(mountTarget);
+  const buttons = Array.from(scope.querySelectorAll<HTMLButtonElement>('button'));
+
+  return buttons.some(button => {
+    const text = getButtonText(button);
+    return text.includes('팔로잉') || /\bFollowing\b/i.test(text);
+  });
+};
+
+const removeFavoriteButton = (): void => {
+  document.getElementById(FAVORITE_ROOT_ID)?.remove();
 };
 
 export const editLivePage = async () => {
@@ -90,8 +142,7 @@ export const editLivePage = async () => {
 
   const ensureMessageStorageButton = () => {
     if (!document.getElementById('chzzk-plus-live-chattools')) {
-      const $chatTools = document.querySelector(CHATTING_TOOLS);
-      const $donationTools = $chatTools?.querySelector(CHATTING_ACTIONS);
+      const $donationTools = getChatActionArea();
       if ($donationTools) {
         const $tools = document.createElement('div');
         $tools.id = 'chzzk-plus-live-chattools';
@@ -120,7 +171,7 @@ export const editLivePage = async () => {
         });
       }
     });
-    const $chat_area = document.querySelector(CHATTING_AREA);
+    const $chat_area = getChatContainer() ?? document.querySelector(CHATTING_AREA);
     if ($chat_area) observer.observe($chat_area, { childList: true, subtree: true });
   };
 
@@ -141,17 +192,25 @@ export const editLivePage = async () => {
       }
 
       // Feat: 즐겨찾기 버튼 (라이브 정보 헤더 옆) ==============================================
-      if (res[FAVORITE_ENABLE] && !document.getElementById('chzzk-plus-favorite-btn')) {
-        const $liveControl = findLiveControlMenu();
-        if ($liveControl) {
+      if (res[FAVORITE_ENABLE]) {
+        const $followControl = findFavoriteMountTarget();
+        if (!$followControl || !isFollowingChannel($followControl)) {
+          removeFavoriteButton();
+        } else if (!document.getElementById(FAVORITE_ROOT_ID)) {
           const $favRoot = document.createElement('div');
-          $favRoot.id = 'chzzk-plus-favorite-btn';
-          $liveControl.prepend($favRoot);
+          $favRoot.id = FAVORITE_ROOT_ID;
+          $followControl.prepend($favRoot);
           createReactElement($favRoot, FavoriteButton);
+          if ($followControl) {
+            ($followControl as HTMLElement).style.display = 'flex';
+            ($followControl as HTMLElement).style.gap = '6px';
+          }
         }
+      } else {
+        removeFavoriteButton();
       }
 
-      const $btn_list = document.querySelector(VIDEO_BUTTONS);
+      const $btn_list = findPlayerButtonList();
 
       // Feat: 빨리감기 버튼 활성화 =========================================================
       if (res[FAST_BUTTON] && $btn_list && !document.getElementById('chzzk-plus-fast-btns')) {
@@ -198,7 +257,7 @@ export const editLivePage = async () => {
       //   }
       // }
       if (res[GUARD_ENALBE]) {
-        const $sectionToolbar = document.querySelector(SECTION_TOOLBAR);
+        const $sectionToolbar = findHeaderToolbar();
         if ($sectionToolbar && !document.getElementById('chzzk-plus-screen-guard')) {
           const $tools = document.createElement('div');
           $tools.id = 'chzzk-plus-screen-guard';

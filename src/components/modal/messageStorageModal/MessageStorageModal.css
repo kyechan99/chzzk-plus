@@ -68,7 +68,7 @@
 .czp-storage-form-input {
   padding: 0.5rem;
   flex: 1;
-  background: var(--Surface-Neutral-Base);
+  background: var(--sem-color-surface-neutral-base);
   border-radius: 0.5rem;
 }
 
@@ -105,7 +105,7 @@
   padding: 1rem;
   cursor: pointer;
   flex-shrink: 0;
-  background: var(--Surface-Neutral-Base);
+  background: var(--sem-color-surface-neutral-base);
   border-radius: 1rem;
 }
 

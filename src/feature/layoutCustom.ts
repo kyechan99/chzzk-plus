@@ -20,7 +20,7 @@ import {
 import { CHAT_CONTAINER, LAYOUT_WRAP, SIDEBAR, VOD_ASIDE } from '../constants/class';
 
 // 우측 패널(라이브 채팅 / VOD aside). 팝업 채팅은 제외. 둘은 동시에 존재하지 않는다.
-const RIGHT_PANEL = `${CHAT_CONTAINER}:not([class*="_is_popup_chat_"]), ${VOD_ASIDE}`;
+const RIGHT_PANEL = `${CHAT_CONTAINER}, ${VOD_ASIDE}`;
 
 const STYLE_ID = 'czp-layout-custom-style';
 const HANDLE_STYLE_ID = 'czp-layout-handle-style';
@@ -50,8 +50,8 @@ const buildCss = (): string => {
   let css = '';
   if (sidebarWidth != null) {
     css += `@media (min-width: 1200px) {
-      ${SIDEBAR}[class*="_is_expanded_"] { width: ${sidebarWidth}px !important; }
-      #${LAYOUT_WRAP}[class*="_is_expanded_"] { padding-left: ${sidebarWidth}px !important; }
+      ${SIDEBAR}[data-czp-expanded="true"] { width: ${sidebarWidth}px !important; }
+      #${LAYOUT_WRAP}[data-czp-sidebar-expanded="true"] { padding-left: ${sidebarWidth}px !important; }
     }`;
   }
   if (chatWidth != null) {
@@ -59,11 +59,21 @@ const buildCss = (): string => {
     // 그때는 고정 너비를 주지 않는다. 가로형(aspect-ratio > 1/1)에서만 적용.
     css += `
       @media (aspect-ratio > 1/1) {
-        ${CHAT_CONTAINER}:not([class*="_is_popup_chat_"]) { width: ${chatWidth}px !important; flex: none !important; }
+        ${CHAT_CONTAINER} { width: ${chatWidth}px !important; flex: none !important; }
         ${VOD_ASIDE} { width: ${chatWidth}px !important; flex: none !important; }
       }`;
   }
   return css;
+};
+
+const syncExpandedState = (): void => {
+  const sidebar = document.querySelector<HTMLElement>(SIDEBAR);
+  const layout = document.getElementById(LAYOUT_WRAP);
+  const rect = sidebar?.getBoundingClientRect();
+  const expanded = !!rect && rect.width > 80;
+
+  sidebar?.setAttribute('data-czp-expanded', String(expanded));
+  layout?.setAttribute('data-czp-sidebar-expanded', String(expanded));
 };
 
 const applyStyle = (): void => {
@@ -151,10 +161,11 @@ const ensureHandles = (): void => {
 // 핸들을 대상 엘리먼트 모서리에 맞춰 계속 위치시킨다.
 const positionHandles = (): void => {
   if (!enabled) return;
+  syncExpandedState();
 
   const sb = document.querySelector(SIDEBAR);
   if (sidebarHandle) {
-    const expanded = sb?.matches('[class*="_is_expanded_"]');
+    const expanded = sb?.getAttribute('data-czp-expanded') === 'true';
     const r = sb?.getBoundingClientRect();
     if (sb && expanded && r && r.width > 0) {
       sidebarHandle.style.display = 'block';

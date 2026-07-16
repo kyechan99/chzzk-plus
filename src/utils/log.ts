@@ -1,4 +1,4 @@
-const isDev = false;
+const isDev = true;
 
 export const log = (msg: unknown) => {
   if (isDev) console.log(`[Cheese-Plus] : ${msg}`);

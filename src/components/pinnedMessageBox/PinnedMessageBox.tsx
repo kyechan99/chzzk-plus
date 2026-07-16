@@ -47,16 +47,9 @@ export default function PinnedMessageBox() {
   };
 
   return (
-    <div
-      className={`_container_dba1a_1 ${isOpen ? '_is_opened_dba1a_7' : ''}`}
-      id="chzzk-plus-message-pin"
-      style={{ top: 'unset' }}
-    >
-      <div className="_wrapper_dba1a_7">
-        <div
-          className={`live_chatting_fixed_mission_header__EvP2K ${isOpen ? 'isOpen' : ''}`}
-          onClick={handleToggleOpen}
-        >
+    <div className={`${isOpen ? '_is_opened_' : ''}`} id="chzzk-plus-message-pin" style={{ top: 'unset' }}>
+      <div className="czp-message-pin-wrapper">
+        <div className={`czp-live_chatting_fixed_mission_header ${isOpen ? 'isOpen' : ''}`} onClick={handleToggleOpen}>
           <div id="chzzk-plus-message-pin-title-container">
             <span id="chzzk-plus-message-pin-title" className="_header_dba1a_30">
               <svg
@@ -90,7 +83,7 @@ export default function PinnedMessageBox() {
             </span>
             <span id="chzzk-plus-new-message-dot">•</span>
           </div>
-          <div className="live_chatting_fixed_mission_folded_button__bBWS2">
+          <div className="czp-live_chatting_fixed_mission_folded_button">
             <svg
               width="22"
               height="22"
@@ -109,7 +102,7 @@ export default function PinnedMessageBox() {
             </svg>
           </div>
         </div>
-        <div ref={pinListRef} className="czp-message-pin-list _message_dba1a_47">
+        <div ref={pinListRef} className={`czp-message-pin-list _message_dba1a_47 ${isOpen ? 'isOpen' : ''}`}>
           {!hasMessages && <div id="chzzk-plus-message-pin-empty-message">메시지가 없습니다</div>}
         </div>
       </div>

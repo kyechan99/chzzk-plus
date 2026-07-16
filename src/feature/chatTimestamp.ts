@@ -12,10 +12,10 @@
 import { CHAT_CONTAINER } from '../constants/class';
 import { CHAT_TIMESTAMP_ENABLE } from '../constants/storage';
 import { waitingElement } from '../utils/dom';
+import { findChatNicknameButton, isChatMessageItem } from '../utils/chatDom';
 
 const CLASS = 'czp-chat-timestamp';
 const STYLE_ID = 'czp-chat-timestamp-style';
-const NICK_BTN = 'button[class*="_nickname_"]';
 
 let started = false;
 let enabled = false;
@@ -45,8 +45,19 @@ const stampButton = (btn: Element): void => {
 };
 
 const stampWithin = (node: Element): void => {
-  if (node.matches?.(NICK_BTN)) stampButton(node);
-  node.querySelectorAll?.(NICK_BTN).forEach(stampButton);
+  if (isChatMessageItem(node)) {
+    const button = findChatNicknameButton(node);
+    if (button) stampButton(button);
+    return;
+  }
+
+  node
+    .querySelectorAll?.('[data-czp-chat-item], [class*="live_chatting_list_item__"], [class*="_item_"]')
+    .forEach(item => {
+      if (!isChatMessageItem(item)) return;
+      const button = findChatNicknameButton(item);
+      if (button) stampButton(button);
+    });
 };
 
 const startObserver = async (): Promise<void> => {

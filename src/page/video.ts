@@ -9,7 +9,7 @@ import AudioCompressorButton from '../components/button/AudioCompressorButton/Au
 // import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 
 import { AUDIO_COMPRESSOR } from '../constants/storage';
-import { VIDEO_BUTTONS } from '../constants/class';
+import { findPlayerButtonList } from '../utils/playerDom';
 
 export const editVideoPage = () => {
   if (!isVideoPage()) return;
@@ -49,7 +49,7 @@ export const editVideoPage = () => {
     // }
   */
   chrome.storage.local.get([AUDIO_COMPRESSOR], res => {
-    const $btn_list = document.querySelector(VIDEO_BUTTONS);
+    const $btn_list = findPlayerButtonList();
 
     // Feat: 오디오 압축 버튼 활성화 =======================================================
     if (res[AUDIO_COMPRESSOR] && $btn_list && !document.getElementById('chzzk-plus-compr-btns')) {

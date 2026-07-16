@@ -1,0 +1,17 @@
+.czp-user-pin-button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.czp-user-pin-button-icon {
+  flex: none;
+}

@@ -2,21 +2,41 @@ import { useState, useEffect } from 'react';
 import { USER_POPUP_NAME } from '../../../constants/class';
 import { MESSAGE_PIN_USERS } from '../../../constants/storage';
 import { waitingElement } from '../../../utils/dom';
+import { findUserPopupNickname } from '../../../utils/chatDom';
+import './UserPinButton.css';
+
+const getCurrentPopupRoot = (): Element | null => {
+  return (
+    document
+      .getElementById('chzzk-plus-user-pin-btn')
+      ?.closest('[role="alertdialog"], [role="dialog"], [role="menu"]') ?? null
+  );
+};
 
 export default function UserPinButton() {
   const [isPinned, setIsPinned] = useState(false);
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    waitingElement(USER_POPUP_NAME).then(userNameElement => {
-      if (userNameElement?.textContent) {
-        setUserName(userNameElement.textContent);
+    const applyUserName = (name: string | null | undefined) => {
+      const nextUserName = name?.replace(/\s+/g, ' ').trim();
+      if (nextUserName) {
+        setUserName(nextUserName);
         chrome.storage.local.get([MESSAGE_PIN_USERS], res => {
           const pinnedUsers = res[MESSAGE_PIN_USERS] || [];
-          setIsPinned(pinnedUsers.includes(userNameElement.textContent));
+          setIsPinned(pinnedUsers.includes(nextUserName));
         });
       }
-    });
+    };
+
+    applyUserName(findUserPopupNickname(getCurrentPopupRoot() ?? document.body));
+
+    if (!getCurrentPopupRoot()) {
+      waitingElement(USER_POPUP_NAME).then(userNameElement => {
+        applyUserName(userNameElement?.textContent);
+      });
+    }
+
     return () => {
       setUserName('');
       setIsPinned(false);
@@ -50,14 +70,14 @@ export default function UserPinButton() {
   if (!userName) return <></>;
 
   return (
-    <button onClick={handlerClick} className="_item_1hyev_272">
+    <button onClick={handlerClick} className="czp-user-pin-button">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="25"
         height="25"
         viewBox="0 0 20 20"
         fill="none"
-        className="_icon_control_1hyev_296"
+        className="czp-user-pin-button-icon"
         aria-hidden="true"
       >
         <path

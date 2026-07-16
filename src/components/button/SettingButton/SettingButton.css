@@ -1,3 +1,17 @@
 .czp-setting-btn {
-    color: var(--color-bg-chzzk-01);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-bg-chzzk-01, #00ffa3);
+    cursor: pointer;
+    padding: 0;
+}
+
+.czp-setting-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
 }

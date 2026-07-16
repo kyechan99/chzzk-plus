@@ -8,8 +8,8 @@
   word-break: break-all;
   word-wrap: break-word;
   z-index: 10;
-  background-color: var(--Surface-Neutral-Subtle);
-  color: var(--Content-Neutral-Cool-Strong);
+  background-color: var(--sem-color-surface-neutral-subtle);
+  color: var(--sem-color-content-neutral-cool-strong);
   border-radius: 6px;
   align-items: center;
   padding: 3px 3px 3px 8px;
