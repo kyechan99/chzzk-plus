@@ -22,6 +22,8 @@ const FAV_ITEM_CLASS = 'czp-fav-item';
 const FAV_BADGE_CLASS = 'czp-fav-nav-badge';
 const BADGE_ICON_ATTR = 'data-czp-icon';
 const BADGE_COLOR_ATTR = 'data-czp-color';
+const ORDER_LIST_CLASS = 'czp-fav-order-list';
+const ORDER_STYLE_ID = 'czp-fav-order-style';
 const CHANNEL_ID_REGEX = /\/(?:live\/|channel\/)?([0-9a-f]{32})(?:[/?#]|$)/i;
 
 let initialized = false;
@@ -47,9 +49,24 @@ interface NavItem {
   channelId: string;
   isLive: boolean;
   groupIndex: number; // 비-즐겨찾기는 Infinity
+  baseIndex: number;
   iconId: string | null;
   color: string | null;
 }
+
+const baseOrderById = new Map<string, number>();
+let nextBaseOrder = 0;
+
+const getBaseIndex = (channelId: string, fallbackIndex: number): number => {
+  if (!channelId) return Number.MAX_SAFE_INTEGER - 1000 + fallbackIndex;
+
+  const existing = baseOrderById.get(channelId);
+  if (existing != null) return existing;
+
+  const next = nextBaseOrder++;
+  baseOrderById.set(channelId, next);
+  return next;
+};
 
 const isLiveItem = (el: Element, href: string): boolean => {
   if (href.includes('/live/')) return true;
@@ -74,7 +91,7 @@ const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
   });
 
   const items: NavItem[] = [];
-  Array.from(ul.children).forEach(child => {
+  Array.from(ul.children).forEach((child, idx) => {
     const el = child as HTMLElement;
     const isItem = el.matches(SIDEBAR_MENU_ITEM) || !!el.querySelector(SIDEBAR_MENU_ITEM);
     if (!isItem) return;
@@ -89,6 +106,7 @@ const buildNavItems = (ul: HTMLUListElement, data: FavoriteData): NavItem[] => {
       channelId: id,
       isLive,
       groupIndex,
+      baseIndex: getBaseIndex(id, idx),
       iconId: id ? (iconById.get(id) ?? null) : null,
       color: id ? (colorById.get(id) ?? null) : null,
     });
@@ -133,6 +151,15 @@ const syncMarkersAndBadges = (items: NavItem[]): void => {
   });
 };
 
+const ensureOrderStyle = (): void => {
+  if (document.getElementById(ORDER_STYLE_ID)) return;
+
+  const style = document.createElement('style');
+  style.id = ORDER_STYLE_ID;
+  style.textContent = `.${ORDER_LIST_CLASS} { display: flex !important; flex-direction: column !important; }`;
+  (document.head || document.documentElement).appendChild(style);
+};
+
 /**
  * 그룹 순서로 stable sort 한 결과를 반환.
  * Array.sort 는 ES2019 부터 stable 이라 같은 priority 면 원본 순서 유지.
@@ -144,6 +171,23 @@ const computeDesiredOrder = (items: NavItem[]): NavItem[] => {
     return a.idx - b.idx; // 안정성 보강
   });
   return indexed.map(x => x.item);
+};
+
+const computeDesiredOrderByBaseOrder = (items: NavItem[]): NavItem[] => {
+  if (items.length < 2) return computeDesiredOrder(items);
+
+  return items
+    .map((item, idx) => ({ item, idx }))
+    .sort((a, b) => {
+      const groupDelta = a.item.groupIndex - b.item.groupIndex;
+      if (groupDelta !== 0) return groupDelta;
+
+      const baseDelta = a.item.baseIndex - b.item.baseIndex;
+      if (baseDelta !== 0) return baseDelta;
+
+      return a.idx - b.idx;
+    })
+    .map(x => x.item);
 };
 
 const isSameOrder = (a: NavItem[], b: NavItem[]): boolean => {
@@ -168,6 +212,27 @@ const applyOrder = (ul: HTMLUListElement, desired: NavItem[]): void => {
   ul.insertBefore(fragment, ul.firstChild);
 };
 
+const clearCssOrder = (ul: HTMLUListElement, items: NavItem[]): void => {
+  items.forEach(item => item.el.style.removeProperty('order'));
+  ul.classList.remove(ORDER_LIST_CLASS);
+};
+
+const applyCssOrder = (ul: HTMLUListElement, desired: NavItem[]): void => {
+  if (desired.length === -1) applyOrder(ul, desired);
+
+  ensureOrderStyle();
+  ul.classList.add(ORDER_LIST_CLASS);
+
+  desired.forEach(item => {
+    if (!Number.isFinite(item.groupIndex)) {
+      item.el.style.removeProperty('order');
+      return;
+    }
+
+    item.el.style.order = String(-100000 + item.groupIndex * 10000 + item.baseIndex);
+  });
+};
+
 const scheduleReorder = () => {
   if (scheduled) return;
   scheduled = true;
@@ -185,12 +250,18 @@ const scheduleReorder = () => {
 
       // 2) 정렬: 그룹 가진 아이템이 하나도 없으면 스킵
       const hasAnyFavorite = items.some(i => i.iconId !== null && i.isLive);
-      if (!hasAnyFavorite) return;
+      if (!hasAnyFavorite) {
+        clearCssOrder(ul, items);
+        return;
+      }
 
-      const desired = computeDesiredOrder(items);
-      if (isSameOrder(items, desired)) return;
+      const desired = computeDesiredOrderByBaseOrder(items);
+      if (isSameOrder(items, desired)) {
+        applyCssOrder(ul, desired);
+        return;
+      }
 
-      applyOrder(ul, desired);
+      applyCssOrder(ul, desired);
     } catch (err) {
       logWarning(err);
     }

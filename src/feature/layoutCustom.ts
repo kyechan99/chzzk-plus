@@ -29,6 +29,7 @@ const SIDEBAR_MIN = 180;
 const SIDEBAR_MAX = 600;
 const CHAT_MIN = 280;
 const CHAT_MAX = 700;
+const SIDEBAR_EXPANDED_CLASS_SELECTOR = '[class*="_is_expanded_"], [class*="is_expanded"], [class*="isExpanded"]';
 
 let started = false;
 let enabled = false;
@@ -37,6 +38,7 @@ let applied = false;
 // null = 사용자가 조절하지 않음 → 사이트 기본값을 그대로 둔다(우리 CSS 미주입).
 let sidebarWidth: number | null = null;
 let chatWidth: number | null = null;
+let sidebarExpanded = false;
 
 let sidebarHandle: HTMLElement | null = null;
 let chatHandle: HTMLElement | null = null;
@@ -48,7 +50,7 @@ const clamp = (v: number, min: number, max: number): number => Math.min(max, Mat
 // 사용자가 조절한 값(null 아님)에 대해서만 규칙을 만든다 → 미조절 시 사이트 기본값 유지.
 const buildCss = (): string => {
   let css = '';
-  if (sidebarWidth != null) {
+  if (sidebarWidth != null && isSidebarExpandedByNativeClass()) {
     css += `@media (min-width: 1200px) {
       ${SIDEBAR}[data-czp-expanded="true"] { width: ${sidebarWidth}px !important; }
       #${LAYOUT_WRAP}[data-czp-sidebar-expanded="true"] { padding-left: ${sidebarWidth}px !important; }
@@ -66,14 +68,22 @@ const buildCss = (): string => {
   return css;
 };
 
+const isSidebarExpandedByNativeClass = (): boolean => {
+  const sidebar = document.querySelector<HTMLElement>(SIDEBAR);
+  if (!sidebar) return false;
+  return sidebar.matches(SIDEBAR_EXPANDED_CLASS_SELECTOR) || !!sidebar.querySelector(SIDEBAR_EXPANDED_CLASS_SELECTOR);
+};
+
 const syncExpandedState = (): void => {
   const sidebar = document.querySelector<HTMLElement>(SIDEBAR);
   const layout = document.getElementById(LAYOUT_WRAP);
-  const rect = sidebar?.getBoundingClientRect();
-  const expanded = !!rect && rect.width > 80;
+  const expanded = isSidebarExpandedByNativeClass();
+  const changed = expanded !== sidebarExpanded;
+  sidebarExpanded = expanded;
 
   sidebar?.setAttribute('data-czp-expanded', String(expanded));
   layout?.setAttribute('data-czp-sidebar-expanded', String(expanded));
+  if (changed && applied) applyStyle();
 };
 
 const applyStyle = (): void => {

@@ -83,31 +83,56 @@ interface ChannelSnapshot {
   thumbnail: string;
   href: string;
 }
-let prevSnapshotSet: Map<string, ChannelSnapshot> | null = null;
+interface FollowSnapshot {
+  live: Map<string, ChannelSnapshot>;
+  allIds: Set<string>;
+}
+
+let prevSnapshot: FollowSnapshot | null = null;
+
+const isSameIdSet = (a: Set<string>, b: Set<string>): boolean => {
+  if (a.size !== b.size) return false;
+  for (const id of a) {
+    if (!b.has(id)) return false;
+  }
+  return true;
+};
+
 /**
  * 팔로잉 nav 에서 "현재 라이브" 채널 집합 스냅샷 빌더
  */
-const buildSnapshot = (): Map<string, ChannelSnapshot> => {
-  const map = new Map<string, ChannelSnapshot>();
+const buildSnapshot = (): FollowSnapshot | null => {
+  const live = new Map<string, ChannelSnapshot>();
+  const allIds = new Set<string>();
   const followingNav = findFollowingNav();
-  if (!followingNav) return map;
+  if (!followingNav) return null;
 
-  followingNav.querySelectorAll('li').forEach(li => {
+  const channelItems = Array.from(followingNav.querySelectorAll('li')).filter(li => {
+    return !!li.querySelector<HTMLAnchorElement>('a[href]');
+  });
+  if (channelItems.length === 0) return null;
+
+  channelItems.forEach(li => {
     const anchor =
       li.querySelector<HTMLAnchorElement>('a[class*="_item_link_"]') ?? li.querySelector<HTMLAnchorElement>('a[href]');
     const href = anchor?.getAttribute('href') ?? '';
     const id = extractChannelId(href);
 
-    if (!id || map.has(id)) return;
+    if (!id) return;
+    allIds.add(id);
+
+    if (live.has(id)) return;
     if (!isItemLive(li, href)) return;
 
-    map.set(id, {
+    live.set(id, {
       name: getChannelName(li),
       thumbnail: getChannelThumbnail(li),
       href: href,
     });
   });
-  return map;
+
+  if (allIds.size === 0) return null;
+  return { live, allIds };
 };
 
 /* ── 토스트 UI ─────────────────────────────────────────────── */
@@ -232,25 +257,30 @@ const tick = (): void => {
   if (!startEnabled && !endEnabled) return;
 
   const current = buildSnapshot();
-  if (current.size === 0 && prevSnapshotSet === null) return;
+  if (current === null) return;
 
-  if (prevSnapshotSet === null) {
-    prevSnapshotSet = current;
+  if (prevSnapshot === null) {
+    prevSnapshot = current;
+    return;
+  }
+
+  if (!isSameIdSet(prevSnapshot.allIds, current.allIds)) {
+    prevSnapshot = current;
     return;
   }
 
   if (startEnabled) {
-    for (const [id, channel] of current) {
-      if (!prevSnapshotSet.has(id)) notify(id, channel, 'start');
+    for (const [id, channel] of current.live) {
+      if (!prevSnapshot.live.has(id)) notify(id, channel, 'start');
     }
   }
   if (endEnabled) {
-    for (const [id, channel] of prevSnapshotSet) {
-      if (!current.has(id)) notify(id, channel, 'end');
+    for (const [id, channel] of prevSnapshot.live) {
+      if (!current.live.has(id)) notify(id, channel, 'end');
     }
   }
 
-  prevSnapshotSet = current;
+  prevSnapshot = current;
 };
 
 const schedule = (): void => {

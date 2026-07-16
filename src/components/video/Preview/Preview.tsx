@@ -9,6 +9,17 @@ import { PREVIEW_VOLUME } from '../../../constants/storage';
 
 import './Preview.css';
 
+const isLiveSidebarItem = (element: HTMLElement): boolean => {
+  const item = element.closest('li');
+  if (!item) return false;
+
+  const anchor = element.closest('a');
+  const href = anchor?.getAttribute('href') ?? '';
+  if (href.includes('/live/')) return true;
+  if (item.querySelector('[class*="_is_live_"]')) return true;
+  return /\bLIVE\b/i.test(item.textContent ?? '');
+};
+
 export default function Preview() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -184,6 +195,11 @@ export default function Preview() {
 
         // 채널 링크가 아니면 (지연) 숨김. 핀 상태면 scheduleHide 가 무시한다.
         if (!anchor || !channelID) {
+          scheduleHide();
+          return;
+        }
+
+        if (!isLiveSidebarItem(event.target as HTMLElement)) {
           scheduleHide();
           return;
         }
