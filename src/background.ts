@@ -9,6 +9,8 @@ import {
   AUDIO_COMPRESSOR_AUTO,
   FAST_BUTTON,
   CHAT_EMOJI_SEARCH_ENABLE,
+  CHAT_TIMESTAMP_FORMAT,
+  CHAT_TIMESTAMP_FORMAT_DEFAULT,
 } from './constants/storage';
 
 const defaultValues: Record<string, unknown> = {
@@ -22,6 +24,7 @@ const defaultValues: Record<string, unknown> = {
   [AUDIO_COMPRESSOR_AUTO]: true,
   [FAST_BUTTON]: true,
   [CHAT_EMOJI_SEARCH_ENABLE]: true,
+  [CHAT_TIMESTAMP_FORMAT]: CHAT_TIMESTAMP_FORMAT_DEFAULT,
 };
 
 chrome.runtime.onMessage.addListener(message => {

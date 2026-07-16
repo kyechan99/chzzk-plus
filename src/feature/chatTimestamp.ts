@@ -10,22 +10,55 @@
  * 기존(백로그) 채팅은 실제 작성 시각을 알 수 없으므로 새로 도착하는 채팅만 표기한다.
  */
 import { CHAT_CONTAINER } from '../constants/class';
-import { CHAT_TIMESTAMP_ENABLE } from '../constants/storage';
+import {
+  CHAT_TIMESTAMP_ENABLE,
+  CHAT_TIMESTAMP_FORMAT,
+  CHAT_TIMESTAMP_FORMAT_DEFAULT,
+  CHAT_TIMESTAMP_FORMAT_OPTIONS,
+} from '../constants/storage';
 import { waitingElement } from '../utils/dom';
 import { findChatNicknameButton, isChatMessageItem } from '../utils/chatDom';
 
 const CLASS = 'czp-chat-timestamp';
 const STYLE_ID = 'czp-chat-timestamp-style';
+const VALUE_ATTR = 'data-czp-chat-timestamp-value';
 
 let started = false;
 let enabled = false;
+let format = CHAT_TIMESTAMP_FORMAT_DEFAULT;
 let observer: MutationObserver | null = null;
 let observedTarget: Element | null = null;
 
 const pad = (n: number): string => String(n).padStart(2, '0');
-const nowTime = (): string => {
-  const d = new Date();
-  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+const padMs = (n: number): string => String(n).padStart(3, '0');
+
+const normalizeFormat = (value: unknown): string => {
+  return typeof value === 'string' && CHAT_TIMESTAMP_FORMAT_OPTIONS.includes(value)
+    ? value
+    : CHAT_TIMESTAMP_FORMAT_DEFAULT;
+};
+
+const formatTime = (date: Date): string => {
+  const hours24 = date.getHours();
+  const hours12 = hours24 % 12 || 12;
+  const ampm = hours24 < 12 ? 'AM' : 'PM';
+
+  return format
+    .replace(/YYYY/g, String(date.getFullYear()))
+    .replace(/MM/g, pad(date.getMonth() + 1))
+    .replace(/DD/g, pad(date.getDate()))
+    .replace(/HH/g, pad(hours24))
+    .replace(/hh/g, pad(hours12))
+    .replace(/h/g, String(hours12))
+    .replace(/mm/g, pad(date.getMinutes()))
+    .replace(/ss/g, pad(date.getSeconds()))
+    .replace(/SSS/g, padMs(date.getMilliseconds()))
+    .replace(/A/g, ampm);
+};
+
+const nowTime = (): { text: string; value: string } => {
+  const date = new Date();
+  return { text: formatTime(date), value: date.toISOString() };
 };
 
 const ensureStyle = (): void => {
@@ -38,10 +71,22 @@ const ensureStyle = (): void => {
 
 const stampButton = (btn: Element): void => {
   if (btn.querySelector(`:scope > .${CLASS}`)) return;
+  const time = nowTime();
   const span = document.createElement('span');
   span.className = CLASS;
-  span.textContent = nowTime();
+  span.setAttribute(VALUE_ATTR, time.value);
+  span.textContent = time.text;
   btn.prepend(span);
+};
+
+const refreshStampedTimes = (): void => {
+  document.querySelectorAll<HTMLElement>(`.${CLASS}`).forEach(element => {
+    const value = element.getAttribute(VALUE_ATTR);
+    if (!value) return;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return;
+    element.textContent = formatTime(date);
+  });
 };
 
 const stampWithin = (node: Element): void => {
@@ -97,12 +142,18 @@ export const initChatTimestamp = (): void => {
   if (started) return;
   started = true;
 
-  chrome.storage.local.get([CHAT_TIMESTAMP_ENABLE], res => {
+  chrome.storage.local.get([CHAT_TIMESTAMP_ENABLE, CHAT_TIMESTAMP_FORMAT], res => {
     enabled = !!res[CHAT_TIMESTAMP_ENABLE];
+    format = normalizeFormat(res[CHAT_TIMESTAMP_FORMAT]);
     if (enabled) startObserver();
   });
 
   chrome.storage.onChanged.addListener(changes => {
+    if (CHAT_TIMESTAMP_FORMAT in changes) {
+      format = normalizeFormat(changes[CHAT_TIMESTAMP_FORMAT].newValue);
+      refreshStampedTimes();
+    }
+
     if (CHAT_TIMESTAMP_ENABLE in changes) {
       enabled = !!changes[CHAT_TIMESTAMP_ENABLE].newValue;
       if (enabled) startObserver();

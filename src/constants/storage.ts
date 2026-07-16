@@ -150,6 +150,9 @@ export const POWER_COLLECT_ENABLE = 'czp-power-collect';
 
 // 채팅 타임스탬프 (채팅 생성 시각 표시)
 export const CHAT_TIMESTAMP_ENABLE = 'czp-chat-timestamp';
+export const CHAT_TIMESTAMP_FORMAT = 'czp-chat-timestamp-format';
+export const CHAT_TIMESTAMP_FORMAT_DEFAULT = 'HH:mm:ss';
+export const CHAT_TIMESTAMP_FORMAT_OPTIONS = ['HH:mm:ss', 'HH:mm', 'HH:mm:ss.SSS', 'A h:mm:ss', 'MM-DD HH:mm:ss'];
 
 // 레이아웃 커스텀 (사이드바/채팅 너비 드래그 조절)
 export const LAYOUT_CUSTOM_ENABLE = 'czp-layout-custom'; // 기능 on/off (드래그 핸들)

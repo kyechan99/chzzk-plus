@@ -36,6 +36,8 @@ import {
   CHAT_STORAGE_ENABLE,
   CHAT_TEXT_COLOR,
   CHAT_TIMESTAMP_ENABLE,
+  CHAT_TIMESTAMP_FORMAT,
+  CHAT_TIMESTAMP_FORMAT_OPTIONS,
   CHEEZE_RANKING_REMOVER,
   CHEEZE_REMOVER,
   COMP_ATTACK,
@@ -423,6 +425,17 @@ function App() {
                 <p className="menu-desc">채팅 옆에 도착 시각 표시</p>
               </div>
             </Checkbox>
+
+            <Select
+              id={CHAT_TIMESTAMP_FORMAT}
+              options={CHAT_TIMESTAMP_FORMAT_OPTIONS.map(op => {
+                return { name: op, value: op };
+              })}
+            >
+              <div className="menu depth-2">
+                <p className="menu-title">Timestamp format</p>
+              </div>
+            </Select>
 
             <Checkbox id={CHAT_EMOJI_SEARCH_ENABLE}>
               <div className="menu">
