@@ -8,8 +8,6 @@ import { createReactElement, waitingElement } from '../utils/dom';
 import { findHeaderToolbar } from '../utils/header';
 
 import {
-  PLAYER_LAYOUT_ID,
-  CHATTING_TOOLS,
   WEBPLAYER_VIDEO,
   CHATTING_DONATION_POPUP,
   CHATTING_AREA,
@@ -36,6 +34,29 @@ import { findPlayerButtonList } from '../utils/playerDom';
 import { getChatActionArea, getChatContainer } from '../utils/chatDom';
 
 const FAVORITE_ROOT_ID = 'chzzk-plus-favorite-btn';
+type ReactComponent = () => JSX.Element;
+
+let donationPopupObserver: MutationObserver | null = null;
+let donationPopupObserverTarget: Element | null = null;
+
+const mountReactRoot = (
+  parent: Element | null,
+  id: string,
+  Component: ReactComponent,
+  place: 'prepend' | 'append' = 'prepend',
+): Element | null => {
+  if (!parent) return null;
+
+  const existing = document.getElementById(id);
+  if (existing && parent.contains(existing)) return existing;
+  existing?.remove();
+
+  const root = document.createElement('div');
+  root.id = id;
+  parent[place](root);
+  createReactElement(root, Component);
+  return root;
+};
 
 const getButtonText = (button: HTMLButtonElement): string => {
   return [
@@ -113,11 +134,6 @@ export const editLivePage = async () => {
     return;
   }
   // 영상 Layout이 발견이 되었다면 content를 수정할 준비가 되었음.
-  const $playerLayout = document.getElementById(PLAYER_LAYOUT_ID);
-  if (!$playerLayout) {
-    return;
-  }
-
   // if (!document.getElementById("chzzk-plus-live-helper")) {
   // Feat: Helper 추가 (즐겨찾기, 녹화, 캡처) =========================================================
   // const $infoHeads = document.getElementsByClassName(LIVE_INFORMATION_HEAD);
@@ -137,26 +153,23 @@ export const editLivePage = async () => {
   chatTimestampSetting();
   chatEmojiSearchSetting();
 
-  const $chatToolsList = await waitingElement(CHATTING_TOOLS);
-  if (!$chatToolsList) return;
-
   const ensureMessageStorageButton = () => {
-    if (!document.getElementById('chzzk-plus-live-chattools')) {
-      const $donationTools = getChatActionArea();
-      if ($donationTools) {
-        const $tools = document.createElement('div');
-        $tools.id = 'chzzk-plus-live-chattools';
-        $tools.style.display = 'inline-flex';
-        $tools.style.width = '28px';
-        $tools.style.height = '28px';
-        $donationTools.append($tools);
-        createReactElement($tools, MessageStorageButton);
-      }
-    }
+    const $donationTools = getChatActionArea();
+    const $tools = mountReactRoot($donationTools, 'chzzk-plus-live-chattools', MessageStorageButton, 'append');
+    if (!$tools) return;
+
+    ($tools as HTMLElement).style.display = 'inline-flex';
+    ($tools as HTMLElement).style.width = '28px';
+    ($tools as HTMLElement).style.height = '28px';
   };
 
   // CHATTING_DONATION_POPUP 엘리먼트가 제거될 때 MessageStorageButton 버튼을 재생성
   const observeDonationPopupRemoval = () => {
+    const $chat_area = getChatContainer() ?? document.querySelector(CHATTING_AREA);
+    if (!$chat_area || donationPopupObserverTarget === $chat_area) return;
+
+    donationPopupObserver?.disconnect();
+    donationPopupObserverTarget = $chat_area;
     const observer = new MutationObserver(mutations => {
       for (const mutation of mutations) {
         if (mutation.type !== 'childList') continue;
@@ -171,8 +184,8 @@ export const editLivePage = async () => {
         });
       }
     });
-    const $chat_area = getChatContainer() ?? document.querySelector(CHATTING_AREA);
-    if ($chat_area) observer.observe($chat_area, { childList: true, subtree: true });
+    observer.observe($chat_area, { childList: true, subtree: true });
+    donationPopupObserver = observer;
   };
 
   /*
@@ -196,15 +209,10 @@ export const editLivePage = async () => {
         const $followControl = findFavoriteMountTarget();
         if (!$followControl || !isFollowingChannel($followControl)) {
           removeFavoriteButton();
-        } else if (!document.getElementById(FAVORITE_ROOT_ID)) {
-          const $favRoot = document.createElement('div');
-          $favRoot.id = FAVORITE_ROOT_ID;
-          $followControl.prepend($favRoot);
-          createReactElement($favRoot, FavoriteButton);
-          if ($followControl) {
-            ($followControl as HTMLElement).style.display = 'flex';
-            ($followControl as HTMLElement).style.gap = '6px';
-          }
+        } else {
+          mountReactRoot($followControl, FAVORITE_ROOT_ID, FavoriteButton);
+          ($followControl as HTMLElement).style.display = 'flex';
+          ($followControl as HTMLElement).style.gap = '6px';
         }
       } else {
         removeFavoriteButton();
@@ -213,25 +221,16 @@ export const editLivePage = async () => {
       const $btn_list = findPlayerButtonList();
 
       // Feat: 빨리감기 버튼 활성화 =========================================================
-      if (res[FAST_BUTTON] && $btn_list && !document.getElementById('chzzk-plus-fast-btns')) {
-        const $FastButton = document.createElement('div');
-        $FastButton.id = 'chzzk-plus-fast-btns';
-        $btn_list?.prepend($FastButton);
-        createReactElement($FastButton, FastButton);
+      if (res[FAST_BUTTON] && $btn_list) {
+        mountReactRoot($btn_list, 'chzzk-plus-fast-btns', FastButton);
       }
       // Feat: PIP 키 이벤트 활성화 =========================================================
-      if (res[PIP_BUTTON] && $btn_list && !document.getElementById('chzzk-plus-pip-btn')) {
-        const $PipButton = document.createElement('div');
-        $PipButton.id = 'chzzk-plus-pip-btn';
-        $btn_list?.prepend($PipButton);
-        createReactElement($PipButton, PipButton);
+      if (res[PIP_BUTTON] && $btn_list) {
+        mountReactRoot($btn_list, 'chzzk-plus-pip-btn', PipButton);
       }
       // Feat: 오디오 압축 버튼 활성화 =======================================================
-      if (res[AUDIO_COMPRESSOR] && $btn_list && !document.getElementById('chzzk-plus-compr-btns')) {
-        const $AudioCompressorButton = document.createElement('div');
-        $AudioCompressorButton.id = 'chzzk-plus-compr-btns';
-        $btn_list?.prepend($AudioCompressorButton);
-        createReactElement($AudioCompressorButton, AudioCompressorButton);
+      if (res[AUDIO_COMPRESSOR] && $btn_list) {
+        mountReactRoot($btn_list, 'chzzk-plus-compr-btns', AudioCompressorButton);
       }
       // Feat: 녹화, 캡처 활성화 ============================================================
       // if (
@@ -258,12 +257,7 @@ export const editLivePage = async () => {
       // }
       if (res[GUARD_ENALBE]) {
         const $sectionToolbar = findHeaderToolbar();
-        if ($sectionToolbar && !document.getElementById('chzzk-plus-screen-guard')) {
-          const $tools = document.createElement('div');
-          $tools.id = 'chzzk-plus-screen-guard';
-          $sectionToolbar?.prepend($tools);
-          createReactElement($tools, ScreenGuardButton);
-        }
+        mountReactRoot($sectionToolbar, 'chzzk-plus-screen-guard', ScreenGuardButton);
       }
     },
   );

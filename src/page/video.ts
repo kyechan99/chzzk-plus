@@ -15,7 +15,7 @@ const COMPRESSOR_ROOT_ID = 'chzzk-plus-compr-btns';
 let mountingCompressor = false;
 
 const ensureAudioCompressorButton = async (): Promise<void> => {
-  if (mountingCompressor || document.getElementById(COMPRESSOR_ROOT_ID)) return;
+  if (mountingCompressor) return;
   mountingCompressor = true;
 
   try {
@@ -25,7 +25,9 @@ const ensureAudioCompressorButton = async (): Promise<void> => {
     for (let i = 0; i < 20; i++) {
       const $btnList = findPlayerButtonList();
       if ($btnList) {
-        if (document.getElementById(COMPRESSOR_ROOT_ID)) return;
+        const existing = document.getElementById(COMPRESSOR_ROOT_ID);
+        if (existing && $btnList.contains(existing)) return;
+        existing?.remove();
 
         const $AudioCompressorButton = document.createElement('div');
         $AudioCompressorButton.id = COMPRESSOR_ROOT_ID;
@@ -86,9 +88,13 @@ export const editVideoPage = () => {
     const $btn_list = findPlayerButtonList();
 
     // Feat: 오디오 압축 버튼 활성화 =======================================================
-    if (res[AUDIO_COMPRESSOR] && $btn_list && !document.getElementById('chzzk-plus-compr-btns')) {
+    if (res[AUDIO_COMPRESSOR] && $btn_list) {
+      const existing = document.getElementById(COMPRESSOR_ROOT_ID);
+      if (existing && $btn_list.contains(existing)) return;
+      existing?.remove();
+
       const $AudioCompressorButton = document.createElement('div');
-      $AudioCompressorButton.id = 'chzzk-plus-compr-btns';
+      $AudioCompressorButton.id = COMPRESSOR_ROOT_ID;
       $btn_list?.prepend($AudioCompressorButton);
       createReactElement($AudioCompressorButton, AudioCompressorButton);
     }

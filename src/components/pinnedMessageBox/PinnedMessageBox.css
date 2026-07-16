@@ -36,6 +36,7 @@
     z-index: 1000;
     top: unset;
     display: none;
+    cursor: pointer;
   }
   .czp-message-pin-list.isOpen {
     display: flex;

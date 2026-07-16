@@ -69,6 +69,42 @@ const scheduleReconcile = () => {
   }
 };
 
+const isIgnoredMutationTarget = (target: Node): boolean => {
+  if (!(target instanceof Element)) return false;
+  if (target.closest('[role="log"]')) return true;
+  return Boolean(
+    target.closest(
+      [
+        '#czp-global',
+        '#chzzk-plus-preview',
+        '#chzzk-plus-live-chattools',
+        '#chzzk-plus-fast-btns',
+        '#chzzk-plus-pip-btn',
+        '#chzzk-plus-compr-btns',
+        '#chzzk-plus-screen-guard',
+        '#chzzk-plus-favorite-btn',
+      ].join(','),
+    ),
+  );
+};
+
+function installDocumentLayoutObserver() {
+  const observer = new MutationObserver(mutations => {
+    for (const mutation of mutations) {
+      if (isIgnoredMutationTarget(mutation.target)) continue;
+      scheduleReconcile();
+      return;
+    }
+  });
+
+  observer.observe(document.body || document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'style', 'hidden', 'aria-hidden'],
+  });
+}
+
 const installRouteChangeObserver = () => {
   let lastUrl = location.href;
 
@@ -110,7 +146,7 @@ function installSelfHealingObserver($layout: HTMLElement) {
   const observer = new MutationObserver(mutations => {
     for (const mutation of mutations) {
       const target = mutation.target;
-      if (target instanceof Element && target.closest('[role="log"]')) continue;
+      if (isIgnoredMutationTarget(target)) continue;
       scheduleReconcile();
       return;
     }
@@ -151,12 +187,13 @@ function installChildStyleObserver($layout: HTMLElement) {
   initLayoutCustom();
   initChatTimestamp();
   initChatEmojiSearch();
+  installRouteChangeObserver();
+  installDocumentLayoutObserver();
 
   const $layout = await waitingElement(`#${LAYOUT_WRAP}`, 30000);
   if (!$layout) return;
 
   applyPageEdits();
-  installRouteChangeObserver();
   installSelfHealingObserver($layout);
   installChildStyleObserver($layout);
 })();
