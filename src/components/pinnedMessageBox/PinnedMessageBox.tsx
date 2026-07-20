@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import './PinnedMessageBox.css';
 
 export default function PinnedMessageBox() {
@@ -38,7 +38,10 @@ export default function PinnedMessageBox() {
     return () => observer.disconnect();
   }, [isScrolledUp]);
 
-  const handleToggleOpen = () => {
+  const handleToggleOpen = (event: MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     setIsOpen(prev => !prev);
     const newMessageDot = document.getElementById('chzzk-plus-new-message-dot');
     if (newMessageDot) {
@@ -47,7 +50,12 @@ export default function PinnedMessageBox() {
   };
 
   return (
-    <div className={`${isOpen ? '_is_opened_' : ''}`} id="chzzk-plus-message-pin" style={{ top: 'unset' }}>
+    <div
+      className={`${isOpen ? 'czp-is-opened' : ''}`}
+      id="chzzk-plus-message-pin"
+      style={{ top: 'unset' }}
+      onClick={event => event.stopPropagation()}
+    >
       <div className="czp-message-pin-wrapper">
         <div className={`czp-live_chatting_fixed_mission_header ${isOpen ? 'isOpen' : ''}`} onClick={handleToggleOpen}>
           <div id="chzzk-plus-message-pin-title-container">

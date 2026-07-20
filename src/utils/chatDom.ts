@@ -11,10 +11,28 @@ import {
 
 const CHAT_INPUT_SELECTOR =
   'pre[contenteditable="true"], [contenteditable="true"][role="textbox"], [contenteditable="true"], textarea, input';
-const CHAT_ITEM_SELECTOR = `[${DATA_CHAT_ITEM}], [class*="live_chatting_list_item__"], [class*="_item_"]`;
+const STRICT_CHAT_ITEM_SELECTOR = `[${DATA_CHAT_ITEM}], [class*="live_chatting_list_item__"]`;
+const CHAT_ITEM_SELECTOR = `${STRICT_CHAT_ITEM_SELECTOR}, [class*="_item_"]`;
 const CHAT_WRAPPER_SELECTOR = `${CHAT_WRAPPER}, [class*="_wrapper_"]`;
 const USER_POPUP_DIALOG_SELECTOR = '[role="alertdialog"], [role="dialog"], [role="menu"]';
 export const CHAT_PIN_FALLBACK_FIXED_CLASS = 'czp-message-pin-fixed-root';
+const RANKING_SELECTOR = '[class*="_ranking_"], [class*="ranking"]';
+const UNSAFE_NATIVE_CONTENT_CLASS = /ranking/i;
+
+const getElementClassName = (element: Element | null | undefined): string => {
+  return typeof element?.className === 'string' ? element.className : '';
+};
+
+const isNativeChatFixedArea = (element: Element | null | undefined): element is HTMLElement => {
+  if (!(element instanceof HTMLElement)) return false;
+  if (element.classList.contains(CHAT_PIN_FALLBACK_FIXED_CLASS)) return false;
+  if (element.closest(RANKING_SELECTOR) || element.querySelector(RANKING_SELECTOR)) return false;
+
+  const className = getElementClassName(element);
+  if (/ranking/i.test(className)) return false;
+
+  return className.includes('_fixed_') || className.includes('live_chatting_list_fixed__');
+};
 
 export const getChatContainer = (): HTMLElement | null => {
   return document.querySelector<HTMLElement>(CHAT_CONTAINER);
@@ -61,11 +79,14 @@ export const getChatMessageList = (container: Element = getChatContainer() ?? do
   const roleLog = container.querySelector<HTMLElement>('[role="log"]') ?? container;
 
   const wrapper = Array.from(roleLog.querySelectorAll<HTMLElement>(CHAT_WRAPPER_SELECTOR)).find(element => {
-    return !!element.querySelector(CHAT_ITEM_SELECTOR);
+    return Array.from(element.children).some(isChatMessageItem);
   });
   if (wrapper) return wrapper;
 
-  const firstItem = roleLog.querySelector<HTMLElement>(CHAT_ITEM_SELECTOR);
+  const strictItem = roleLog.querySelector<HTMLElement>(STRICT_CHAT_ITEM_SELECTOR);
+  if (strictItem?.parentElement && isChatMessageItem(strictItem)) return strictItem.parentElement;
+
+  const firstItem = Array.from(roleLog.querySelectorAll<HTMLElement>(CHAT_ITEM_SELECTOR)).find(isChatMessageItem);
   if (firstItem?.parentElement) return firstItem.parentElement;
 
   return roleLog instanceof HTMLElement ? roleLog : container.querySelector<HTMLElement>(CHAT_WRAPPER);
@@ -77,16 +98,17 @@ export const getChatPinnedArea = (container: Element = getChatContainer() ?? doc
 
 export const getNativeChatFixedArea = (container: Element = getChatContainer() ?? document.body): HTMLElement | null => {
   const roleLog = container.querySelector<HTMLElement>('[role="log"]') ?? container;
-  const fixedByClass = roleLog.querySelector<HTMLElement>(CHATTING_FIXED_AREA);
-  if (fixedByClass) return fixedByClass;
-
   const messageList = getChatMessageList(container);
   const previous = messageList?.previousElementSibling;
-  if (previous instanceof HTMLElement && previous.parentElement === messageList?.parentElement) {
-    if (!previous.classList.contains(CHAT_PIN_FALLBACK_FIXED_CLASS)) return previous;
+  if (previous instanceof HTMLElement && previous.parentElement === messageList?.parentElement && isNativeChatFixedArea(previous)) {
+    return previous;
   }
 
-  return null;
+  return (
+    Array.from(roleLog.querySelectorAll<HTMLElement>(CHATTING_FIXED_AREA)).find(element => {
+      return element.parentElement === messageList?.parentElement && isNativeChatFixedArea(element);
+    }) ?? null
+  );
 };
 
 export const getChatFixedClassName = (container: Element = getChatContainer() ?? document.body): string => {
@@ -104,11 +126,18 @@ export const getChatFixedContentClassName = (container: Element = getChatContain
     return element instanceof HTMLElement && !element.classList.contains('czp-message-pin-root');
   }) as HTMLElement | undefined;
 
-  return nativeContent?.className ?? '';
+  const className = getElementClassName(nativeContent);
+  if (!className || UNSAFE_NATIVE_CONTENT_CLASS.test(className)) return '';
+
+  return className
+    .split(/\s+/)
+    .filter(name => name.includes('_fixed_') || name.includes('live_chatting_fixed_'))
+    .join(' ');
 };
 
 export const isChatMessageItem = (node: Node): node is HTMLElement => {
   if (!(node instanceof HTMLElement)) return false;
+  if (node.closest(RANKING_SELECTOR) || node.querySelector(RANKING_SELECTOR)) return false;
   if (node.hasAttribute(DATA_CHAT_ITEM)) return true;
   if (!node.matches('[class*="live_chatting_list_item__"], [class*="_item_"]')) return false;
   return !!node.querySelector?.(`[${DATA_CHAT_NICK}], [class*="_nickname_"], [class*="live_chatting_message_nickname__"]`);

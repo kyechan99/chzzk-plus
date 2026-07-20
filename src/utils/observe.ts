@@ -10,7 +10,6 @@ import {
   isUserPopupFromChatItem,
 } from './chatDom';
 
-const CHAT_ITEM_FALLBACK = `${CHAT_ITEM}, [class*="live_chatting_list_item__"]`;
 const CHAT_NAME_FALLBACK = [CHAT_NAME, '[class*="live_chatting_message_nickname__"]', '[class*="_nickname_"]'];
 
 // inject.js(MAIN world)가 fiber 로 찍은 data-czp-* 속성을 우선 사용하고,
@@ -18,7 +17,8 @@ const CHAT_NAME_FALLBACK = [CHAT_NAME, '[class*="live_chatting_message_nickname_
 const isChatItem = (node: Node): node is HTMLElement => {
   if (isChatMessageItem(node)) return true;
   if (!(node instanceof HTMLElement)) return false;
-  return node.matches(CHAT_ITEM_FALLBACK);
+  if (!node.matches(`${CHAT_ITEM}, [class*="live_chatting_list_item__"]`)) return false;
+  return !!getChatNickname(node);
 };
 
 const getChatNickname = (el: HTMLElement): string | null => {

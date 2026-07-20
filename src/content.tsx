@@ -72,6 +72,7 @@ const scheduleReconcile = () => {
 const isIgnoredMutationTarget = (target: Node): boolean => {
   if (!(target instanceof Element)) return false;
   if (target.closest('[role="log"]')) return true;
+  if (target.closest('[class*="_ranking_"], [class*="ranking"]')) return true;
   return Boolean(
     target.closest(
       [

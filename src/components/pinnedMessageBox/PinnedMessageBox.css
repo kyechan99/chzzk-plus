@@ -133,7 +133,7 @@
     margin-top: 0px !important;
   }
 
-  &:not(._is_opened_) .czp-message-pin-wrapper{
+  &:not(.czp-is-opened) .czp-message-pin-wrapper{
     padding: 6px 15px;
   }
 

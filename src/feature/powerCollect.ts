@@ -10,6 +10,7 @@ import { logWarning } from '../utils/log';
 const API_BASE = 'https://api.chzzk.naver.com/service/v1';
 const COLLECT_INTERVAL = 60_000; // API claim 수령 주기
 const BUTTON_INTERVAL = 5_000; // 보조 버튼 클릭 주기
+const RANKING_SELECTOR = '[class*="_ranking_"], [class*="ranking"]';
 
 let enabled = false;
 let started = false;
@@ -53,10 +54,17 @@ const clickPowerButton = (): void => {
   if (!aside) return;
 
   const btn = Array.from(aside.querySelectorAll('button')).find(button => {
-    if (button.className.includes('power_button')) return true;
+    const className = typeof button.className === 'string' ? button.className : '';
+    if (button.closest(RANKING_SELECTOR) || /ranking/i.test(className)) return false;
+    if (button.hasAttribute('aria-expanded')) return false;
+    if (className.includes('power_button')) return true;
+
     const text = button.textContent?.replace(/\s+/g, ' ').trim() ?? '';
     const label = button.getAttribute('aria-label') ?? '';
-    return text.includes('파워') || label.includes('파워');
+    const buttonText = `${text} ${label}`;
+    const hasPower = /(\ud30c\uc6cc|power|log)/i.test(buttonText);
+    const hasClaim = /(\ubc1b\uae30|\uc218\ub839|claim|receive)/i.test(buttonText);
+    return hasPower && hasClaim;
   });
   btn?.click();
 };
