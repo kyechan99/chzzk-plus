@@ -109,10 +109,14 @@ const ensureHandleStyle = (): void => {
   style.id = HANDLE_STYLE_ID;
   style.textContent = `
     .czp-resize-handle { position: fixed; z-index: 2147483646; width: 8px;
-      cursor: ew-resize; background: transparent; transition: background .15s; }
+      cursor: ew-resize; background: transparent; transition: background .15s; pointer-events: auto; }
     .czp-resize-handle:hover, .czp-resize-handle.czp-dragging { background: rgba(0,255,163,0.5); }
   `;
   (document.head || document.documentElement).appendChild(style);
+};
+
+const attachHandle = (handle: HTMLElement): void => {
+  if (!handle.isConnected) document.body.appendChild(handle);
 };
 
 const startDrag = (e: MouseEvent, kind: 'sidebar' | 'chat'): void => {
@@ -158,19 +162,21 @@ const ensureHandles = (): void => {
     sidebarHandle = document.createElement('div');
     sidebarHandle.className = 'czp-resize-handle';
     sidebarHandle.addEventListener('mousedown', e => startDrag(e, 'sidebar'));
-    document.body.appendChild(sidebarHandle);
   }
+  attachHandle(sidebarHandle);
+
   if (!chatHandle) {
     chatHandle = document.createElement('div');
     chatHandle.className = 'czp-resize-handle';
     chatHandle.addEventListener('mousedown', e => startDrag(e, 'chat'));
-    document.body.appendChild(chatHandle);
   }
+  attachHandle(chatHandle);
 };
 
 // 핸들을 대상 엘리먼트 모서리에 맞춰 계속 위치시킨다.
 const positionHandles = (): void => {
   if (!enabled) return;
+  ensureHandles();
   syncExpandedState();
 
   const sb = document.querySelector(SIDEBAR);

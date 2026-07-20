@@ -14,6 +14,9 @@ import {
   CHAT_CONTENT,
   CHAT_ITEM,
   CHAT_NAME,
+  CHAT_CONTAINER,
+  DATA_CHAT_ITEM,
+  DATA_CHAT_NICK,
   CHEEZE_CHAT,
   SUBSCRIBE_CHAT,
   CHEEZE_RANKING_CHAT,
@@ -34,7 +37,17 @@ import {
 import { CHAT_NAME_COLOR_DEFAULT, CHAT_TEXT_COLOR_DEFAULT } from './constants/color';
 
 const STYLE_ID = 'czp-early-chat-style';
-
+const CHAT_ITEM_STABLE_SELECTOR = `${CHAT_CONTAINER} [${DATA_CHAT_ITEM}], ${CHAT_CONTAINER} [class*="live_chatting_list_item__"]`;
+const CHAT_TEXT_STABLE_SELECTOR = [
+  `${CHAT_CONTAINER} [${DATA_CHAT_ITEM}] [${DATA_CHAT_NICK}]`,
+  `${CHAT_CONTAINER} [${DATA_CHAT_ITEM}] [class*="_nickname_"]`,
+  `${CHAT_CONTAINER} [${DATA_CHAT_ITEM}] [class*="live_chatting_message_nickname__"]`,
+  `${CHAT_CONTAINER} [${DATA_CHAT_ITEM}] [class*="_text_"]`,
+  `${CHAT_CONTAINER} [class*="live_chatting_list_item__"] [class*="live_chatting_message_nickname__"]`,
+  `${CHAT_CONTAINER} [class*="live_chatting_list_item__"] [class*="live_chatting_message_text__"]`,
+  `${CHAT_CONTAINER} [class*="live_chatting_list_item__"] [class*="_nickname_"]`,
+  `${CHAT_CONTAINER} [class*="live_chatting_list_item__"] [class*="_text_"]`,
+].join(', ');
 // CSS 빌드에 영향을 주는 storage 키들 (이 중 하나라도 바뀌면 <style> 재빌드)
 const CHAT_CSS_KEYS = [
   CHAT_COLOR_THEME,
@@ -71,17 +84,17 @@ const refresh = () => {
 
     // 채팅 크기 설정 (기본 14가 아니면 적용)
     if (res[CHAT_SIZE] && res[CHAT_SIZE] != 14) {
-      css += `${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_CONTENT} {
+      css += `${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_CONTENT}, ${CHAT_ITEM_STABLE_SELECTOR}, ${CHAT_TEXT_STABLE_SELECTOR} {
           --czp-fontSize: ${res[CHAT_SIZE]}px;
-          font-size: var(--czp-fontSize);
+          font-size: var(--czp-fontSize) !important;
           ${res[CHAT_SIZE] > 14 ? 'line-height: var(--czp-fontSize) !important;' : ''}
         }`;
     }
 
     // 커스텀 색상 테마
     if (res[CHAT_COLOR_THEME] === '커스텀') {
-      css += `${CHAT_ITEM} ${CHAT_NAME} { color: var(--${CHAT_NAME_COLOR}) !important; }`;
       css += `${CHAT_ITEM} ${CHAT_CONTENT} { color: var(--${CHAT_TEXT_COLOR}) !important; }`;
+      css += `${CHAT_ITEM} ${CHAT_NAME}, ${CHAT_ITEM} ${CHAT_NAME} * { color: var(--${CHAT_NAME_COLOR}) !important; }`;
     }
 
     ensureStyleEl().innerHTML = css;

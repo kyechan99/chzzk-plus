@@ -48,7 +48,8 @@ export const CHAT_CONTENT = '._text_1s877_1';
 export const CHEEZE_CHAT = '._container_y6h6c_1._level0_y6h6c_9';
 export const BLIND_CHAT = byClass('live_chatting_message_is_hidden__');
 export const SUBSCRIBE_CHAT = byClass('live_chatting_list_subscription__');
-export const CHEEZE_RANKING_CHAT = '._container_4gn4x_2';
+export const CHEEZE_RANKING_CHAT =
+  '._container_4gn4x_2, #aside-chatting [class*="_ranking_"], #aside-chatting [class*="ranking"], #aside-chatting [class*="_container_"]:has([class*="_ranking_button_"])';
 export const CHAT_BUTTON = byClass('live_chatting_message_nickname__');
 
 // 채팅 이모티콘
@@ -81,7 +82,17 @@ export const CHATTING_FIXED_AREA = '[class*="_fixed_"], [class*="live_chatting_l
 // 고정 영역이 없는 채팅창에서 새로 만들 때 부여할 클래스명 (네이티브 고정 영역 스타일 차용).
 export const CHATTING_DONATION_POPUP = byClass('live_chatting_popup_donation_layer__'); // 채팅창 후원하기 창
 export const CHATTING_AREA = byClass('live_chatting_area__');
-export const CHATTING_BADGE = '._wrapper_o04z9_23';
+export const CHATTING_BADGE =
+  [
+    '._wrapper_o04z9_23',
+    '#aside-chatting [class*="badge"]',
+    '#aside-chatting [class*="_badge_"]',
+    '#aside-chatting [class*="live_chatting_badge"]',
+    '#aside-chatting [data-czp-chat-item]:has([data-czp-nick], [class*="_nickname_"], [class*="live_chatting_message_nickname__"]) [class*="_wrapper_"]:has(img)',
+    '#aside-chatting [data-czp-chat-item]:has([data-czp-nick], [class*="_nickname_"], [class*="live_chatting_message_nickname__"]) [class*="_wrapper_"]:has(svg)',
+    '#aside-chatting [class*="live_chatting_list_item__"]:has([data-czp-nick], [class*="_nickname_"], [class*="live_chatting_message_nickname__"]) [class*="_wrapper_"]:has(img)',
+    '#aside-chatting [class*="live_chatting_list_item__"]:has([data-czp-nick], [class*="_nickname_"], [class*="live_chatting_message_nickname__"]) [class*="_wrapper_"]:has(svg)',
+  ].join(', ');
 // 채팅 입력창 (버퍼/지연 시간을 placeholder 로 표시). css-module + webpack 폴백 union.
 export const CHAT_INPUT = '._input_1xxwu_59._default_1xxwu_77, [class*="live_chatting_input_input__"]';
 // 채팅 입력창의 contenteditable 요소. CHAT_INPUT 은 _default_ 클래스를 요구해 내용이 있으면 매칭 실패하므로,

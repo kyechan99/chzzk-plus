@@ -14,6 +14,9 @@ import { initPowerCollect } from './feature/powerCollect';
 import { initLayoutCustom } from './feature/layoutCustom';
 import { initChatTimestamp } from './feature/chatTimestamp';
 import { initChatEmojiSearch } from './feature/chatEmojiSearch';
+import { initCheezeRankingRemover } from './feature/cheezeRankingRemover';
+import { initChatBadgeRemover } from './feature/chatBadgeRemover';
+import { initChatColor } from './feature/chatColor';
 
 /**
  * MAIN world(페이지 컨텍스트)에서 동작하는 inject.js 를 주입한다.
@@ -185,6 +188,9 @@ function installChildStyleObserver($layout: HTMLElement) {
   initFollowNotify();
   initTabViewerCount();
   initPowerCollect();
+  initCheezeRankingRemover();
+  initChatBadgeRemover();
+  initChatColor();
   initLayoutCustom();
   initChatTimestamp();
   initChatEmojiSearch();
