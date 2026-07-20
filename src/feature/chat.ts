@@ -7,6 +7,7 @@ import { delay } from '../utils/time';
 import {
   getChatFixedClassName,
   getChatFixedContentClassName,
+  getChatLog,
   getChatMessageList,
   getChatPinnedArea,
   getNativeChatFixedArea,
@@ -41,11 +42,13 @@ export async function chatSetting(): Promise<void> {
       if (getChatPinnedArea(chatContainer)) return;
 
       let nativeFixed = getNativeChatFixedArea(chatContainer);
-      const chatWrapper = getChatMessageList(chatContainer);
-      if (!nativeFixed && chatWrapper) {
+      const chatLog = getChatLog(chatContainer);
+      const fallbackAnchor = chatLog ?? getChatMessageList(chatContainer);
+      if (!nativeFixed && fallbackAnchor) {
         nativeFixed = document.createElement('div');
         nativeFixed.className = getChatFixedClassName(chatContainer);
-        chatWrapper.insertAdjacentElement('beforebegin', nativeFixed);
+        nativeFixed.setAttribute('data-czp-message-pin-fallback', 'true');
+        fallbackAnchor.insertAdjacentElement('beforebegin', nativeFixed);
       }
 
       if (nativeFixed) {

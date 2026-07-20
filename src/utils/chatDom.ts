@@ -38,6 +38,10 @@ export const getChatContainer = (): HTMLElement | null => {
   return document.querySelector<HTMLElement>(CHAT_CONTAINER);
 };
 
+export const getChatLog = (container: Element = getChatContainer() ?? document.body): HTMLElement | null => {
+  return container.querySelector<HTMLElement>('[role="log"]');
+};
+
 export const getChatInputEditable = (): HTMLElement | null => {
   const container = getChatContainer();
   return (
@@ -76,7 +80,7 @@ export const getChatActionArea = (): HTMLElement | null => {
 };
 
 export const getChatMessageList = (container: Element = getChatContainer() ?? document.body): HTMLElement | null => {
-  const roleLog = container.querySelector<HTMLElement>('[role="log"]') ?? container;
+  const roleLog = getChatLog(container) ?? container;
 
   const wrapper = Array.from(roleLog.querySelectorAll<HTMLElement>(CHAT_WRAPPER_SELECTOR)).find(element => {
     return Array.from(element.children).some(isChatMessageItem);
@@ -97,7 +101,16 @@ export const getChatPinnedArea = (container: Element = getChatContainer() ?? doc
 };
 
 export const getNativeChatFixedArea = (container: Element = getChatContainer() ?? document.body): HTMLElement | null => {
-  const roleLog = container.querySelector<HTMLElement>('[role="log"]') ?? container;
+  const roleLog = getChatLog(container) ?? container;
+  const previousLogSibling = roleLog.previousElementSibling;
+  if (
+    previousLogSibling instanceof HTMLElement &&
+    previousLogSibling.parentElement === roleLog.parentElement &&
+    isNativeChatFixedArea(previousLogSibling)
+  ) {
+    return previousLogSibling;
+  }
+
   const messageList = getChatMessageList(container);
   const previous = messageList?.previousElementSibling;
   if (previous instanceof HTMLElement && previous.parentElement === messageList?.parentElement && isNativeChatFixedArea(previous)) {

@@ -10,10 +10,23 @@
 .czp-message-pin-fixed-root {
   z-index: 100;
   background-color: var(--sem-color-background-neutral-base);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  flex: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+[data-czp-message-pin-fallback="true"] {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  flex: none !important;
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 #chzzk-plus-message-pin {
