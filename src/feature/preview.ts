@@ -50,7 +50,7 @@ export async function previewSetting(): Promise<void> {
   autoExpandFollowing();
   setupFollowingRefresher();
 
-  // Feat: Preview 썸네일 (Preview 컴포넌트는 #sidebar 이벤트 위임이라 리빌드에 견딘다) =========
+  // Feat: Preview 썸네일 (Preview 컴포넌트는 document 이벤트 위임이라 사이드바 교체에 견딘다) =========
   if (!document.getElementById('chzzk-plus-preview')) {
     const $preview = document.createElement('div');
     $preview.id = 'chzzk-plus-preview';

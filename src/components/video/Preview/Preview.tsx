@@ -178,16 +178,13 @@ export default function Preview() {
     };
   }, [channelId, visible]);
 
-  /* ── 좌측 사이드바 마우스 이벤트 (영속 #sidebar 에 위임) ── */
+  /* ── 사이드바 교체에도 유지되도록 document 에 이벤트 위임 ── */
   useEffect(() => {
-    const $sidebar = document.querySelector(SIDEBAR);
-    if (!$sidebar) return;
-
     const navHoverListener = (event: Event) => {
       try {
-        // 프리뷰는 #sidebar 의 자식이라, 프리뷰 위 이벤트가 여기로 버블링되어 숨김을 유발한다.
-        // 프리뷰 내부에서 발생한 이벤트는 무시한다.
-        if ((event.target as HTMLElement)?.closest?.('.czp-preview')) return;
+        const target = event.target;
+        if (!(target instanceof Element) || !target.closest(SIDEBAR)) return;
+        if (target.closest('.czp-preview')) return;
 
         const anchor = (event.target as HTMLElement)?.closest?.('a');
         const href = anchor?.getAttribute('href');
@@ -227,16 +224,23 @@ export default function Preview() {
       }
     };
 
-    const onSidebarLeave = () => {
+    const onSidebarLeave = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const sidebar = target.closest(SIDEBAR);
+      if (!sidebar) return;
+      // mouseleave 는 버블링하지 않으므로 mouseout 으로 사이드바 경계를 검사한다.
+      if (event.relatedTarget instanceof Node && sidebar.contains(event.relatedTarget)) return;
       if (!pinnedRef.current) scheduleHide();
     };
 
-    $sidebar.addEventListener('mouseover', navHoverListener);
-    $sidebar.addEventListener('mouseleave', onSidebarLeave);
+    document.addEventListener('mouseover', navHoverListener);
+    document.addEventListener('mouseout', onSidebarLeave);
 
     return () => {
-      $sidebar.removeEventListener('mouseover', navHoverListener);
-      $sidebar.removeEventListener('mouseleave', onSidebarLeave);
+      document.removeEventListener('mouseover', navHoverListener);
+      document.removeEventListener('mouseout', onSidebarLeave);
+      cancelHide();
     };
   }, [cancelHide, scheduleHide]);
 
