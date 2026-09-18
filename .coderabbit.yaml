@@ -1,0 +1,67 @@
+language: "ko-KR"
+tone_instructions: >
+  친절하고 차분한 해요체로 작성해요. 코드 자체를 평가하거나 칭찬하기보다,
+  구체적인 영향과 개선 방향을 설명해요. 단정적이거나 자극적인 표현 대신
+  완곡하고 명확한 표현을 사용하고, 평서문·질문·제안형을 자연스럽게 섞어요.
+  이모지는 사용하지 않고 느낌표는 꼭 필요할 때만 사용해요.
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  review_details: false
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - "!dist/**"
+    - "!dist.zip"
+    - "!yarn.lock"
+  path_instructions:
+    - path: "manifest.json"
+      instructions: |
+        Review Chrome Manifest V3 compatibility and the principle of least
+        privilege. Flag permission, host permission, content script, service
+        worker, or web-accessible resource changes that are broader than the
+        requested feature or lack a user-facing justification.
+    - path: "src/content.tsx"
+      instructions: |
+        This is the content-script entry point for a dynamic SPA. Check that
+        initialization remains idempotent across route changes and DOM rebuilds,
+        and that observers, listeners, and timers do not create duplicate work
+        or leak after the target UI disappears.
+    - path: "src/{feature,page,utils}/**"
+      instructions: |
+        Chzzk selectors and page structure can change without notice. Check for
+        safe behavior when elements are missing or delayed, narrowly scoped DOM
+        observation, and cleanup of listeners, observers, and timers. Avoid
+        findings that are only style issues.
+    - path: "src/background.ts"
+      instructions: |
+        Check Chrome runtime message validation and storage-default changes for
+        backwards compatibility with existing users' stored settings.
+    - path: "src/components/**"
+      instructions: |
+        Check that a setting change is reflected consistently in chrome.storage
+        and the feature that consumes it, and preserve accessible control labels
+        and keyboard behavior where applicable.
+    - path: "tests/**"
+      instructions: |
+        Tests use Vitest with jsdom. Prefer regression coverage for observable
+        DOM behavior, SPA replacement, cleanup, and storage interactions.
+  pre_merge_checks:
+    title:
+      mode: "warning"
+      requirements: >
+        Use a concise Conventional Commit-style title that explains the
+        user-facing or maintainer-facing change. Technical terms are acceptable
+        for refactors, build work, infrastructure, or Chrome extension changes.
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  learnings:
+    scope: "local"
