@@ -8,8 +8,9 @@ import AudioCompressorButton from '../components/button/AudioCompressorButton/Au
 // import RecordButton from "../components/button/RecordButton/RecordButton";
 // import CaptureButton from "../components/button/CaptureButton/CaptureButton";
 
-import { AUDIO_COMPRESSOR } from '../constants/storage';
+import { AUDIO_COMPRESSOR, FAVORITE_ENABLE } from '../constants/storage';
 import { findPlayerButtonList } from '../utils/playerDom';
+import { ensureFavoriteButton } from '../utils/favoriteButton';
 
 const COMPRESSOR_ROOT_ID = 'chzzk-plus-compr-btns';
 let mountingCompressor = false;
@@ -80,10 +81,13 @@ export const editVideoPage = () => {
     //   createReactElement($pipButtonRoot, PipButton);
     // }
   */
-  chrome.storage.local.get([AUDIO_COMPRESSOR], res => {
+  chrome.storage.local.get([AUDIO_COMPRESSOR, FAVORITE_ENABLE], res => {
     if (res[AUDIO_COMPRESSOR]) {
       ensureAudioCompressorButton().catch(() => {});
     }
+
+    // Feat: 즐겨찾기 버튼 (VOD 정보 헤더 옆) ==================================================
+    ensureFavoriteButton(!!res[FAVORITE_ENABLE]);
 
     const $btn_list = findPlayerButtonList();
 

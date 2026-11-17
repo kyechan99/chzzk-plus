@@ -1,6 +1,7 @@
 import { editLivePage } from './page/live';
 import { editVideoPage } from './page/video';
 import { editGlobalPage } from './page/global';
+import { editChannelPage } from './page/channel';
 
 import { LAYOUT_WRAP } from './constants/class';
 import { editLiveListPage } from './page/lives';
@@ -40,6 +41,7 @@ const applyPageEdits = () => {
   editLiveListPage();
   editCategoryPage();
   editVideoPage();
+  editChannelPage();
 };
 
 /**
