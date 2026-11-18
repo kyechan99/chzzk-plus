@@ -81,11 +81,17 @@ const findFollowButton = (channelId: string): HTMLButtonElement | null => {
       const links = Array.from(header.querySelectorAll<HTMLAnchorElement>('a[href]'));
       return links.some(link => {
         const url = new URL(link.href, location.href);
-        return (
+        const isChannelLink =
           url.origin === location.origin &&
           /^\/(?:live\/|channel\/)?[0-9a-f]{32}\/?$/i.test(url.pathname) &&
-          getChannelIDByUrl(url.pathname).toLowerCase() === channelId.toLowerCase()
-        );
+          getChannelIDByUrl(url.pathname).toLowerCase() === channelId.toLowerCase();
+        // 오프라인 채널 홈의 썸네일은 live 링크가 아닌 네이버 프로필 링크다.
+        const profileId = url.pathname.match(/^\/profile\/([0-9a-f]{32})\/?$/i)?.[1];
+        const isHomeProfile =
+          header === home &&
+          url.origin === 'https://game.naver.com' &&
+          profileId?.toLowerCase() === channelId.toLowerCase();
+        return isChannelLink || isHomeProfile;
       });
     }) ?? null
   );

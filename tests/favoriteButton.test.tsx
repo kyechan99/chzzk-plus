@@ -240,4 +240,17 @@ describe('favorite button on channel pages', () => {
     await act(async () => ensureFavoriteButton(true));
     expect(fetchMock).toHaveBeenCalledTimes(4);
   });
+  it('mounts on an offline channel home with only a Naver profile link', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a href="https://game.naver.com/profile/${a}">프로필</a><div class="_wrapper_home"><div class="_area_home"><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('#chzzk-plus-favorite-btn')?.getAttribute('data-channel-id')).toBe(a);
+  });
+
+  it('rejects a profile link from a different host or a different channel', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a href="https://game.naver.com.evil.example/profile/${a}">가짜</a><a href="https://game.naver.com/profile/${b}">다른 채널</a><div class="_wrapper_home"><div class="_area_home"><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
+  });
 });
