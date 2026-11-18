@@ -185,9 +185,9 @@ describe('favorite button on channel pages', () => {
     vi.useRealTimers();
   });
 
-  it('mounts on a channel home header whose thumbnail links to that channel', async () => {
+  it('mounts on a channel home header with a matching profile link', async () => {
     history.replaceState({}, '', `/${a}`);
-    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a class="_thumbnail_home" href="/live/${a}">채널</a><div class="_wrapper_home"><div class="_area_home"><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${a}">프로필 보기</a></div><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('.favorite-btn')).not.toBeNull();
   });
@@ -242,14 +242,32 @@ describe('favorite button on channel pages', () => {
   });
   it('mounts on an offline channel home with only a Naver profile link', async () => {
     history.replaceState({}, '', `/${a}`);
-    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a href="https://game.naver.com/profile/${a}">프로필</a><div class="_wrapper_home"><div class="_area_home"><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${a}">프로필</a></div><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('#chzzk-plus-favorite-btn')?.getAttribute('data-channel-id')).toBe(a);
   });
 
   it('rejects a profile link from a different host or a different channel', async () => {
     history.replaceState({}, '', `/${a}`);
-    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a href="https://game.naver.com.evil.example/profile/${a}">가짜</a><a href="https://game.naver.com/profile/${b}">다른 채널</a><div class="_wrapper_home"><div class="_area_home"><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com.evil.example/profile/${a}">가짜</a><a href="https://game.naver.com/profile/${b}">다른 채널</a></div><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
+  });
+  it('rejects a channel home when only the live link matches but its profile identifies another channel', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><a href="/live/${a}">라이브</a><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${b}">프로필 보기</a></div><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
+  });
+  it('ignores a matching profile outside the home identity area', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><aside><a href="https://game.naver.com/profile/${a}">추천</a></aside><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${b}">프로필 보기</a></div><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
+  });
+  it('ignores unrelated profiles nested in the home area outside channel information', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${b}">프로필</a></div><aside><a href="https://game.naver.com/profile/${a}">추천</a></aside><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
   });

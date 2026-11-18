@@ -78,20 +78,21 @@ const findFollowButton = (channelId: string): HTMLButtonElement | null => {
             ? home
             : null;
       if (!header || header.closest('aside, nav, [role="log"]')) return false;
-      const links = Array.from(header.querySelectorAll<HTMLAnchorElement>('a[href]'));
+      const identityArea = header === home ? homeArea?.querySelector(':scope > div[class*="_information_"]') : header;
+      if (!identityArea) return false;
+      const links = Array.from(identityArea.querySelectorAll<HTMLAnchorElement>('a[href]'));
       return links.some(link => {
         const url = new URL(link.href, location.href);
-        const isChannelLink =
+        if (header === home) {
+          // 채널 홈은 방송 상태와 무관하게 헤더의 프로필 링크로 채널을 확인한다.
+          const profileId = url.pathname.match(/^\/profile\/([0-9a-f]{32})\/?$/i)?.[1];
+          return url.origin === 'https://game.naver.com' && profileId?.toLowerCase() === channelId.toLowerCase();
+        }
+        return (
           url.origin === location.origin &&
           /^\/(?:live\/|channel\/)?[0-9a-f]{32}\/?$/i.test(url.pathname) &&
-          getChannelIDByUrl(url.pathname).toLowerCase() === channelId.toLowerCase();
-        // 오프라인 채널 홈의 썸네일은 live 링크가 아닌 네이버 프로필 링크다.
-        const profileId = url.pathname.match(/^\/profile\/([0-9a-f]{32})\/?$/i)?.[1];
-        const isHomeProfile =
-          header === home &&
-          url.origin === 'https://game.naver.com' &&
-          profileId?.toLowerCase() === channelId.toLowerCase();
-        return isChannelLink || isHomeProfile;
+          getChannelIDByUrl(url.pathname).toLowerCase() === channelId.toLowerCase()
+        );
       });
     }) ?? null
   );
