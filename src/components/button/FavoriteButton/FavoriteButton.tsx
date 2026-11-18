@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { logWarning } from '../../../utils/log';
 import './FavoriteButton.css';
 import { FAVORITE_GROUPS } from '../../../constants/storage';
-import { getChannelIDByUrl } from '../../../utils/channel';
 import {
   FavoriteData,
   FavoriteGroup,
@@ -23,8 +22,15 @@ import {
   FavoriteIconId,
 } from '../../../constants/favoriteIcons';
 
-export default function FavoriteButton() {
+export default function FavoriteButton({
+  channelId,
+  isCurrent = () => true,
+}: {
+  channelId: string;
+  isCurrent?: () => boolean;
+}) {
   const [data, setData] = useState<FavoriteData>({ groups: [] });
+  const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
   const [creating, setCreating] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
@@ -32,8 +38,8 @@ export default function FavoriteButton() {
   const [newColor, setNewColor] = useState<string>(DEFAULT_COLOR);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const route = useRef(window.location.pathname);
 
-  const channelId = useMemo(() => getChannelIDByUrl(window.location.href), []);
   const currentGroup: FavoriteGroup | null = useMemo(
     () => (channelId ? findGroupOfChannel(data, channelId) : null),
     [data, channelId],
@@ -41,12 +47,20 @@ export default function FavoriteButton() {
 
   useEffect(() => {
     let mounted = true;
+    let changed = false;
     readFavoriteData()
-      .then(d => mounted && setData(d))
+      .then(d => {
+        if (mounted && !changed) {
+          setData(d);
+          setLoaded(true);
+        }
+      })
       .catch(logWarning);
 
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (changes[FAVORITE_GROUPS]) {
+        changed = true;
+        setLoaded(true);
         setData(parseFavoriteData(changes[FAVORITE_GROUPS].newValue));
       }
     };
@@ -76,6 +90,7 @@ export default function FavoriteButton() {
   }, [open]);
 
   const persist = (next: FavoriteData) => {
+    if (window.location.pathname !== route.current || !isCurrent()) return;
     setData(next);
     writeFavoriteData(next).catch(logWarning);
   };
@@ -117,6 +132,7 @@ export default function FavoriteButton() {
         className={`favorite-btn ${currentGroup ? 'favorited' : ''}`}
         onClick={toggleOpen}
         type="button"
+        disabled={!loaded}
       >
         <span
           className="czp-fav-icon-chip"
@@ -167,19 +183,11 @@ export default function FavoriteButton() {
 
           {!creating ? (
             <div className="czp-fav-actions">
-              <button
-                type="button"
-                className="czp-fav-action-btn"
-                onClick={() => setCreating(true)}
-              >
+              <button type="button" className="czp-fav-action-btn" onClick={() => setCreating(true)}>
                 + 새 그룹
               </button>
               {currentGroup && (
-                <button
-                  type="button"
-                  className="czp-fav-action-btn czp-fav-action-danger"
-                  onClick={handleUnfavorite}
-                >
+                <button type="button" className="czp-fav-action-btn czp-fav-action-danger" onClick={handleUnfavorite}>
                   즐겨찾기 해제
                 </button>
               )}
@@ -226,11 +234,7 @@ export default function FavoriteButton() {
                 ))}
               </div>
               <div className="czp-fav-create-actions">
-                <button
-                  type="button"
-                  className="czp-fav-action-btn"
-                  onClick={() => setCreating(false)}
-                >
+                <button type="button" className="czp-fav-action-btn" onClick={() => setCreating(false)}>
                   취소
                 </button>
                 <button

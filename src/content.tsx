@@ -1,6 +1,8 @@
 import { editLivePage } from './page/live';
 import { editVideoPage } from './page/video';
 import { editGlobalPage } from './page/global';
+import { ensureFavoriteButton, removeFavoriteButton } from './utils/favoriteButton';
+import { FAVORITE_ENABLE } from './constants/storage';
 
 import { LAYOUT_WRAP } from './constants/class';
 import { editLiveListPage } from './page/lives';
@@ -34,12 +36,16 @@ const injectMainWorldScript = () => {
   }
 };
 
+let favoriteEnabled: boolean | undefined;
+let favoriteSettingChanged = false;
+
 const applyPageEdits = () => {
   editGlobalPage();
   editLivePage();
   editLiveListPage();
   editCategoryPage();
   editVideoPage();
+  if (favoriteEnabled !== undefined) ensureFavoriteButton(favoriteEnabled);
 };
 
 /**
@@ -73,11 +79,12 @@ const scheduleReconcile = () => {
 };
 
 const isIgnoredMutationTarget = (target: Node): boolean => {
-  if (!(target instanceof Element)) return false;
-  if (target.closest('[role="log"]')) return true;
-  if (target.closest('[class*="_ranking_"], [class*="ranking"]')) return true;
+  const element = target instanceof Element ? target : target.parentElement;
+  if (!element) return false;
+  if (element.closest('[role="log"]')) return true;
+  if (element.closest('[class*="_ranking_"], [class*="ranking"]')) return true;
   return Boolean(
-    target.closest(
+    element.closest(
       [
         '#czp-global',
         '#chzzk-plus-preview',
@@ -105,7 +112,8 @@ function installDocumentLayoutObserver() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['class', 'style', 'hidden', 'aria-hidden'],
+    attributeFilter: ['class', 'style', 'hidden', 'aria-hidden', 'aria-label', 'title', 'data-tooltip', 'href'],
+    characterData: true,
   });
 }
 
@@ -115,6 +123,7 @@ const installRouteChangeObserver = () => {
   const handleRouteChange = () => {
     if (location.href === lastUrl) return;
     lastUrl = location.href;
+    removeFavoriteButton();
     // 새 페이지 DOM 은 시간차로 그려지지만, self-healing 옵저버가 등장하는 대로 잡아준다.
     scheduleReconcile();
   };
@@ -124,19 +133,20 @@ const installRouteChangeObserver = () => {
   const originalPushState = history.pushState;
   history.pushState = function (...args: Parameters<History['pushState']>) {
     const result = originalPushState.apply(this, args);
-    window.setTimeout(handleRouteChange, 0);
+    handleRouteChange();
     return result;
   };
 
   const originalReplaceState = history.replaceState;
   history.replaceState = function (...args: Parameters<History['replaceState']>) {
     const result = originalReplaceState.apply(this, args);
-    window.setTimeout(handleRouteChange, 0);
+    handleRouteChange();
     return result;
   };
 
   window.addEventListener('popstate', handleRouteChange);
   window.addEventListener('hashchange', handleRouteChange);
+  window.addEventListener('czp-route-change', handleRouteChange);
 };
 
 /**
@@ -182,6 +192,7 @@ function installChildStyleObserver($layout: HTMLElement) {
 
 // 진입점: 레이아웃이 그려질 때까지 기다린 뒤(폴링 대신 MutationObserver 기반) 기능을 주입한다.
 (async () => {
+  installRouteChangeObserver();
   injectMainWorldScript();
   initVideoFilter();
   initLiveNewTab();
@@ -194,7 +205,17 @@ function installChildStyleObserver($layout: HTMLElement) {
   initLayoutCustom();
   initChatTimestamp();
   initChatEmojiSearch();
-  installRouteChangeObserver();
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'local' || !changes[FAVORITE_ENABLE]) return;
+    favoriteSettingChanged = true;
+    favoriteEnabled = !!changes[FAVORITE_ENABLE].newValue;
+    ensureFavoriteButton(favoriteEnabled);
+  });
+  chrome.storage.local.get([FAVORITE_ENABLE], res => {
+    if (favoriteSettingChanged) return;
+    favoriteEnabled = !!res[FAVORITE_ENABLE];
+    ensureFavoriteButton(favoriteEnabled);
+  });
   installDocumentLayoutObserver();
 
   const $layout = await waitingElement(`#${LAYOUT_WRAP}`, 30000);
