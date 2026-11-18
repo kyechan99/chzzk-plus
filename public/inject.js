@@ -20,6 +20,17 @@
   if (window.__czpInjected) return;
   window.__czpInjected = true;
 
+  // Notify the isolated content script without passing page-controlled data.
+  ['pushState', 'replaceState'].forEach(function (method) {
+    var original = history[method];
+    history[method] = function () {
+      var before = location.href;
+      var result = original.apply(this, arguments);
+      if (location.href !== before) window.dispatchEvent(new Event('czp-route-change'));
+      return result;
+    };
+  });
+
   var CHAT_ROOT_SELECTOR = '#aside-chatting';
 
   function getReactProps(node) {

@@ -36,7 +36,8 @@ const injectMainWorldScript = () => {
   }
 };
 
-let favoriteSettingRequest = 0;
+let favoriteEnabled: boolean | undefined;
+let favoriteSettingChanged = false;
 
 const applyPageEdits = () => {
   editGlobalPage();
@@ -44,11 +45,7 @@ const applyPageEdits = () => {
   editLiveListPage();
   editCategoryPage();
   editVideoPage();
-  const route = location.href;
-  const request = ++favoriteSettingRequest;
-  chrome.storage.local.get([FAVORITE_ENABLE], res => {
-    if (location.href === route && request === favoriteSettingRequest) ensureFavoriteButton(!!res[FAVORITE_ENABLE]);
-  });
+  if (favoriteEnabled !== undefined) ensureFavoriteButton(favoriteEnabled);
 };
 
 /**
@@ -115,7 +112,7 @@ function installDocumentLayoutObserver() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['class', 'style', 'hidden', 'aria-hidden', 'aria-label', 'title', 'href'],
+    attributeFilter: ['class', 'style', 'hidden', 'aria-hidden', 'aria-label', 'title', 'data-tooltip', 'href'],
     characterData: true,
   });
 }
@@ -126,7 +123,6 @@ const installRouteChangeObserver = () => {
   const handleRouteChange = () => {
     if (location.href === lastUrl) return;
     lastUrl = location.href;
-    favoriteSettingRequest++;
     removeFavoriteButton();
     // 새 페이지 DOM 은 시간차로 그려지지만, self-healing 옵저버가 등장하는 대로 잡아준다.
     scheduleReconcile();
@@ -150,6 +146,7 @@ const installRouteChangeObserver = () => {
 
   window.addEventListener('popstate', handleRouteChange);
   window.addEventListener('hashchange', handleRouteChange);
+  window.addEventListener('czp-route-change', handleRouteChange);
 };
 
 /**
@@ -195,6 +192,7 @@ function installChildStyleObserver($layout: HTMLElement) {
 
 // 진입점: 레이아웃이 그려질 때까지 기다린 뒤(폴링 대신 MutationObserver 기반) 기능을 주입한다.
 (async () => {
+  installRouteChangeObserver();
   injectMainWorldScript();
   initVideoFilter();
   initLiveNewTab();
@@ -209,10 +207,15 @@ function installChildStyleObserver($layout: HTMLElement) {
   initChatEmojiSearch();
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local' || !changes[FAVORITE_ENABLE]) return;
-    favoriteSettingRequest++;
-    ensureFavoriteButton(!!changes[FAVORITE_ENABLE].newValue);
+    favoriteSettingChanged = true;
+    favoriteEnabled = !!changes[FAVORITE_ENABLE].newValue;
+    ensureFavoriteButton(favoriteEnabled);
   });
-  installRouteChangeObserver();
+  chrome.storage.local.get([FAVORITE_ENABLE], res => {
+    if (favoriteSettingChanged) return;
+    favoriteEnabled = !!res[FAVORITE_ENABLE];
+    ensureFavoriteButton(favoriteEnabled);
+  });
   installDocumentLayoutObserver();
 
   const $layout = await waitingElement(`#${LAYOUT_WRAP}`, 30000);

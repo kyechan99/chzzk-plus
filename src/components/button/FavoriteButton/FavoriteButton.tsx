@@ -38,7 +38,7 @@ export default function FavoriteButton({
   const [newColor, setNewColor] = useState<string>(DEFAULT_COLOR);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const route = useRef(window.location.href);
+  const route = useRef(window.location.pathname);
 
   const currentGroup: FavoriteGroup | null = useMemo(
     () => (channelId ? findGroupOfChannel(data, channelId) : null),
@@ -90,7 +90,7 @@ export default function FavoriteButton({
   }, [open]);
 
   const persist = (next: FavoriteData) => {
-    if (window.location.href !== route.current || !isCurrent()) return;
+    if (window.location.pathname !== route.current || !isCurrent()) return;
     setData(next);
     writeFavoriteData(next).catch(logWarning);
   };

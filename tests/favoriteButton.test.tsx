@@ -37,6 +37,72 @@ afterEach(async () => {
 });
 
 describe('favorite button on channel pages', () => {
+  it('does not let an old 404 consume the new visit retry budget', async () => {
+    vi.useFakeTimers();
+    let old!: (value: unknown) => void;
+    let current!: (value: unknown) => void;
+    const fetchMock = vi.fn()
+      .mockImplementationOnce(() => new Promise(resolve => { old = resolve; }))
+      .mockImplementationOnce(() => new Promise(resolve => { current = resolve; }))
+      .mockResolvedValue({ ok: true, json: async () => ({ content: { videoNo: 88003, channel: { channelId: a } } }) });
+    vi.stubGlobal('fetch', fetchMock);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">channel</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    history.replaceState({}, '', '/video/88003');
+    await act(async () => ensureFavoriteButton(true));
+    history.replaceState({}, '', '/');
+    await act(async () => ensureFavoriteButton(true));
+    history.replaceState({}, '', '/video/88003');
+    await act(async () => ensureFavoriteButton(true));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await act(async () => old({ ok: false, status: 404 }));
+    await act(async () => current({ ok: false, status: 503 }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(2000); });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(document.querySelector('.favorite-btn')).not.toBeNull();
+  });
+  it('retries when a response body never finishes', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: true, json: () => new Promise(() => {}) })
+      .mockResolvedValue({ ok: true, json: async () => ({ content: { videoNo: 88001, channel: { channelId: a } } }) });
+    vi.stubGlobal('fetch', fetchMock);
+    history.replaceState({}, '', '/video/88001');
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">channel</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    await act(async () => { await vi.advanceTimersByTimeAsync(32000); });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(document.querySelector('.favorite-btn')).not.toBeNull();
+  });
+  it('allows a new request after returning while an old visit is pending', async () => {
+    let resolveOld!: (value: unknown) => void;
+    const fetchMock = vi.fn().mockImplementationOnce(() => new Promise(resolve => { resolveOld = resolve; }))
+      .mockResolvedValue({ ok: true, json: async () => ({ content: { videoNo: 88002, channel: { channelId: a } } }) });
+    vi.stubGlobal('fetch', fetchMock);
+    history.replaceState({}, '', '/video/88002');
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">channel</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    history.replaceState({}, '', '/');
+    await act(async () => ensureFavoriteButton(true));
+    history.replaceState({}, '', '/video/88002');
+    await act(async () => ensureFavoriteButton(true));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await act(async () => resolveOld({ ok: false, status: 404 }));
+    expect(document.querySelector('.favorite-btn')).not.toBeNull();
+  });
+  it('restores the parent inline layout on removal', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">channel</a><div class="_control_example"><div style="display:grid;gap:13px"><button>팔로잉</button></div></div></div></div></div>`;
+    const parent = document.querySelector('button')!.parentElement!;
+    await act(async () => ensureFavoriteButton(true));
+    await act(async () => removeFavoriteButton());
+    expect(parent.style.display).toBe('grid');
+    expect(parent.style.gap).toBe('13px');
+  });
+  it('skips malformed header links before the matching channel link', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="https://[">bad</a><a href="/live/${a}">channel</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('.favorite-btn')).not.toBeNull();
+  });
   it('mounts next to the followed channel without a main element', async () => {
     history.replaceState({}, '', `/${a}`);
     document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">채널</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
@@ -105,18 +171,28 @@ describe('favorite button on channel pages', () => {
   });
 
   it('waits for the matching header after metadata resolves', async () => {
-    history.replaceState({}, '', '/video/16231170');
+    let resolve!: (value: unknown) => void;
+    vi.stubGlobal('fetch', vi.fn(() => new Promise(r => { resolve = r; })));
+    history.replaceState({}, '', '/video/16231172');
     document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${b}">채널</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('.favorite-btn')).toBeNull();
+    await act(async () => resolve({ ok: true, json: async () => ({ content: { videoNo: 16231172, channel: { channelId: a } } }) }));
     expect(document.querySelector('.favorite-btn')).toBeNull();
     document.querySelector('a')!.setAttribute('href', `/live/${a}`);
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('#chzzk-plus-favorite-btn')?.getAttribute('data-channel-id')).toBe(a);
   });
 
-  it('rejects unrelated following controls and stale channel links', async () => {
+  it('rejects matching following controls in navigation', async () => {
     history.replaceState({}, '', `/${a}`);
-    document.body.innerHTML = `<div id="layout-body"><nav><div class="_row_example"><a href="/live/${a}">채널</a><button>팔로잉</button></div></nav><div class="_row_example"><a href="/live/${b}">채널</a><button>팔로잉</button></div></div>`;
+    document.body.innerHTML = `<div id="layout-body"><nav><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">채널</a><div class="_control_example"><button>팔로잉</button></div></div></div></nav></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    expect(document.querySelector('.favorite-btn')).toBeNull();
+  });
+  it('rejects a valid header for another channel', async () => {
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${b}">채널</a><div class="_control_example"><button>팔로잉</button></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('.favorite-btn')).toBeNull();
   });
@@ -213,6 +289,19 @@ describe('favorite button on channel pages', () => {
     await act(async () => (document.querySelector('.czp-fav-group-item') as HTMLElement).click());
     expect(storage.set).toHaveBeenCalledTimes(1);
   });
+  it('refuses a menu action on a replaced follow button before reconciliation', async () => {
+    const group = { id: 'group', name: '그룹', icon: 'star', color: '#ff0000', channelIds: [] };
+    const storage = chrome.storage.local as unknown as { get: ReturnType<typeof vi.fn>; set: ReturnType<typeof vi.fn> };
+    storage.get.mockImplementation((_keys, cb) => cb({ [FAVORITE_GROUPS]: JSON.stringify({ groups: [group] }) }));
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">채널</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    await act(async () => (document.querySelector('.favorite-btn') as HTMLElement).click());
+    const old = Array.from(document.querySelectorAll('button')).find(x => x.textContent === '팔로잉')!;
+    old.replaceWith(old.cloneNode(true));
+    await act(async () => (document.querySelector('.czp-fav-group-item') as HTMLElement).click());
+    expect(storage.set).not.toHaveBeenCalled();
+  });
   it('stops retrying permanent metadata failures', async () => {
     vi.useFakeTimers();
     const fetchMock = vi.fn().mockResolvedValue({ ok: false, status: 404 });
@@ -270,5 +359,17 @@ describe('favorite button on channel pages', () => {
     document.body.innerHTML = `<div id="layout-body"><div class="_container_home"><div class="_wrapper_home"><div class="_area_home"><div class="_information_home"><a href="https://game.naver.com/profile/${b}">프로필</a></div><aside><a href="https://game.naver.com/profile/${a}">추천</a></aside><div class="_control_home"><div class="_action_home"><div class="_follow_home"><button>팔로잉</button></div></div></div></div></div></div></div>`;
     await act(async () => ensureFavoriteButton(true));
     expect(document.querySelector('#chzzk-plus-favorite-btn')).toBeNull();
+  });
+  it('allows a same-channel action after only the query changes without a route event', async () => {
+    const group = { id: 'query-group', name: '그룹', icon: 'star', color: '#ff0000', channelIds: [] };
+    const storage = chrome.storage.local as unknown as { get: ReturnType<typeof vi.fn>; set: ReturnType<typeof vi.fn> };
+    storage.get.mockImplementation((_keys, cb) => cb({ [FAVORITE_GROUPS]: JSON.stringify({ groups: [group] }) }));
+    history.replaceState({}, '', `/${a}`);
+    document.body.innerHTML = `<div id="layout-body"><div class="_row_example"><div class="_inner_example"><a href="/live/${a}">채널</a><div class="_control_example"><div><button>팔로잉</button></div></div></div></div></div>`;
+    await act(async () => ensureFavoriteButton(true));
+    history.replaceState({}, '', `/${a}?view=changed`);
+    await act(async () => (document.querySelector('.favorite-btn') as HTMLElement).click());
+    await act(async () => (document.querySelector('.czp-fav-group-item') as HTMLElement).click());
+    expect(storage.set).toHaveBeenCalledTimes(1);
   });
 });

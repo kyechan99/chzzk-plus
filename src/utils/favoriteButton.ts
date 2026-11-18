@@ -47,13 +47,15 @@ let favoriteRoot: Root | null = null;
 let favoriteContainer: Element | null = null;
 let favoriteRoute = '';
 let favoriteFollowButton: HTMLButtonElement | null = null;
+let restoreParentStyle: (() => void) | null = null;
 let activeRoute = '';
 let activeEnabled = false;
 let retryTimer: number | null = null;
 const videoChannels = new Map<string, string>();
-const videoRequests = new Set<string>();
+const videoRequests = new Map<string, number>();
 const videoFailures = new Map<string, number>();
 const MAX_VIDEO_ATTEMPTS = 3;
+let visitGeneration = 0;
 
 const findFollowButton = (channelId: string): HTMLButtonElement | null => {
   const content = document.querySelector('#layout-body') ?? document.querySelector('main');
@@ -82,7 +84,12 @@ const findFollowButton = (channelId: string): HTMLButtonElement | null => {
       if (!identityArea) return false;
       const links = Array.from(identityArea.querySelectorAll<HTMLAnchorElement>('a[href]'));
       return links.some(link => {
-        const url = new URL(link.href, location.href);
+        let url: URL;
+        try {
+          url = new URL(link.href, location.href);
+        } catch {
+          return false;
+        }
         if (header === home) {
           // 채널 홈은 방송 상태와 무관하게 헤더의 프로필 링크로 채널을 확인한다.
           const profileId = url.pathname.match(/^\/profile\/([0-9a-f]{32})\/?$/i)?.[1];
@@ -102,12 +109,15 @@ const unmountFavorite = (): void => {
   favoriteRoot?.unmount();
   favoriteRoot = null;
   favoriteContainer?.remove();
+  restoreParentStyle?.();
+  restoreParentStyle = null;
   favoriteContainer = null;
   favoriteRoute = '';
   favoriteFollowButton = null;
 };
 
 export const removeFavoriteButton = (): void => {
+  visitGeneration++;
   activeEnabled = false;
   activeRoute = '';
   videoFailures.clear();
@@ -117,20 +127,29 @@ export const removeFavoriteButton = (): void => {
 };
 
 const requestVideoChannel = (videoId: string, route: string): void => {
-  if (videoRequests.has(videoId) || retryTimer !== null || (videoFailures.get(videoId) ?? 0) >= MAX_VIDEO_ATTEMPTS)
+  const generation = visitGeneration;
+  if (videoRequests.get(videoId) === generation || retryTimer !== null || (videoFailures.get(videoId) ?? 0) >= MAX_VIDEO_ATTEMPTS)
     return;
-  videoRequests.add(videoId);
-  fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoId}`)
-    .then(response => {
+  videoRequests.set(videoId, generation);
+  const controller = new AbortController();
+  let timeout: number;
+  const expired = new Promise<never>((_, reject) => {
+    timeout = window.setTimeout(() => {
+      controller.abort();
+      reject(new Error('Video metadata timeout'));
+    }, 30000);
+  });
+  const request = fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoId}`, { signal: controller.signal }).then(
+    response => {
       if (!response.ok) {
-        if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-          videoFailures.set(videoId, MAX_VIDEO_ATTEMPTS);
-        }
-        throw new Error('Video metadata unavailable');
+        throw Object.assign(new Error('Video metadata unavailable'), { status: response.status });
       }
       return response.json();
-    })
+    },
+  );
+  Promise.race([request, expired])
     .then(data => {
+      if (generation !== visitGeneration) return;
       const id = data?.content?.channel?.channelId;
       if (String(data?.content?.videoNo) !== videoId || typeof id !== 'string' || !/^[0-9a-f]{32}$/i.test(id)) {
         throw new Error('Invalid video metadata');
@@ -138,7 +157,10 @@ const requestVideoChannel = (videoId: string, route: string): void => {
       videoChannels.set(videoId, id);
       videoFailures.delete(videoId);
     })
-    .catch(() => {
+    .catch((error: { status?: number }) => {
+      if (generation !== visitGeneration) return;
+      if (error?.status && error.status >= 400 && error.status < 500 && error.status !== 429)
+        videoFailures.set(videoId, MAX_VIDEO_ATTEMPTS);
       const failures = Math.min(MAX_VIDEO_ATTEMPTS, (videoFailures.get(videoId) ?? 0) + 1);
       videoFailures.set(videoId, failures);
       if (failures < MAX_VIDEO_ATTEMPTS && activeEnabled && location.pathname === route && retryTimer === null) {
@@ -149,8 +171,9 @@ const requestVideoChannel = (videoId: string, route: string): void => {
       }
     })
     .finally(() => {
-      videoRequests.delete(videoId);
-      if (activeEnabled && location.pathname === route && videoChannels.has(videoId)) ensureFavoriteButton(true);
+      window.clearTimeout(timeout);
+      if (videoRequests.get(videoId) === generation) videoRequests.delete(videoId);
+      if (generation === visitGeneration && activeEnabled && location.pathname === route && videoChannels.has(videoId)) ensureFavoriteButton(true);
     });
 };
 
@@ -161,6 +184,7 @@ export const ensureFavoriteButton = (enabled: boolean): void => {
     return;
   }
   if (activeRoute !== route || !activeEnabled) {
+    visitGeneration++;
     videoFailures.clear();
     activeRoute = route;
     activeEnabled = true;
@@ -199,6 +223,7 @@ export const ensureFavoriteButton = (enabled: boolean): void => {
   favoriteRoute = route;
   favoriteFollowButton = followButton;
   favoriteRoot = createRoot(root);
+  // A replaced native control invalidates open menus; remount instead of risking a stale write.
   const isCurrent = () =>
     location.pathname === route &&
     activeEnabled &&
@@ -206,6 +231,14 @@ export const ensureFavoriteButton = (enabled: boolean): void => {
     root.isConnected &&
     findFollowButton(channelId) === followButton;
   favoriteRoot.render(React.createElement(FavoriteButton, { channelId, isCurrent }));
-  if (parent.style.display !== 'flex') parent.style.display = 'flex';
-  if (parent.style.gap !== '6px') parent.style.gap = '6px';
+  const display = parent.style.getPropertyValue('display');
+  const displayPriority = parent.style.getPropertyPriority('display');
+  const gap = parent.style.getPropertyValue('gap');
+  const gapPriority = parent.style.getPropertyPriority('gap');
+  parent.style.setProperty('display', 'flex');
+  parent.style.setProperty('gap', '6px');
+  restoreParentStyle = () => {
+    if (parent.style.display === 'flex') parent.style.setProperty('display', display, displayPriority);
+    if (parent.style.gap === '6px') parent.style.setProperty('gap', gap, gapPriority);
+  };
 };
