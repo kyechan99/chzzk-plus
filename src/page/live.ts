@@ -16,7 +16,6 @@ import {
   AUTO_WIDE_MODE,
   GUARD_ENALBE,
   CHAT_STORAGE_ENABLE,
-  FAVORITE_ENABLE,
 } from '../constants/storage';
 import MessageStorageButton from '../components/button/MessageStorageButton/MessageStorageButton';
 import { traceOpenLive } from '../utils/trace';
@@ -27,7 +26,7 @@ import PipButton from '../components/button/PipButton/PipButton';
 import ScreenGuardButton from '../components/button/ScreenGuardButton/ScreenGuardButton';
 import { findPlayerButtonList } from '../utils/playerDom';
 import { getChatActionArea, getChatContainer } from '../utils/chatDom';
-import { ensureFavoriteButton, mountReactRoot } from '../utils/favoriteButton';
+import { mountReactRoot } from '../utils/favoriteButton';
 
 let donationPopupObserver: MutationObserver | null = null;
 let donationPopupObserverTarget: Element | null = null;
@@ -110,15 +109,12 @@ export const editLivePage = async () => {
     // createReactElement($pipButtonRoot, PipButton);
   */
   chrome.storage.local.get(
-    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE, FAVORITE_ENABLE],
+    [FAST_BUTTON, AUDIO_COMPRESSOR, PIP_BUTTON, AUTO_WIDE_MODE, GUARD_ENALBE, CHAT_STORAGE_ENABLE],
     res => {
       if (res[CHAT_STORAGE_ENABLE]) {
         ensureMessageStorageButton();
         observeDonationPopupRemoval();
       }
-
-      // Feat: 즐겨찾기 버튼 (라이브 정보 헤더 옆) ==============================================
-      ensureFavoriteButton(!!res[FAVORITE_ENABLE]);
 
       const $btn_list = findPlayerButtonList();
 

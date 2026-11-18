@@ -7,6 +7,9 @@
  */
 import { createReactElement } from './dom';
 import FavoriteButton from '../components/button/FavoriteButton/FavoriteButton';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import { getChannelIDByUrl } from './channel';
 
 export const FAVORITE_ROOT_ID = 'chzzk-plus-favorite-btn';
 type ReactComponent = () => JSX.Element;
@@ -30,84 +33,172 @@ export const mountReactRoot = (
   return root;
 };
 
-const getButtonText = (button: HTMLButtonElement): string => {
-  return [
+const isFollowing = (button: HTMLButtonElement): boolean => {
+  const labels = [
     button.textContent,
     button.getAttribute('aria-label'),
     button.getAttribute('title'),
     button.getAttribute('data-tooltip'),
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  ];
+  return labels.some(label => /^(팔로잉|following)$/i.test((label ?? '').replace(/\s+/g, ' ').trim()));
 };
 
-const findFollowControlMenu = (): Element | null => {
-  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('button'));
-  const semanticButton = buttons.find(button => {
-    const text = button.textContent?.replace(/\s+/g, ' ').trim() ?? '';
-    const label = button.getAttribute('aria-label') ?? '';
-    return text.includes('구독') || text.includes('팔로우') || label.includes('구독') || label.includes('팔로우');
-  });
-  if (semanticButton?.parentElement) return semanticButton.parentElement;
+let favoriteRoot: Root | null = null;
+let favoriteContainer: Element | null = null;
+let favoriteRoute = '';
+let favoriteFollowButton: HTMLButtonElement | null = null;
+let activeRoute = '';
+let activeEnabled = false;
+let retryTimer: number | null = null;
+const videoChannels = new Map<string, string>();
+const videoRequests = new Set<string>();
+const videoFailures = new Map<string, number>();
+const MAX_VIDEO_ATTEMPTS = 3;
 
+const findFollowButton = (channelId: string): HTMLButtonElement | null => {
+  const content = document.querySelector('#layout-body') ?? document.querySelector('main');
+  if (!content) return null;
+  const buttons = Array.from(content.querySelectorAll<HTMLButtonElement>('button'));
   return (
-    Array.from(document.querySelectorAll<HTMLElement>('main div, main section')).find(element => {
-      const text = element.textContent?.replace(/\s+/g, ' ').trim() ?? '';
-      return element.querySelectorAll('button').length >= 2 && (text.includes('구독') || text.includes('팔로우'));
+    buttons.find(button => {
+      if (button.closest('[id^="chzzk-plus-"], [id^="czp-"]')) return false;
+      if (!isFollowing(button)) return false;
+      // 라이브/VOD 헤더는 inner에 채널 링크와 control이 함께 존재한다.
+      const control = button.closest('div[class*="_control_"]');
+      const inner = control?.closest('div[class*="_inner_"]');
+      const row = inner?.closest('div[class*="_row_"]');
+      // 채널 홈은 follow/action/area 및 채널 썸네일 링크 구조를 사용한다.
+      const homeFollow = button.closest('div[class*="_follow_"]');
+      const homeArea = homeFollow?.closest('div[class*="_area_"]');
+      const home = homeArea?.parentElement?.parentElement;
+      const header =
+        row && inner?.contains(control)
+          ? inner
+          : home?.matches('div[class*="_container_"]') && homeFollow?.closest('div[class*="_action_"]')
+            ? home
+            : null;
+      if (!header || header.closest('aside, nav, [role="log"]')) return false;
+      const links = Array.from(header.querySelectorAll<HTMLAnchorElement>('a[href]'));
+      return links.some(link => {
+        const url = new URL(link.href, location.href);
+        return (
+          url.origin === location.origin &&
+          /^\/(?:live\/|channel\/)?[0-9a-f]{32}\/?$/i.test(url.pathname) &&
+          getChannelIDByUrl(url.pathname).toLowerCase() === channelId.toLowerCase()
+        );
+      });
     }) ?? null
   );
 };
 
-const findFollowButton = (): HTMLButtonElement | null => {
-  return (
-    Array.from(document.querySelectorAll<HTMLButtonElement>('main button')).find(button => {
-      const text = getButtonText(button);
-      return text.includes('팔로우') || text.includes('팔로잉') || /\bFollow(?:ing)?\b/i.test(text);
-    }) ?? null
-  );
-};
-
-export const findFavoriteMountTarget = (): Element | null => {
-  return findFollowButton()?.parentElement ?? findFollowControlMenu();
-};
-
-const findFollowStateScope = (mountTarget: Element): Element => {
-  return mountTarget.closest('section, article, [class*="_profile_"], [class*="_information_"]') ?? mountTarget;
-};
-
-export const isFollowingChannel = (mountTarget: Element): boolean => {
-  const scope = findFollowStateScope(mountTarget);
-  const buttons = Array.from(scope.querySelectorAll<HTMLButtonElement>('button'));
-
-  return buttons.some(button => {
-    const text = getButtonText(button);
-    return text.includes('팔로잉') || /\bFollowing\b/i.test(text);
-  });
+const unmountFavorite = (): void => {
+  favoriteRoot?.unmount();
+  favoriteRoot = null;
+  favoriteContainer?.remove();
+  favoriteContainer = null;
+  favoriteRoute = '';
+  favoriteFollowButton = null;
 };
 
 export const removeFavoriteButton = (): void => {
-  document.getElementById(FAVORITE_ROOT_ID)?.remove();
+  activeEnabled = false;
+  activeRoute = '';
+  videoFailures.clear();
+  if (retryTimer !== null) window.clearTimeout(retryTimer);
+  retryTimer = null;
+  unmountFavorite();
 };
 
-/**
- * 즐겨찾기 버튼을 팔로우 버튼 옆에 붙이거나(조건 충족 시) 제거한다(조건 미충족/기능 비활성 시).
- * live / channel / video 페이지가 동일한 규칙을 공유한다.
- */
+const requestVideoChannel = (videoId: string, route: string): void => {
+  if (videoRequests.has(videoId) || retryTimer !== null || (videoFailures.get(videoId) ?? 0) >= MAX_VIDEO_ATTEMPTS)
+    return;
+  videoRequests.add(videoId);
+  fetch(`https://api.chzzk.naver.com/service/v2/videos/${videoId}`)
+    .then(response => {
+      if (!response.ok) {
+        if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+          videoFailures.set(videoId, MAX_VIDEO_ATTEMPTS);
+        }
+        throw new Error('Video metadata unavailable');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const id = data?.content?.channel?.channelId;
+      if (String(data?.content?.videoNo) !== videoId || typeof id !== 'string' || !/^[0-9a-f]{32}$/i.test(id)) {
+        throw new Error('Invalid video metadata');
+      }
+      videoChannels.set(videoId, id);
+      videoFailures.delete(videoId);
+    })
+    .catch(() => {
+      const failures = Math.min(MAX_VIDEO_ATTEMPTS, (videoFailures.get(videoId) ?? 0) + 1);
+      videoFailures.set(videoId, failures);
+      if (failures < MAX_VIDEO_ATTEMPTS && activeEnabled && location.pathname === route && retryTimer === null) {
+        retryTimer = window.setTimeout(() => {
+          retryTimer = null;
+          if (activeEnabled && location.pathname === route) ensureFavoriteButton(true);
+        }, 2000);
+      }
+    })
+    .finally(() => {
+      videoRequests.delete(videoId);
+      if (activeEnabled && location.pathname === route && videoChannels.has(videoId)) ensureFavoriteButton(true);
+    });
+};
+
 export const ensureFavoriteButton = (enabled: boolean): void => {
+  const route = location.pathname;
   if (!enabled) {
     removeFavoriteButton();
     return;
   }
-
-  const $followControl = findFavoriteMountTarget();
-  if (!$followControl || !isFollowingChannel($followControl)) {
-    removeFavoriteButton();
+  if (activeRoute !== route || !activeEnabled) {
+    videoFailures.clear();
+    activeRoute = route;
+    activeEnabled = true;
+    if (retryTimer !== null) window.clearTimeout(retryTimer);
+    retryTimer = null;
+    unmountFavorite();
+  }
+  const video = route.match(/^\/video\/(\d+)\/?$/);
+  const directChannel = route.match(/^\/(?:live\/|channel\/)?([0-9a-f]{32})\/?$/i)?.[1];
+  const channelId = video ? videoChannels.get(video[1]) : directChannel;
+  if (!channelId) {
+    unmountFavorite();
+    if (video) requestVideoChannel(video[1], route);
     return;
   }
-
-  mountReactRoot($followControl, FAVORITE_ROOT_ID, FavoriteButton);
-  ($followControl as HTMLElement).style.display = 'flex';
-  ($followControl as HTMLElement).style.gap = '6px';
+  const followButton = findFollowButton(channelId);
+  const parent = followButton?.parentElement;
+  if (!parent) {
+    unmountFavorite();
+    return;
+  }
+  if (
+    favoriteContainer &&
+    parent.contains(favoriteContainer) &&
+    favoriteContainer.getAttribute('data-channel-id') === channelId &&
+    favoriteRoute === route &&
+    favoriteFollowButton === followButton
+  )
+    return;
+  unmountFavorite();
+  const root = document.createElement('div');
+  root.id = FAVORITE_ROOT_ID;
+  root.setAttribute('data-channel-id', channelId);
+  parent.prepend(root);
+  favoriteContainer = root;
+  favoriteRoute = route;
+  favoriteFollowButton = followButton;
+  favoriteRoot = createRoot(root);
+  const isCurrent = () =>
+    location.pathname === route &&
+    activeEnabled &&
+    favoriteContainer === root &&
+    root.isConnected &&
+    findFollowButton(channelId) === followButton;
+  favoriteRoot.render(React.createElement(FavoriteButton, { channelId, isCurrent }));
+  if (parent.style.display !== 'flex') parent.style.display = 'flex';
+  if (parent.style.gap !== '6px') parent.style.gap = '6px';
 };
